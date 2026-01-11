@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { FaUsers, FaFileAlt, FaClipboardList } from "react-icons/fa";
+import { FaUsers, FaFileAlt, FaClipboardList, FaStar, FaShieldAlt, FaRocket } from "react-icons/fa";
 
 const HomePage: React.FC = () => {
   const router = useRouter();
@@ -78,7 +78,7 @@ const HomePage: React.FC = () => {
         >
           <div className="bg-white/90 p-10 rounded-3xl shadow-2xl backdrop-blur-lg flex flex-col items-center">
             <Image
-              src="/logo.png"
+              src="/BrgyLogo.png"
               alt="Barangay Logo"
               width={220}
               height={220}
@@ -137,6 +137,164 @@ const HomePage: React.FC = () => {
               <p className="text-gray-600">{item.desc}</p>
             </motion.div>
           ))}
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 md:px-20 py-16">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <h3 className="text-3xl font-bold text-gray-800 mb-4">
+              Trusted by Barangays Nationwide
+            </h3>
+            <p className="text-gray-600 text-lg">
+              Join hundreds of barangays already using our system
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { number: "500+", label: "Barangays Served" },
+              { number: "50K+", label: "Residents Managed" },
+              { number: "100K+", label: "Requests Processed" },
+              { number: "99.9%", label: "Uptime" },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center"
+              >
+                <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
+                <div className="text-gray-600 font-medium">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="bg-white px-6 md:px-20 py-16">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <h3 className="text-3xl font-bold text-gray-800 mb-4">
+              What Barangay Leaders Say
+            </h3>
+            <p className="text-gray-600 text-lg">
+              Real feedback from barangay officials using our system
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Maria Santos",
+                position: "Barangay Captain",
+                quote: "This system has revolutionized how we manage our barangay. So much easier and efficient!",
+                rating: 5,
+                avatar: "MS"
+              },
+              {
+                name: "Juan Dela Cruz",
+                position: "Barangay Secretary",
+                quote: "The resident management and request processing features are fantastic. Highly recommended!",
+                rating: 5,
+                avatar: "JD"
+              },
+              {
+                name: "Ana Garcia",
+                position: "Barangay Treasurer",
+                quote: "Reports are now generated in minutes instead of hours. Game changer for our barangay!",
+                rating: 5,
+                avatar: "AG"
+              },
+            ].map((testimonial, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.2 }}
+                className="bg-gray-50 p-6 rounded-xl shadow-md"
+              >
+                <div className="flex items-center mb-4">
+                  {[...Array(testimonial.rating)].map((_, j) => (
+                    <FaStar key={j} className="text-yellow-400 text-sm" />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-4 italic">"{testimonial.quote}"</p>
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                    {testimonial.avatar}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-800">{testimonial.name}</div>
+                    <div className="text-sm text-gray-600">{testimonial.position}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 md:px-20 py-16 text-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <h3 className="text-4xl font-bold mb-6">
+              Ready to Modernize Your Barangay?
+            </h3>
+            <p className="text-xl mb-8 text-blue-100">
+              Join thousands of barangays already using our comprehensive information system.
+              Start your digital transformation today!
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push("/register")}
+                className="px-8 py-4 bg-yellow-400 text-gray-900 font-bold rounded-full shadow-lg text-lg"
+              >
+                Get Started Free
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push("/login")}
+                className="px-8 py-4 bg-white text-blue-600 font-bold rounded-full shadow-lg text-lg"
+              >
+                Login to Dashboard
+              </motion.button>
+            </div>
+
+            <div className="mt-8 flex flex-wrap justify-center items-center gap-6 text-blue-100">
+              <div className="flex items-center gap-2">
+                <FaShieldAlt />
+                <span>Secure & Reliable</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaRocket />
+                <span>Fast Implementation</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaUsers />
+                <span>24/7 Support</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

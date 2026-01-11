@@ -1,0 +1,66 @@
+{
+  "name": "Barangay Information System",
+  "short_name": "Brgy InfoSys",
+  "description": "Comprehensive barangay management system",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "utilities"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/BrgyLogo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/BrgyLogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Resident",
+      "short_name": "Add Resident",
+      "description": "Quickly add a new resident",
+      "url": "/residents/add",
+      "icons": [
+        {
+          "src": "/BrgyLogo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "View Requests",
+      "short_name": "Requests",
+      "description": "Check pending requests",
+      "url": "/requests/pending",
+      "icons": [
+        {
+          "src": "/BrgyLogo.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

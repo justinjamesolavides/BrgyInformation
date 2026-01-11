@@ -1,13 +1,17 @@
 import Link from "next/link";
 import React from "react";
+import ThemeToggle from "./ThemeToggle";
 
 const Sidebar: React.FC = () => {
   return (
     <div className="h-screen w-64 bg-gray-900 text-white fixed">
 
       {/* Logo */}
-      <div className="p-6 text-xl font-bold border-b border-gray-700">
-        Brgy System
+      <div className="p-6 border-b border-gray-700 dark:border-gray-600">
+        <div className="flex items-center justify-between">
+          <span className="text-xl font-bold">Brgy System</span>
+          <ThemeToggle />
+        </div>
       </div>
 
       {/* Menu */}

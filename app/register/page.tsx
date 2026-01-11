@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
@@ -9,54 +10,53 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
-    // For now, just navigate to dashboard
-    router.push("/dashboard");
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600 px-4">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
-        <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
-          Register
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-700 px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8"
+      >
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
+          Create Account
         </h2>
+        <p className="text-center text-gray-500 mb-8">
+          Register to get started
+        </p>
 
-        {/* Full Name Input */}
         <input
           type="text"
           placeholder="Full Name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          className="w-full mb-4 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+          className="w-full mb-4 p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
         />
 
-        {/* Email Input */}
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full mb-4 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+          className="w-full mb-4 p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
         />
 
-        {/* Password Input */}
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full mb-6 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+          className="w-full mb-6 p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
         />
 
-        {/* Register Button */}
-        <button
-          onClick={handleRegister}
-          className="w-full py-3 bg-yellow-400 text-white font-semibold rounded-lg hover:bg-yellow-500 transition cursor-pointer"
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.02 }}
+          onClick={() => router.push("/dashboard")}
+          className="w-full py-3 bg-yellow-400 text-gray-900 font-semibold rounded-xl shadow-lg"
         >
           Register
-        </button>
+        </motion.button>
 
-        {/* Login Link */}
         <p className="mt-6 text-center text-gray-600">
           Already have an account?{" "}
           <span
@@ -66,7 +66,7 @@ const RegisterPage: React.FC = () => {
             Login
           </span>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 };

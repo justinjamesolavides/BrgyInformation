@@ -1,79 +1,242 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import NotificationPanel from "../components/NotificationPanel";
-import { motion } from "framer-motion";
-import { useNotifications } from "../components/NotificationProvider";
-import {
-  FaUsers,
-  FaFileAlt,
-  FaClipboardList,
-  FaChartLine,
-  FaBell,
-  FaPlus,
-  FaEye,
-  FaClock,
-  FaCheckCircle,
-  FaExclamationTriangle,
-  FaCalendarAlt,
-  FaUserPlus,
-  FaFileSignature,
-  FaCog
-} from "react-icons/fa";
+import { FaUsers, FaBell, FaEye, FaClock, FaCalendarAlt, FaFileSignature, FaUserPlus, FaCheckCircle, FaFileAlt, FaChartLine, FaCog, FaClipboardList } from "react-icons/fa";
 
 const Dashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
-  const { addNotification } = useNotifications();
 
-  // Mock data - in real app this would come from API
-  const stats = {
-    totalResidents: 1247,
-    registeredUsers: 387,
-    pendingRequests: 23,
-    monthlyGrowth: 12.5
-  };
+  // Mock data for different periods - in real app this would come from API
+  const getPeriodData = (period: string) => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
 
-  const recentActivities = [
-    {
-      id: 1,
-      type: "request",
-      title: "New Barangay Clearance Request",
-      user: "Juan Dela Cruz",
-      time: "2 minutes ago",
-      status: "pending",
-      icon: <FaFileSignature className="text-blue-500" />
-    },
-    {
-      id: 2,
-      type: "user",
-      title: "New Resident Registration",
-      user: "Maria Santos",
-      time: "15 minutes ago",
-      status: "completed",
-      icon: <FaUserPlus className="text-green-500" />
-    },
-    {
-      id: 3,
-      type: "request",
-      title: "Certificate of Indigency Approved",
-      user: "Pedro Garcia",
-      time: "1 hour ago",
-      status: "approved",
-      icon: <FaCheckCircle className="text-green-500" />
-    },
-    {
-      id: 4,
-      type: "system",
-      title: "Monthly Report Generated",
-      user: "System",
-      time: "2 hours ago",
-      status: "completed",
-      icon: <FaFileAlt className="text-purple-500" />
+    switch (period) {
+      case 'week':
+        return {
+          stats: {
+            totalResidents: 1247,
+            registeredUsers: 42,
+            pendingRequests: 8,
+            monthlyGrowth: 3.2
+          },
+          activities: [
+            {
+              id: 1,
+              type: "request",
+              title: "New Barangay Clearance Request",
+              user: "Juan Dela Cruz",
+              time: "2 minutes ago",
+              status: "pending",
+              icon: <FaFileSignature className="text-blue-500" />
+            },
+            {
+              id: 2,
+              type: "user",
+              title: "New Resident Registration",
+              user: "Maria Santos",
+              time: "15 minutes ago",
+              status: "completed",
+              icon: <FaUserPlus className="text-green-500" />
+            },
+            {
+              id: 3,
+              type: "request",
+              title: "Certificate of Indigency Approved",
+              user: "Pedro Garcia",
+              time: "1 hour ago",
+              status: "approved",
+              icon: <FaCheckCircle className="text-green-500" />
+            },
+            {
+              id: 4,
+              type: "system",
+              title: "Weekly Report Generated",
+              user: "System",
+              time: "2 hours ago",
+              status: "completed",
+              icon: <FaFileAlt className="text-purple-500" />
+            }
+          ]
+        };
+
+      case 'month':
+        return {
+          stats: {
+            totalResidents: 1247,
+            registeredUsers: 387,
+            pendingRequests: 23,
+            monthlyGrowth: 12.5
+          },
+          activities: [
+            {
+              id: 1,
+              type: "request",
+              title: "New Barangay Clearance Request",
+              user: "Juan Dela Cruz",
+              time: "2 minutes ago",
+              status: "pending",
+              icon: <FaFileSignature className="text-blue-500" />
+            },
+            {
+              id: 2,
+              type: "user",
+              title: "New Resident Registration",
+              user: "Maria Santos",
+              time: "15 minutes ago",
+              status: "completed",
+              icon: <FaUserPlus className="text-green-500" />
+            },
+            {
+              id: 3,
+              type: "request",
+              title: "Certificate of Indigency Approved",
+              user: "Pedro Garcia",
+              time: "1 hour ago",
+              status: "approved",
+              icon: <FaCheckCircle className="text-green-500" />
+            },
+            {
+              id: 4,
+              type: "request",
+              title: "Business Permit Application",
+              user: "Ana Reyes",
+              time: "3 hours ago",
+              status: "pending",
+              icon: <FaClipboardList className="text-yellow-500" />
+            },
+            {
+              id: 5,
+              type: "system",
+              title: "Monthly Census Update",
+              user: "System",
+              time: "1 day ago",
+              status: "completed",
+              icon: <FaChartLine className="text-purple-500" />
+            }
+          ]
+        };
+
+      case 'quarter':
+        return {
+          stats: {
+            totalResidents: 1247,
+            registeredUsers: 892,
+            pendingRequests: 45,
+            monthlyGrowth: 28.7
+          },
+          activities: [
+            {
+              id: 1,
+              type: "request",
+              title: "Quarterly Tax Assessment",
+              user: "Barangay Treasurer",
+              time: "2 days ago",
+              status: "completed",
+              icon: <FaFileAlt className="text-purple-500" />
+            },
+            {
+              id: 2,
+              type: "user",
+              title: "Bulk Resident Import",
+              user: "Admin",
+              time: "1 week ago",
+              status: "completed",
+              icon: <FaUsers className="text-blue-500" />
+            },
+            {
+              id: 3,
+              type: "system",
+              title: "Quarterly Report Generated",
+              user: "System",
+              time: "2 weeks ago",
+              status: "completed",
+              icon: <FaChartLine className="text-green-500" />
+            },
+            {
+              id: 4,
+              type: "request",
+              title: "Community Development Grant",
+              user: "Barangay Captain",
+              time: "3 weeks ago",
+              status: "approved",
+              icon: <FaCheckCircle className="text-green-500" />
+            }
+          ]
+        };
+
+      case 'year':
+        return {
+          stats: {
+            totalResidents: 1247,
+            registeredUsers: 2156,
+            pendingRequests: 67,
+            monthlyGrowth: 45.3
+          },
+          activities: [
+            {
+              id: 1,
+              type: "system",
+              title: "Annual Census Completed",
+              user: "System",
+              time: "1 month ago",
+              status: "completed",
+              icon: <FaUsers className="text-blue-500" />
+            },
+            {
+              id: 2,
+              type: "request",
+              title: "Year-End Financial Report",
+              user: "Barangay Treasurer",
+              time: "2 months ago",
+              status: "completed",
+              icon: <FaFileAlt className="text-purple-500" />
+            },
+            {
+              id: 3,
+              type: "system",
+              title: "Annual Budget Approved",
+              user: "Barangay Council",
+              time: "3 months ago",
+              status: "approved",
+              icon: <FaCheckCircle className="text-green-500" />
+            },
+            {
+              id: 4,
+              type: "user",
+              title: "New Barangay Officials Elected",
+              user: "COMELEC",
+              time: "6 months ago",
+              status: "completed",
+              icon: <FaUserPlus className="text-green-500" />
+            }
+          ]
+        };
+
+      default:
+        return {
+          stats: {
+            totalResidents: 1247,
+            registeredUsers: 387,
+            pendingRequests: 23,
+            monthlyGrowth: 12.5
+          },
+          activities: []
+        };
     }
-  ];
+  };
+  
+
+  const periodData = getPeriodData(selectedPeriod);
+  const { stats, activities: recentActivities } = periodData;
+
 
   const quickActions = [
     {
@@ -116,56 +279,71 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
 
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="ml-64 flex-1 p-6 bg-gray-50 dark:bg-gray-900">
+      <div className="ml-0 lg:ml-64 flex-1 p-4 md:p-6 lg:p-8 mobile-spacing transition-all duration-300">
 
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex justify-between items-center mb-8"
-        >
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-              Barangay Dashboard
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Welcome back! Here's what's happening in your barangay.
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full"></div>
+              <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                Barangay Dashboard
+              </h1>
+            </div>
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
+              Welcome back! Here's what's happening in your barangay today.
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm">
-              <FaCalendarAlt className="text-gray-500" />
+          <div className="flex items-center gap-3 w-full lg:w-auto">
+            <div className="flex items-center gap-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/20 dark:border-gray-700/50 shadow-lg hover:shadow-xl transition-all duration-300">
+              <FaCalendarAlt className="text-blue-500 dark:text-blue-400" />
               <select
                 value={selectedPeriod}
-                onChange={(e) => setSelectedPeriod(e.target.value)}
-                className="bg-transparent border-none outline-none text-sm"
+                onChange={(e) => {
+                  setIsLoading(true);
+                  setSelectedPeriod(e.target.value);
+                  // Simulate loading delay
+                  setTimeout(() => setIsLoading(false), 800);
+                }}
+                disabled={isLoading}
+                className="bg-transparent border-none outline-none text-sm font-medium text-gray-900 dark:text-white cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors disabled:opacity-50"
               >
-                <option value="week">This Week</option>
-                <option value="month">This Month</option>
-                <option value="quarter">This Quarter</option>
-                <option value="year">This Year</option>
+                <option value="week">📅 This Week</option>
+                <option value="month">📆 This Month</option>
+                <option value="quarter">📊 This Quarter</option>
+                <option value="year">📈 This Year</option>
               </select>
             </div>
 
             <div className="relative">
               <motion.button
                 ref={notificationButtonRef}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 transition-colors flex items-center gap-2 relative"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 flex items-center gap-2 relative shadow-lg hover:shadow-xl"
+                whileHover={{ scale: 1.05, rotate: [0, -1, 1, 0] }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  boxShadow: [
+                    "0 4px 6px -1px rgba(59, 130, 246, 0.3)",
+                    "0 10px 15px -3px rgba(59, 130, 246, 0.2)",
+                    "0 4px 6px -1px rgba(59, 130, 246, 0.3)"
+                  ]
+                }}
+                transition={{
+                  boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+                  rotate: { duration: 0.3 }
+                }}
               >
                 <FaBell className="text-sm" />
-                <span className="hidden md:inline">Notifications</span>
-                {/* Notification badge */}
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                <span className="hidden md:inline font-medium">Notifications</span>
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
                   3
                 </span>
               </motion.button>
@@ -177,202 +355,396 @@ const Dashboard: React.FC = () => {
               />
             </div>
           </div>
-        </motion.div>
-
-        {/* Stats Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
-        >
-          {[
-            {
-              title: "Total Residents",
-              value: stats.totalResidents.toLocaleString(),
-              change: "+8.2%",
-              changeType: "positive",
-              icon: <FaUsers className="text-blue-500" />,
-              bgColor: "bg-blue-50"
-            },
-            {
-              title: "Registered Users",
-              value: stats.registeredUsers.toLocaleString(),
-              change: "+12.5%",
-              changeType: "positive",
-              icon: <FaUserPlus className="text-green-500" />,
-              bgColor: "bg-green-50"
-            },
-            {
-              title: "Pending Requests",
-              value: stats.pendingRequests.toString(),
-              change: "-3.1%",
-              changeType: "negative",
-              icon: <FaClipboardList className="text-yellow-500" />,
-              bgColor: "bg-yellow-50"
-            },
-            {
-              title: "Monthly Growth",
-              value: `${stats.monthlyGrowth}%`,
-              change: "+2.4%",
-              changeType: "positive",
-              icon: <FaChartLine className="text-purple-500" />,
-              bgColor: "bg-purple-50"
-            }
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.title}
-              whileHover={{ y: -2 }}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className="text-2xl font-bold text-gray-800 mt-1">{stat.value}</p>
-                  <div className={`text-xs mt-2 flex items-center gap-1 ${
-                    stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    <FaChartLine className="text-xs" />
-                    {stat.change} from last month
-                  </div>
-                </div>
-                <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                  {stat.icon}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-          {/* Recent Activities */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100"
-          >
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-800">Recent Activities</h3>
-              <p className="text-sm text-gray-600 mt-1">Latest updates from your barangay system</p>
-            </div>
-
-            <div className="p-6">
-              <div className="space-y-4">
-                {recentActivities.map((activity, index) => (
-                  <motion.div
-                    key={activity.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * index }}
-                    className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="p-2 bg-gray-100 rounded-lg">
-                      {activity.icon}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium text-gray-800">{activity.title}</h4>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(activity.status)}`}>
-                          {activity.status}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 mt-1">by {activity.user}</p>
-                      <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
-                        <FaClock />
-                        {activity.time}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full mt-4 text-blue-600 hover:text-blue-700 font-medium py-2 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
-              >
-                View All Activities
-              </motion.button>
-            </div>
-          </motion.div>
-
-          {/* Quick Actions */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white rounded-xl shadow-sm border border-gray-100"
-          >
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-800">Quick Actions</h3>
-              <p className="text-sm text-gray-600 mt-1">Common tasks and shortcuts</p>
-            </div>
-
-            <div className="p-6">
-              <div className="grid grid-cols-1 gap-3">
-                {quickActions.map((action, index) => (
-                  <motion.button
-                    key={action.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * index }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`p-4 rounded-lg text-white text-left transition-all ${action.color}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {action.icon}
-                      <div>
-                        <div className="font-medium">{action.title}</div>
-                        <div className="text-sm opacity-90">{action.description}</div>
-                      </div>
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
         </div>
 
-        {/* System Status */}
+        {/* Stats Cards */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedPeriod}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          >
+            {isLoading ? (
+              // Loading skeletons
+              Array.from({ length: 4 }).map((_, index) => (
+                <motion.div
+                  key={`skeleton-${index}`}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/50 overflow-hidden"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="loading-skeleton-text h-4 w-24 mb-2"></div>
+                      <div className="loading-skeleton-text h-8 w-16 mb-2"></div>
+                      <div className="loading-skeleton-text h-3 w-20"></div>
+                    </div>
+                    <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-2xl loading-skeleton"></div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              // Actual stats cards
+              [
+                {
+                  title: "Total Residents",
+                  value: stats.totalResidents.toLocaleString(),
+                  icon: <FaUsers className="text-blue-500" />,
+                  bgGradient: "from-blue-500 to-blue-600",
+                  bgLight: "bg-blue-50 dark:bg-blue-900/20",
+                  trend: "+12%",
+                  trendColor: "text-green-600"
+                },
+                {
+                  title: "Registered Users",
+                  value: stats.registeredUsers.toLocaleString(),
+                  icon: <FaUserPlus className="text-green-500" />,
+                  bgGradient: "from-green-500 to-emerald-600",
+                  bgLight: "bg-green-50 dark:bg-green-900/20",
+                  trend: "+8%",
+                  trendColor: "text-green-600"
+                },
+                {
+                  title: "Pending Requests",
+                  value: stats.pendingRequests.toString(),
+                  icon: <FaClipboardList className="text-yellow-500" />,
+                  bgGradient: "from-yellow-500 to-orange-600",
+                  bgLight: "bg-yellow-50 dark:bg-yellow-900/20",
+                  trend: "+3",
+                  trendColor: "text-orange-600"
+                },
+                {
+                  title: "Monthly Growth",
+                  value: `${stats.monthlyGrowth}%`,
+                  icon: <FaChartLine className="text-purple-500" />,
+                  bgGradient: "from-purple-500 to-indigo-600",
+                  bgLight: "bg-purple-50 dark:bg-purple-900/20",
+                  trend: "+2.1%",
+                  trendColor: "text-green-600"
+                }
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.title}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  whileHover={{ y: -4, scale: 1.03 }}
+                  className="group relative overflow-hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300"
+                >
+                  {/* Background gradient overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgGradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+
+                  <div className="relative z-10 flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">{stat.title}</p>
+                      <motion.p
+                        key={`${selectedPeriod}-${stat.title}`}
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.2 + index * 0.1, duration: 0.3 }}
+                        className="text-3xl font-bold text-gray-800 dark:text-white mb-2"
+                      >
+                        {stat.value}
+                      </motion.p>
+                      <div className="flex items-center gap-1">
+                        <span className={`text-xs font-medium ${stat.trendColor}`}>{stat.trend}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">vs last period</span>
+                      </div>
+                    </div>
+                    <div className={`p-4 rounded-2xl ${stat.bgLight} transition-all duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                      {stat.icon}
+                    </div>
+                  </div>
+
+                  {/* Decorative elements */}
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-10 translate-x-10"></div>
+                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-8 -translate-x-8"></div>
+                </motion.div>
+              ))
+            )}
+            {[
+              {
+                title: "Total Residents",
+                value: stats.totalResidents.toLocaleString(),
+                icon: <FaUsers className="text-blue-500" />,
+                bgGradient: "from-blue-500 to-blue-600",
+                bgLight: "bg-blue-50 dark:bg-blue-900/20",
+                trend: "+12%",
+                trendColor: "text-green-600"
+              },
+              {
+                title: "Registered Users",
+                value: stats.registeredUsers.toLocaleString(),
+                icon: <FaUserPlus className="text-green-500" />,
+                bgGradient: "from-green-500 to-emerald-600",
+                bgLight: "bg-green-50 dark:bg-green-900/20",
+                trend: "+8%",
+                trendColor: "text-green-600"
+              },
+              {
+                title: "Pending Requests",
+                value: stats.pendingRequests.toString(),
+                icon: <FaClipboardList className="text-yellow-500" />,
+                bgGradient: "from-yellow-500 to-orange-600",
+                bgLight: "bg-yellow-50 dark:bg-yellow-900/20",
+                trend: "+3",
+                trendColor: "text-orange-600"
+              },
+              {
+                title: "Monthly Growth",
+                value: `${stats.monthlyGrowth}%`,
+                icon: <FaChartLine className="text-purple-500" />,
+                bgGradient: "from-purple-500 to-indigo-600",
+                bgLight: "bg-purple-50 dark:bg-purple-900/20",
+                trend: "+2.1%",
+                trendColor: "text-green-600"
+              }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.title}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1, duration: 0.3 }}
+                whileHover={{ y: -4, scale: 1.03 }}
+                className="group relative overflow-hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300"
+              >
+                {/* Background gradient overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgGradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+
+                <div className="relative z-10 flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">{stat.title}</p>
+                    <motion.p
+                      key={`${selectedPeriod}-${stat.title}`}
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.2 + index * 0.1, duration: 0.3 }}
+                      className="text-3xl font-bold text-gray-800 dark:text-white mb-2"
+                    >
+                      {stat.value}
+                    </motion.p>
+                    <div className="flex items-center gap-1">
+                      <span className={`text-xs font-medium ${stat.trendColor}`}>{stat.trend}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">vs last period</span>
+                    </div>
+                  </div>
+                  <div className={`p-4 rounded-2xl ${stat.bgLight} transition-all duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                    {stat.icon}
+                  </div>
+                </div>
+
+                {/* Decorative elements */}
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-10 translate-x-10"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-8 -translate-x-8"></div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Quick Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+          transition={{ delay: 0.4, duration: 0.3 }}
+          className="mb-8"
         >
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">System Status</h3>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1 h-8 bg-gradient-to-b from-indigo-500 to-purple-600 rounded-full"></div>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Quick Actions</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {quickActions.map((action, index) => (
+              <motion.button
+                key={action.title}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  boxShadow: [
+                    "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                    "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+                    "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+                  ]
+                }}
+                transition={{
+                  delay: 0.5 + index * 0.1,
+                  duration: 0.3,
+                  boxShadow: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }
+                }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className={`group relative overflow-hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-white/20 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300 ${action.color} hover:shadow-2xl`}
+              >
+                {/* Background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <div>
-                <p className="font-medium text-gray-800">Database</p>
-                <p className="text-sm text-gray-600">Operational</p>
-              </div>
-            </div>
+                <div className="relative z-10 flex items-center gap-4">
+                  <div className="p-3 bg-white/80 dark:bg-gray-700/80 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                    {action.icon}
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold text-gray-800 dark:text-white group-hover:text-white transition-colors">
+                      {action.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-white/80 transition-colors">
+                      {action.description}
+                    </p>
+                  </div>
+                </div>
 
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <div>
-                <p className="font-medium text-gray-800">API Services</p>
-                <p className="text-sm text-gray-600">99.9% uptime</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-              <div>
-                <p className="font-medium text-gray-800">Backup</p>
-                <p className="text-sm text-gray-600">Last backup: 2h ago</p>
-              </div>
-            </div>
+                {/* Hover effect line */}
+                <div className="absolute bottom-0 left-0 w-0 h-1 bg-white/50 group-hover:w-full transition-all duration-300"></div>
+              </motion.button>
+            ))}
           </div>
         </motion.div>
 
+        {/* Recent Activities */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`activities-${selectedPeriod}`}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 p-6 overflow-hidden relative"
+          >
+            {/* Background decoration */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-full -translate-y-16 translate-x-16"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-indigo-500/5 to-pink-500/5 rounded-full translate-y-12 -translate-x-12"></div>
+
+            <div className="relative z-10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-600 rounded-full"></div>
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-white">Recent Activities</h3>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-full border border-blue-100 dark:border-blue-800/50">
+                  <div className={`w-3 h-3 rounded-full ${
+                    selectedPeriod === 'week' ? 'bg-green-500' :
+                    selectedPeriod === 'month' ? 'bg-blue-500' :
+                    selectedPeriod === 'quarter' ? 'bg-purple-500' : 'bg-orange-500'
+                  } animate-pulse shadow-lg`}></div>
+                  <span className="text-sm font-semibold text-blue-700 dark:text-blue-300 capitalize">
+                    {selectedPeriod === 'week' ? 'This Week' :
+                     selectedPeriod === 'month' ? 'This Month' :
+                     selectedPeriod === 'quarter' ? 'This Quarter' : 'This Year'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <AnimatePresence>
+                  {isLoading ? (
+                    // Loading skeletons for activities
+                    Array.from({ length: 4 }).map((_, index) => (
+                      <motion.div
+                        key={`activity-skeleton-${index}`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1, duration: 0.3 }}
+                        className="flex items-center gap-4 p-4 rounded-xl border border-transparent"
+                      >
+                        <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl loading-skeleton"></div>
+                        <div className="flex-1 min-w-0">
+                          <div className="loading-skeleton-text h-5 w-48 mb-2"></div>
+                          <div className="loading-skeleton-text h-4 w-32"></div>
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <div className="loading-skeleton-text h-6 w-20 rounded-full"></div>
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    recentActivities.map((activity, index) => (
+                    <motion.div
+                      key={`${selectedPeriod}-${activity.id}`}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      transition={{ delay: index * 0.1, duration: 0.3 }}
+                      className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 dark:hover:from-blue-900/10 dark:hover:to-indigo-900/10 transition-all duration-300 cursor-pointer border border-transparent hover:border-blue-100 dark:hover:border-blue-800/30"
+                      whileHover={{ x: 6, scale: 1.01 }}
+                    >
+                      <div className="relative">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                          {activity.icon}
+                        </div>
+                        <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white dark:border-gray-800 ${
+                          activity.status === 'pending' ? 'bg-yellow-400' :
+                          activity.status === 'completed' ? 'bg-green-400' :
+                          activity.status === 'approved' ? 'bg-blue-400' :
+                          'bg-gray-400'
+                        }`}></div>
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-gray-800 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors line-clamp-1">
+                          {activity.title}
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                          <span>by {activity.user}</span>
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                          <span className="flex items-center gap-1">
+                            <FaClock className="text-xs" />
+                            {activity.time}
+                          </span>
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col items-end gap-2">
+                        <span className={`px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${
+                          activity.status === 'pending' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-800/50' :
+                          activity.status === 'completed' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800/50' :
+                          activity.status === 'approved' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50' :
+                          'bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50'
+                        }`}>
+                          {activity.status}
+                        </span>
+                      </div>
+                    </motion.div>
+                    ))
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {recentActivities.length === 0 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-12"
+                >
+                  <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FaClock className="text-2xl text-gray-400 dark:text-gray-500" />
+                  </div>
+                  <p className="text-gray-500 dark:text-gray-400 font-medium">No activities for the selected period</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Activities will appear here as they happen</p>
+                </motion.div>
+              )}
+
+              {recentActivities.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700/50"
+                >
+                  <button className="w-full text-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors py-2">
+                    View All Activities →
+                  </button>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

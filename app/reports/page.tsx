@@ -20,6 +20,7 @@ import {
   FaShare,
   FaEye,
   FaFilePdf,
+  FaBell,
   FaFileExcel,
   FaFileCsv
 } from "react-icons/fa";

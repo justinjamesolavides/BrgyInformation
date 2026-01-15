@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Sidebar from "../components/Sidebar";
 import { motion } from "framer-motion";
 import {
@@ -20,7 +21,8 @@ import {
   FaIdCard,
   FaUserCheck,
   FaUserTimes,
-  FaTimes
+  FaTimes,
+  FaExclamationTriangle
 } from "react-icons/fa";
 
 interface Resident {
@@ -42,106 +44,58 @@ interface Resident {
 }
 
 const ResidentsPage: React.FC = () => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterGender, setFilterGender] = useState("all");
   const [selectedResidents, setSelectedResidents] = useState<number[]>([]);
+  const [residents, setResidents] = useState<Resident[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data - in real app this would come from API
-  const [residents, setResidents] = useState<Resident[]>([
-    {
-      id: 1,
-      firstName: "Juan",
-      lastName: "Dela Cruz",
-      middleName: "Santos",
-      email: "juan@example.com",
-      phone: "+63 917 123 4567",
-      address: "123 Main St, Barangay Central",
-      barangayId: "BRGY-001",
-      dateOfBirth: "1985-03-15",
-      gender: "male",
-      civilStatus: "married",
-      occupation: "Teacher",
-      status: "active",
-      registrationDate: "2024-01-15",
-      avatar: "JD"
-    },
-    {
-      id: 2,
-      firstName: "Maria",
-      lastName: "Santos",
-      email: "maria@example.com",
-      phone: "+63 918 234 5678",
-      address: "456 Oak Ave, Barangay North",
-      barangayId: "BRGY-002",
-      dateOfBirth: "1990-07-22",
-      gender: "female",
-      civilStatus: "single",
-      occupation: "Nurse",
-      status: "active",
-      registrationDate: "2024-02-20",
-      avatar: "MS"
-    },
-    {
-      id: 3,
-      firstName: "Pedro",
-      lastName: "Garcia",
-      middleName: "Reyes",
-      email: "pedro@example.com",
-      phone: "+63 919 345 6789",
-      address: "789 Pine Rd, Barangay South",
-      barangayId: "BRGY-003",
-      dateOfBirth: "1978-11-08",
-      gender: "male",
-      civilStatus: "married",
-      occupation: "Farmer",
-      status: "inactive",
-      registrationDate: "2024-03-10",
-      avatar: "PG"
-    },
-    {
-      id: 4,
-      firstName: "Ana",
-      lastName: "Reyes",
-      email: "ana@example.com",
-      phone: "+63 920 456 7890",
-      address: "321 Elm St, Barangay East",
-      barangayId: "BRGY-004",
-      dateOfBirth: "1995-05-30",
-      gender: "female",
-      civilStatus: "single",
-      occupation: "Student",
-      status: "active",
-      registrationDate: "2024-04-05",
-      avatar: "AR"
-    },
-    {
-      id: 5,
-      firstName: "Carlos",
-      lastName: "Mendoza",
-      email: "carlos@example.com",
-      phone: "+63 921 567 8901",
-      address: "654 Maple Dr, Barangay West",
-      barangayId: "BRGY-005",
-      dateOfBirth: "1982-09-12",
-      gender: "male",
-      civilStatus: "married",
-      occupation: "Driver",
-      status: "active",
-      registrationDate: "2024-05-12",
-      avatar: "CM"
+  // Fetch residents from API
+  useEffect(() => {
+    fetchResidents();
+  }, []);
+
+  const fetchResidents = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const params = new URLSearchParams();
+      if (searchTerm) params.append('search', searchTerm);
+      if (filterStatus !== 'all') params.append('status', filterStatus);
+      if (filterGender !== 'all') params.append('gender', filterGender);
+
+      const response = await fetch(`/api/residents?${params.toString()}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch residents');
+      }
+
+      setResidents(data.data || []);
+    } catch (err: any) {
+      console.error('Error fetching residents:', err);
+      setError(err.message || 'Failed to load residents');
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
-  const filteredResidents = residents.filter(resident => {
-    const fullName = `${resident.firstName} ${resident.lastName}`.toLowerCase();
-    const matchesSearch = fullName.includes(searchTerm.toLowerCase()) ||
-                         resident.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         resident.barangayId.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === "all" || resident.status === filterStatus;
-    const matchesGender = filterGender === "all" || resident.gender === filterGender;
-    return matchesSearch && matchesStatus && matchesGender;
-  });
+  // Refetch when filters change
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      fetchResidents();
+    }, 300); // Debounce search
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchTerm, filterStatus, filterGender]);
+
+
+  // Since we're now fetching filtered data from API, we don't need client-side filtering
+  const filteredResidents = residents;
 
   const handleSelectResident = (residentId: number) => {
     setSelectedResidents(prev =>
@@ -247,6 +201,7 @@ const ResidentsPage: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => router.push('/residents/add')}
               className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-3 rounded-xl shadow-sm transition-all flex items-center gap-2 font-medium"
             >
               <FaPlus className="text-sm" />
@@ -456,168 +411,205 @@ const ResidentsPage: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Residents Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mobile-card-grid"
-        >
-          {filteredResidents.map((resident, index) => (
-            <motion.div
-              key={resident.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.05, duration: 0.3 }}
-              whileHover={{ y: -8 }}
-              className="card card-interactive group overflow-hidden"
-            >
-              {/* Header with gradient background */}
-              <div className="relative p-6 bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white overflow-hidden">
-                {/* Background pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16" />
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12" />
-                </div>
-
-                <div className="relative flex items-start justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                        {resident.avatar}
-                      </div>
-                      {/* Online status indicator */}
-                      <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                        resident.status === 'active' ? 'bg-success-500' : 'bg-neutral-400'
-                      }`} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-xl text-white mb-1 truncate">
-                        {resident.firstName} {resident.lastName}
-                      </h3>
-                      <p className="text-primary-100 text-sm font-medium">{resident.barangayId}</p>
-                      <p className="text-primary-200 text-xs mt-1">
-                        Age: {calculateAge(resident.dateOfBirth)} • {resident.occupation}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="flex gap-2">
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-all duration-200"
-                      title="View Details"
-                    >
-                      <FaEye className="text-white text-sm" />
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-all duration-200"
-                      title="Edit Resident"
-                    >
-                      <FaEdit className="text-white text-sm" />
-                    </motion.button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                {/* Contact Information */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
-                      <FaEnvelope className="text-neutral-500 dark:text-neutral-400 text-xs" />
-                    </div>
-                    <span className="text-neutral-700 dark:text-neutral-300 font-medium truncate">{resident.email}</span>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
-                      <FaPhone className="text-neutral-500 dark:text-neutral-400 text-xs" />
-                    </div>
-                    <span className="text-neutral-700 dark:text-neutral-300 font-medium">{resident.phone}</span>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
-                      <FaMapMarkerAlt className="text-neutral-500 dark:text-neutral-400 text-xs" />
-                    </div>
-                    <span className="text-neutral-700 dark:text-neutral-300 font-medium truncate">{resident.address}</span>
-                  </div>
-                </div>
-
-                {/* Status Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getGenderColor(resident.gender)}`}>
-                    {resident.gender === 'male' ? '👨' : resident.gender === 'female' ? '👩' : '🧑'} {resident.gender}
-                  </span>
-                  <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getCivilStatusColor(resident.civilStatus)}`}>
-                    {resident.civilStatus}
-                  </span>
-                  <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(resident.status)}`}>
-                    {resident.status === 'active' ? '✅' : '⏸️'} {resident.status}
-                  </span>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-3">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleStatusChange(resident.id, resident.status === 'active' ? 'inactive' : 'active')}
-                    className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all duration-200 ${
-                      resident.status === 'active'
-                        ? 'bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-300 hover:bg-error-100 dark:hover:bg-error-900/30 border border-error-200 dark:border-error-800'
-                        : 'bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-300 hover:bg-success-100 dark:hover:bg-success-900/30 border border-success-200 dark:border-success-800'
-                    }`}
-                  >
-                    {resident.status === 'active' ? 'Deactivate' : 'Activate'}
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleDeleteResident(resident.id)}
-                    className="p-3 bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-300 rounded-xl hover:bg-error-100 dark:hover:bg-error-900/30 transition-all duration-200 border border-error-200 dark:border-error-800"
-                    title="Delete Resident"
-                  >
-                    <FaTrash className="text-sm" />
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {filteredResidents.length === 0 && (
+        {/* Loading State */}
+        {loading && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
             className="text-center py-16"
           >
-            <div className="w-24 h-24 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FaUsers className="text-neutral-400 dark:text-neutral-500 text-3xl" />
+            <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-neutral-600 dark:text-neutral-400">Loading residents...</p>
+          </motion.div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-center py-16"
+          >
+            <div className="w-16 h-16 bg-error-100 dark:bg-error-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FaExclamationTriangle className="text-error-500 text-2xl" />
             </div>
-            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">No residents found</h3>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
-              {searchTerm || filterGender !== "all" || filterStatus !== "all"
-                ? "Try adjusting your search or filter criteria to find what you're looking for."
-                : "Get started by adding your first resident to the system."}
-            </p>
-            {(searchTerm || filterGender !== "all" || filterStatus !== "all") && (
-              <button
-                onClick={() => {
-                  setSearchTerm('');
-                  setFilterGender('all');
-                  setFilterStatus('all');
-                }}
-                className="btn-secondary"
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">Error Loading Residents</h3>
+            <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">{error}</p>
+            <button
+              onClick={fetchResidents}
+              className="btn-primary"
+            >
+              Try Again
+            </button>
+          </motion.div>
+        )}
+
+        {/* Residents Grid */}
+        {!loading && !error && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mobile-card-grid"
+          >
+            {filteredResidents.length > 0 ? (
+              filteredResidents.map((resident, index) => (
+                <motion.div
+                  key={resident.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  whileHover={{ y: -8 }}
+                  className="card card-interactive group overflow-hidden"
+                >
+                  {/* Header with gradient background */}
+                  <div className="relative p-6 bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white overflow-hidden">
+                    {/* Background pattern */}
+                    <div className="absolute inset-0 opacity-10">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16" />
+                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12" />
+                    </div>
+
+                    <div className="relative flex items-start justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="relative">
+                          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                            {resident.avatar}
+                          </div>
+                          {/* Online status indicator */}
+                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                            resident.status === 'active' ? 'bg-success-500' : 'bg-neutral-400'
+                          }`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-xl text-white mb-1 truncate">
+                            {resident.firstName} {resident.lastName}
+                          </h3>
+                          <p className="text-primary-100 text-sm font-medium">{resident.barangayId}</p>
+                          <p className="text-primary-200 text-xs mt-1">
+                            Age: {calculateAge(resident.dateOfBirth)} • {resident.occupation}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="flex gap-2">
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="p-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-all duration-200"
+                          title="View Details"
+                        >
+                          <FaEye className="text-white text-sm" />
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="p-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-all duration-200"
+                          title="Edit Resident"
+                        >
+                          <FaEdit className="text-white text-sm" />
+                        </motion.button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    {/* Contact Information */}
+                    <div className="space-y-4 mb-6">
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
+                          <FaEnvelope className="text-neutral-500 dark:text-neutral-400 text-xs" />
+                        </div>
+                        <span className="text-neutral-700 dark:text-neutral-300 font-medium truncate">{resident.email}</span>
+                      </div>
+
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
+                          <FaPhone className="text-neutral-500 dark:text-neutral-400 text-xs" />
+                        </div>
+                        <span className="text-neutral-700 dark:text-neutral-300 font-medium">{resident.phone}</span>
+                      </div>
+
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
+                          <FaMapMarkerAlt className="text-neutral-500 dark:text-neutral-400 text-xs" />
+                        </div>
+                        <span className="text-neutral-700 dark:text-neutral-300 font-medium truncate">{resident.address}</span>
+                      </div>
+                    </div>
+
+                    {/* Status Tags */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getGenderColor(resident.gender)}`}>
+                        {resident.gender === 'male' ? '👨' : resident.gender === 'female' ? '👩' : '🧑'} {resident.gender}
+                      </span>
+                      <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getCivilStatusColor(resident.civilStatus)}`}>
+                        {resident.civilStatus}
+                      </span>
+                      <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(resident.status)}`}>
+                        {resident.status === 'active' ? '✅' : '⏸️'} {resident.status}
+                      </span>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-3">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => handleStatusChange(resident.id, resident.status === 'active' ? 'inactive' : 'active')}
+                        className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all duration-200 ${
+                          resident.status === 'active'
+                            ? 'bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-300 hover:bg-error-100 dark:hover:bg-error-900/30 border border-error-200 dark:border-error-800'
+                            : 'bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-300 hover:bg-success-100 dark:hover:bg-success-900/30 border border-success-200 dark:border-success-800'
+                        }`}
+                      >
+                        {resident.status === 'active' ? 'Deactivate' : 'Activate'}
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => handleDeleteResident(resident.id)}
+                        className="p-3 bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-300 rounded-xl hover:bg-error-100 dark:hover:bg-error-900/30 transition-all duration-200 border border-error-200 dark:border-error-800"
+                        title="Delete Resident"
+                      >
+                        <FaTrash className="text-sm" />
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-16"
               >
-                Clear all filters
-              </button>
+                <div className="w-24 h-24 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <FaUsers className="text-neutral-400 dark:text-neutral-500 text-3xl" />
+                </div>
+                <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">No residents found</h3>
+                <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
+                  {searchTerm || filterGender !== "all" || filterStatus !== "all"
+                    ? "Try adjusting your search or filter criteria to find what you're looking for."
+                    : "Get started by adding your first resident to the system."}
+                </p>
+                {(searchTerm || filterGender !== "all" || filterStatus !== "all") && (
+                  <button
+                    onClick={() => {
+                      setSearchTerm('');
+                      setFilterGender('all');
+                      setFilterStatus('all');
+                    }}
+                    className="btn-secondary"
+                  >
+                    Clear all filters
+                  </button>
+                )}
+              </motion.div>
             )}
           </motion.div>
         )}

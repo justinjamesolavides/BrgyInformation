@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Define protected routes
-const protectedRoutes = ['/admin'];
+const protectedRoutes = ['/admin', '/staff'];
 const authRoutes = ['/login', '/register'];
 
 export function middleware(request: NextRequest) {
@@ -33,8 +33,8 @@ export function middleware(request: NextRequest) {
 
   if (isAuthRoute && sessionToken) {
     // If user is already authenticated and tries to access auth routes,
-    // redirect to dashboard
-    return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+    // redirect to a general dashboard route that will handle role-based redirection
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   return NextResponse.next();

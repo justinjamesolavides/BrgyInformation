@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import AdminAuthGuard from "../../components/AdminAuthGuard";
 import Sidebar from "../../components/Sidebar";
 import NotificationPanel from "../../components/NotificationPanel";
 import { FaUsers, FaBell, FaEye, FaClock, FaCalendarAlt, FaFileSignature, FaUserPlus, FaCheckCircle, FaFileAlt, FaChartLine, FaCog, FaClipboardList, FaArrowUp, FaArrowDown, FaSignOutAlt } from "react-icons/fa";
@@ -14,39 +15,12 @@ interface User {
   role: string;
 }
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboardContent: React.FC<{ user: User }> = ({ user }) => {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Check authentication on mount
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    try {
-      const response = await fetch('/api/auth/session');
-      const data = await response.json();
-
-      if (data.authenticated) {
-        setUser(data.user);
-      } else {
-        router.push('/login');
-        return;
-      }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-      router.push('/login');
-      return;
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleLogout = async () => {
     try {
@@ -54,8 +28,6 @@ const AdminDashboard: React.FC = () => {
       router.push('/login');
     } catch (error) {
       console.error('Logout failed:', error);
-      // Force logout by clearing local state
-      setUser(null);
       router.push('/login');
     }
   };
@@ -326,21 +298,6 @@ const AdminDashboard: React.FC = () => {
       default: return "text-gray-600 bg-gray-100";
     }
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null; // Will redirect in useEffect
-  }
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-900 dark:via-indigo-900 dark:to-purple-900">
@@ -803,6 +760,14 @@ const AdminDashboard: React.FC = () => {
         </AnimatePresence>
       </div>
     </div>
+  );
+};
+
+const AdminDashboard: React.FC = () => {
+  return (
+    <AdminAuthGuard requireAdmin={true}>
+      {(user) => <AdminDashboardContent user={user} />}
+    </AdminAuthGuard>
   );
 };
 

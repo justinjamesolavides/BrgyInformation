@@ -65,6 +65,9 @@ export async function POST(request: NextRequest) {
       createdAt: new Date()
     });
 
+    // Set redirect URL based on user role
+    const redirectUrl = user.role === 'admin' ? '/admin/dashboard' : '/staff/dashboard';
+
     return NextResponse.json({
       success: true,
       user: {
@@ -73,7 +76,7 @@ export async function POST(request: NextRequest) {
         name: user.name,
         role: user.role
       },
-      redirect: '/admin/dashboard'
+      redirect: redirectUrl
     });
 
   } catch (error) {

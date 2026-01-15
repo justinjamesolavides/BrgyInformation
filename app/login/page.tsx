@@ -55,15 +55,29 @@ const LoginPage: React.FC = () => {
     setErrors({});
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
 
       setLoginSuccess(true);
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push(data.redirect || "/admin/dashboard");
       }, 1000);
-    } catch (error) {
-      setErrors({ general: "Invalid email or password" });
+    } catch (error: any) {
+      setErrors({ general: error.message || "Invalid email or password" });
     } finally {
       setIsLoading(false);
     }

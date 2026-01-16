@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import StaffSidebar from "../../components/StaffSidebar";
 import { motion } from "framer-motion";
 import {
   FaUsers,
@@ -34,7 +33,7 @@ interface Resident {
   avatar: string;
 }
 
-const StaffResidentsPage: React.FC = () => {
+const StaffResidentsContent: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Mock data - in real app this would come from API
@@ -119,18 +118,13 @@ const StaffResidentsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      {/* Sidebar */}
-      <StaffSidebar />
-
-      {/* Main Content */}
-      <div className="ml-64 flex-1 p-4 md:p-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
-        >
+    <div className="p-4 md:p-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
+      >
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
@@ -295,10 +289,13 @@ const StaffResidentsPage: React.FC = () => {
               {searchTerm ? "Try adjusting your search criteria." : "No residents available for staff review."}
             </p>
           </motion.div>
-        )}
-      </div>
+      )}
     </div>
   );
+};
+
+const StaffResidentsPage: React.FC = () => {
+  return <StaffResidentsContent />;
 };
 
 export default StaffResidentsPage;

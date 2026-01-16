@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import StaffSidebar from "../../components/StaffSidebar";
 import { motion } from "framer-motion";
 import {
   FaClipboardList,
@@ -25,7 +24,7 @@ interface Request {
   deadline?: string;
 }
 
-const StaffRequestsPage: React.FC = () => {
+const StaffRequestsContent: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -109,18 +108,13 @@ const StaffRequestsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      {/* Sidebar */}
-      <StaffSidebar />
-
-      {/* Main Content */}
-      <div className="ml-64 flex-1 p-4 md:p-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
-        >
+    <div className="p-4 md:p-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
+      >
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
@@ -323,10 +317,13 @@ const StaffRequestsPage: React.FC = () => {
                 : "No requests available for staff review."}
             </p>
           </motion.div>
-        )}
-      </div>
+      )}
     </div>
   );
+};
+
+const StaffRequestsPage: React.FC = () => {
+  return <StaffRequestsContent />;
 };
 
 export default StaffRequestsPage;

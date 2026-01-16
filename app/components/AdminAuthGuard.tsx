@@ -35,17 +35,17 @@ const AdminAuthGuard: React.FC<AdminAuthGuardProps> = ({
       if (data.authenticated) {
         if (requireAdmin && data.user.role !== 'admin') {
           // If admin access required and user is not admin, redirect to appropriate dashboard
-          router.push(data.user.role === 'staff' ? '/staff/dashboard' : '/login');
+          router.replace(data.user.role === 'staff' ? '/staff/dashboard' : '/login');
           return;
         }
         setUser(data.user);
       } else {
-        router.push('/login');
+        router.replace('/login');
         return;
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      router.push('/login');
+      router.replace('/login');
       return;
     } finally {
       setLoading(false);

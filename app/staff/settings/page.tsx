@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import StaffSidebar from "../../components/StaffSidebar";
 import ThemeToggle from "../../components/ThemeToggle";
 import { motion } from "framer-motion";
 import {
@@ -16,7 +15,7 @@ import {
   FaEyeSlash
 } from "react-icons/fa";
 
-const StaffSettingsPage: React.FC = () => {
+const StaffSettingsContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -28,18 +27,13 @@ const StaffSettingsPage: React.FC = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      {/* Sidebar */}
-      <StaffSidebar />
-
-      {/* Main Content */}
-      <div className="ml-64 flex-1 p-4 md:p-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
-        >
+    <div className="p-4 md:p-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
+      >
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
@@ -402,10 +396,13 @@ const StaffSettingsPage: React.FC = () => {
               </div>
             </div>
           </motion.div>
-        </div>
       </div>
     </div>
   );
+};
+
+const StaffSettingsPage: React.FC = () => {
+  return <StaffSettingsContent />;
 };
 
 export default StaffSettingsPage;

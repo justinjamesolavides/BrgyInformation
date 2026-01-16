@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import StaffSidebar from "../../components/StaffSidebar";
 import { motion } from "framer-motion";
 import {
   FaFileAlt,
@@ -25,7 +24,7 @@ interface Report {
   downloadUrl?: string;
 }
 
-const StaffReportsPage: React.FC = () => {
+const StaffReportsContent: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("month");
 
   // Mock data - in real app this would come from API
@@ -102,50 +101,45 @@ const StaffReportsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      {/* Sidebar */}
-      <StaffSidebar />
-
-      {/* Main Content */}
-      <div className="ml-64 flex-1 p-4 md:p-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
-        >
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
-                <FaFileAlt className="text-blue-600 dark:text-blue-400 text-xl" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-neutral-900 dark:text-white font-display">
-                  Staff - Reports & Analytics
-                </h1>
-                <p className="text-neutral-600 dark:text-neutral-400 mt-1">
-                  Generate and view barangay reports (Staff Access)
-                </p>
-              </div>
+    <div className="p-4 md:p-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
+      >
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
+              <FaFileAlt className="text-blue-600 dark:text-blue-400 text-xl" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-neutral-900 dark:text-white font-display">
+                Staff - Reports & Analytics
+              </h1>
+              <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+                Generate and view barangay reports (Staff Access)
+              </p>
             </div>
           </div>
+        </div>
 
-          <div className="flex gap-3">
-            <div className="flex items-center gap-2 bg-white dark:bg-neutral-800 px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm">
-              <FaCalendarAlt className="text-neutral-500 dark:text-neutral-400" />
-              <select
-                value={selectedPeriod}
-                onChange={(e) => setSelectedPeriod(e.target.value)}
-                className="bg-transparent border-none outline-none text-sm font-medium text-neutral-900 dark:text-white cursor-pointer"
-              >
-                <option value="week">📅 This Week</option>
-                <option value="month">📆 This Month</option>
-                <option value="quarter">📊 This Quarter</option>
-                <option value="year">📈 This Year</option>
-              </select>
-            </div>
+        <div className="flex gap-3">
+          <div className="flex items-center gap-2 bg-white dark:bg-neutral-800 px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm">
+            <FaCalendarAlt className="text-neutral-500 dark:text-neutral-400" />
+            <select
+              value={selectedPeriod}
+              onChange={(e) => setSelectedPeriod(e.target.value)}
+              className="bg-transparent border-none outline-none text-sm font-medium text-neutral-900 dark:text-white cursor-pointer"
+            >
+              <option value="week">📅 This Week</option>
+              <option value="month">📆 This Month</option>
+              <option value="quarter">📊 This Quarter</option>
+              <option value="year">📈 This Year</option>
+            </select>
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
 
         {/* Stats Cards */}
         <motion.div
@@ -348,10 +342,13 @@ const StaffReportsPage: React.FC = () => {
               ))}
             </div>
           </div>
-        </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
+};
+
+const StaffReportsPage: React.FC = () => {
+  return <StaffReportsContent />;
 };
 
 export default StaffReportsPage;

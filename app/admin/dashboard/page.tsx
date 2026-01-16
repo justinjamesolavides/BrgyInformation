@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import AdminAuthGuard from "../../components/AdminAuthGuard";
-import Sidebar from "../../components/Sidebar";
 import NotificationPanel from "../../components/NotificationPanel";
 import { FaUsers, FaBell, FaEye, FaClock, FaCalendarAlt, FaFileSignature, FaUserPlus, FaCheckCircle, FaFileAlt, FaChartLine, FaCog, FaClipboardList, FaArrowUp, FaArrowDown, FaSignOutAlt } from "react-icons/fa";
 
@@ -15,7 +13,20 @@ interface User {
   role: string;
 }
 
-const AdminDashboardContent: React.FC<{ user: User }> = ({ user }) => {
+const AdminDashboard: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Fetch user data
+    fetch('/api/auth/session')
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          setUser(data.user);
+        }
+      })
+      .catch(err => console.error('Failed to fetch user:', err));
+  }, []);
   const router = useRouter();
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -299,14 +310,19 @@ const AdminDashboardContent: React.FC<{ user: User }> = ({ user }) => {
     }
   };
 
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-900 dark:via-indigo-900 dark:to-purple-900">
-
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Main Content */}
-      <div className="ml-0 lg:ml-64 flex-1 p-4 md:p-6 lg:p-8 mobile-spacing transition-all duration-300">
+    <div className="p-4 md:p-6 lg:p-8 mobile-spacing transition-all duration-300 bg-gradient-to-br from-slate-50 via-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-900 dark:via-indigo-900 dark:to-purple-900 min-h-screen">
 
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 lg:mb-10 gap-4 lg:gap-6">
@@ -759,15 +775,7 @@ const AdminDashboardContent: React.FC<{ user: User }> = ({ user }) => {
           </motion.div>
         </AnimatePresence>
       </div>
-    </div>
-  );
-};
-
-const AdminDashboard: React.FC = () => {
-  return (
-    <AdminAuthGuard requireAdmin={true}>
-      {(user) => <AdminDashboardContent user={user} />}
-    </AdminAuthGuard>
+    
   );
 };
 

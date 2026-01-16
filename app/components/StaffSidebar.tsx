@@ -37,7 +37,7 @@ const StaffSidebar: React.FC = () => {
 
   const navigationItems: NavItem[] = [
     {
-      href: "/staffDashboard",
+      href: "/staff/dashboard",
       label: "Dashboard",
       icon: <FaTachometerAlt className="text-lg" />,
       description: "Overview & Analytics"
@@ -47,6 +47,18 @@ const StaffSidebar: React.FC = () => {
       label: "Residents",
       icon: <FaUsers className="text-lg" />,
       description: "View Residents"
+    },
+    {
+      href: "/staff/households",
+      label: "Households",
+      icon: <FaHome className="text-lg" />,
+      description: "View Households"
+    },
+    {
+      href: "/staff/announcements",
+      label: "Announcements",
+      icon: <FaBullhorn className="text-lg" />,
+      description: "View Updates"
     },
     {
       href: "/staff/requests",

@@ -35,17 +35,17 @@ const StaffAuthGuard: React.FC<StaffAuthGuardProps> = ({
       if (data.authenticated) {
         if (requireStaff && data.user.role !== 'staff') {
           // If staff access required and user is not staff, redirect to appropriate dashboard
-          router.push(data.user.role === 'admin' ? '/admin/dashboard' : '/login');
+          router.replace(data.user.role === 'admin' ? '/admin/dashboard' : '/login');
           return;
         }
         setUser(data.user);
       } else {
-        router.push('/login');
+        router.replace('/login');
         return;
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      router.push('/login');
+      router.replace('/login');
       return;
     } finally {
       setLoading(false);

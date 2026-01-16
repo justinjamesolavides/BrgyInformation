@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { FaEye, FaEyeSlash, FaUser, FaLock, FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaUser, FaLock, FaExclamationTriangle } from "react-icons/fa";
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
@@ -17,7 +17,6 @@ const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
-  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
@@ -72,10 +71,8 @@ const LoginPage: React.FC = () => {
         throw new Error(data.error || 'Login failed');
       }
 
-      setLoginSuccess(true);
-      setTimeout(() => {
-        router.push(data.redirect || "/admin/dashboard");
-      }, 1000);
+      // Redirect immediately without delay - use replace to avoid history stack
+      router.replace(data.redirect || "/admin/dashboard");
     } catch (error: any) {
       setErrors({ general: error.message || "Invalid email or password" });
     } finally {
@@ -115,27 +112,18 @@ const LoginPage: React.FC = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="surface w-full max-w-md p-8 mt-20 md:mt-0 relative overflow-hidden backdrop-blur-xl bg-white/95 dark:bg-neutral-900/95 border-2 border-white/20 dark:border-neutral-700/50"
       >
-        {/* Success overlay */}
-        {loginSuccess && (
+        {/* Loading overlay - only show during actual authentication */}
+        {isLoading && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="absolute inset-0 bg-success-50 dark:bg-success-900/20 flex items-center justify-center z-10 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 bg-white/80 dark:bg-neutral-900/80 flex items-center justify-center z-10 backdrop-blur-sm"
           >
             <div className="text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              >
-                <FaCheckCircle className="text-success-500 text-5xl mx-auto mb-4" />
-                <h3 className="text-success-800 dark:text-success-200 font-bold text-xl mb-2">
-                  Login Successful!
-                </h3>
-                <p className="text-success-700 dark:text-success-300">
-                  Redirecting to dashboard...
-                </p>
-              </motion.div>
+              <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-neutral-700 dark:text-neutral-300 font-medium">
+                Signing in...
+              </p>
             </div>
           </motion.div>
         )}

@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import StaffAuthGuard from "../../components/StaffAuthGuard";
-import StaffSidebar from "../../components/StaffSidebar";
 import NotificationPanel from "../../components/NotificationPanel";
 import { motion } from "framer-motion";
 import {
@@ -152,12 +150,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      {/* Sidebar */}
-      <StaffSidebar />
-
-      {/* Main Content */}
-      <div className="ml-64 flex-1 p-4 md:p-6 mobile-spacing">
+    <div className="p-4 md:p-6 mobile-spacing">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -456,17 +449,37 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
             )}
           </div>
         </motion.div>
-      </div>
     </div>
   );
 };
 
 const StaffDashboard: React.FC = () => {
-  return (
-    <StaffAuthGuard requireStaff={true}>
-      {(user) => <StaffDashboardContent user={user} />}
-    </StaffAuthGuard>
-  );
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Fetch user data
+    fetch('/api/auth/session')
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          setUser(data.user);
+        }
+      })
+      .catch(err => console.error('Failed to fetch user:', err));
+  }, []);
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <StaffDashboardContent user={user} />;
 };
 
 export default StaffDashboard;

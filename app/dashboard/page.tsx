@@ -13,22 +13,22 @@ const DashboardRedirect: React.FC = () => {
         const data = await response.json();
 
         if (data.authenticated) {
-          // Redirect based on user role
+          // Redirect based on user role - use replace to avoid history stack
           if (data.user.role === 'admin') {
-            router.push('/admin/dashboard');
+            router.replace('/admin/dashboard');
           } else if (data.user.role === 'staff') {
-            router.push('/staff/dashboard');
+            router.replace('/staff/dashboard');
           } else {
             // Default fallback
-            router.push('/admin/dashboard');
+            router.replace('/admin/dashboard');
           }
         } else {
           // Not authenticated, redirect to login
-          router.push('/login');
+          router.replace('/login');
         }
       } catch (error) {
         console.error('Role check failed:', error);
-        router.push('/login');
+        router.replace('/login');
       }
     };
 

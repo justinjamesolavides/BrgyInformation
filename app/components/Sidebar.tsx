@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { FaTachometerAlt, FaUsers, FaFileAlt, FaCog } from "react-icons/fa";
+import { FaTachometerAlt, FaUsers, FaFileAlt, FaCog, FaHome, FaBullhorn, FaUserCog } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
 
 const Sidebar: React.FC = () => {
@@ -9,22 +9,37 @@ const Sidebar: React.FC = () => {
 
   const navigationItems = [
     {
-      href: "/dashboard",
+      href: "/admin/dashboard",
       label: "Dashboard",
       icon: <FaTachometerAlt />
     },
     {
-      href: "/residents",
+      href: "/admin/residents",
       label: "Residents",
       icon: <FaUsers />
     },
     {
-      href: "/reports",
+      href: "/admin/households",
+      label: "Households",
+      icon: <FaHome />
+    },
+    {
+      href: "/admin/announcements",
+      label: "Announcements",
+      icon: <FaBullhorn />
+    },
+    {
+      href: "/admin/users",
+      label: "User Management",
+      icon: <FaUserCog />
+    },
+    {
+      href: "/admin/reports",
       label: "Reports",
       icon: <FaFileAlt />
     },
     {
-      href: "/settings",
+      href: "/admin/settings",
       label: "Settings",
       icon: <FaCog />
     }

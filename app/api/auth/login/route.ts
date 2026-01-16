@@ -1,23 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-
-// Mock user database - in production, use a real database
-const users = [
-  {
-    id: 1,
-    email: 'admin@brgy.com',
-    password: 'demo123', // In production, hash passwords
-    name: 'Admin User',
-    role: 'admin'
-  },
-  {
-    id: 2,
-    email: 'staff@brgy.com',
-    password: 'staff123',
-    name: 'Staff User',
-    role: 'staff'
-  }
-];
+import { usersStorage } from '../../../../lib/fileStorage';
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,10 +14,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find user - in production, query database
-    const user = users.find(u => u.email === email && u.password === password);
+    // Find user from storage
+    const user = usersStorage.findByEmail(email);
 
-    if (!user) {
+    if (!user || user.password !== password) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
@@ -44,18 +27,7 @@ export async function POST(request: NextRequest) {
     // Create session token (in production, use JWT or secure session)
     const sessionToken = `session_${user.id}_${Date.now()}`;
 
-    // Set session cookie
-    const cookieStore = await cookies();
-    cookieStore.set('session_token', sessionToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/'
-    });
-
-    // Store session data (in production, use Redis or database)
-    // For demo, we'll use a simple in-memory store
+    // Store session data first (before setting cookie)
     global.sessionStore = global.sessionStore || new Map();
     global.sessionStore.set(sessionToken, {
       userId: user.id,
@@ -68,7 +40,8 @@ export async function POST(request: NextRequest) {
     // Set redirect URL based on user role
     const redirectUrl = user.role === 'admin' ? '/admin/dashboard' : '/staff/dashboard';
 
-    return NextResponse.json({
+    // Create response with user data
+    const response = NextResponse.json({
       success: true,
       user: {
         id: user.id,
@@ -78,6 +51,17 @@ export async function POST(request: NextRequest) {
       },
       redirect: redirectUrl
     });
+
+    // Set session cookie on response
+    response.cookies.set('session_token', sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/'
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Login error:', error);

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import AdminAuthGuard from "../../components/AdminAuthGuard";
 import Sidebar from "../../components/Sidebar";
 import { motion } from "framer-motion";
 import {
@@ -10,11 +12,14 @@ import {
   FaShieldAlt,
   FaUser,
   FaEnvelope,
-  FaKey
+  FaKey,
+  FaCheckCircle,
+  FaExclamationTriangle
 } from "react-icons/fa";
 import Link from "next/link";
 
-const AddUserPage: React.FC = () => {
+const AddUserContent: React.FC = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -23,57 +28,134 @@ const AddUserPage: React.FC = () => {
     password: "",
     confirmPassword: ""
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors(prev => ({ ...prev, [e.target.name]: "" }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    const newErrors: {[key: string]: string} = {};
+
+    if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
+    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email format";
+    if (!formData.role) newErrors.role = "Role is required";
+    if (!formData.password) newErrors.password = "Password is required";
+    else if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+    if (!formData.confirmPassword) newErrors.confirmPassword = "Please confirm your password";
+    else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Handle form submission here
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          role: formData.role,
+          password: formData.password
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.fields) {
+          // Field-specific errors
+          const fieldErrors: {[key: string]: string} = {};
+          data.fields.forEach((field: string) => {
+            fieldErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+          });
+          setErrors(fieldErrors);
+        } else {
+          setErrors({ general: data.error || 'Failed to create user' });
+        }
+        return;
+      }
+
+      // Success
+      setSuccess(true);
+
+      // Redirect after showing success message
+      setTimeout(() => {
+        router.push('/users');
+      }, 2000);
+
+    } catch (error: any) {
+      console.error('Error creating user:', error);
+      setErrors({ general: 'Network error. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      {/* Sidebar */}
-      <Sidebar />
+    <AdminAuthGuard requireAdmin={true}>
+      {(user) => (
+        <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-900">
+          {/* Sidebar */}
+          <Sidebar />
 
-      {/* Main Content */}
-      <div className="ml-64 flex-1 p-4 md:p-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-4 mb-8"
-        >
-          <Link href="/users">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-3 bg-neutral-100 dark:bg-neutral-800 rounded-xl hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+          {/* Main Content */}
+          <div className="ml-64 flex-1 p-6 md:p-8 lg:p-10">
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-6 mb-10"
             >
-              <FaArrowLeft className="text-neutral-600 dark:text-neutral-400" />
-            </motion.button>
-          </Link>
+              <Link href="/users">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-4 bg-white dark:bg-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-all duration-200 shadow-sm border border-neutral-200 dark:border-neutral-700"
+                >
+                  <FaArrowLeft className="text-neutral-600 dark:text-neutral-400 text-lg" />
+                </motion.button>
+              </Link>
 
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
-              <FaUserPlus className="text-green-600 dark:text-green-400 text-xl" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-neutral-900 dark:text-white font-display">
-                Add New User
-              </h1>
-              <p className="text-neutral-600 dark:text-neutral-400 mt-1">
-                Create a new user account for the barangay system
-              </p>
-            </div>
-          </div>
-        </motion.div>
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-2xl flex items-center justify-center shadow-lg">
+                  <FaUserPlus className="text-blue-600 dark:text-blue-400 text-2xl" />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold text-neutral-900 dark:text-white font-display">
+                    Add New User
+                  </h1>
+                  <p className="text-neutral-600 dark:text-neutral-400 mt-2 text-lg">
+                    Create a new admin or staff user account
+                  </p>
+                </div>
+              </div>
+            </motion.div>
 
         {/* Form */}
         <motion.div
@@ -246,6 +328,8 @@ const AddUserPage: React.FC = () => {
         </motion.div>
       </div>
     </div>
+    )}
+    </AdminAuthGuard>
   );
 };
 

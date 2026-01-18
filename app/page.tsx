@@ -10,7 +10,7 @@ const HomePage: React.FC = () => {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-700 flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-neutral-900 flex flex-col">
 
       {/* Header */}
       <motion.header

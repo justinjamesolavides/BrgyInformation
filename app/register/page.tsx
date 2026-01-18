@@ -118,7 +118,7 @@ const RegisterPage: React.FC = () => {
   const strengthColors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-blue-500", "bg-green-500"];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-700 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-neutral-900 px-4">
 
       {/* Logo/Header */}
       <motion.div

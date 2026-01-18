@@ -53,7 +53,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-64 bg-white dark:bg-gray-900 text-gray-900 dark:text-white fixed border-r border-gray-200 dark:border-gray-700">
+    <div className="h-screen w-64 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white fixed border-r border-gray-200 dark:border-gray-700">
 
       {/* Logo */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">

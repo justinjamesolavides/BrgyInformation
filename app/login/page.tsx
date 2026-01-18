@@ -81,7 +81,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 px-4 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-neutral-900 px-4 relative overflow-hidden">
 
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">

@@ -322,7 +322,7 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 mobile-spacing transition-all duration-300 bg-gradient-to-br from-slate-50 via-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-900 dark:via-indigo-900 dark:to-purple-900 min-h-screen">
+    <div className="p-4 md:p-6 lg:p-8 mobile-spacing transition-all duration-300 bg-white dark:bg-neutral-900 min-h-screen">
 
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 lg:mb-10 gap-4 lg:gap-6">
@@ -638,9 +638,6 @@ const AdminDashboard: React.FC = () => {
             transition={{ duration: 0.3 }}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/30 dark:border-gray-700/60 p-6 overflow-hidden relative"
           >
-            {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-full -translate-y-16 translate-x-16"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-indigo-500/5 to-pink-500/5 rounded-full translate-y-12 -translate-x-12"></div>
 
             <div className="relative z-10">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 lg:mb-8 gap-3 lg:gap-4">

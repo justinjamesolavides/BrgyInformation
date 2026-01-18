@@ -178,7 +178,7 @@ const PendingRequestsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-white dark:bg-neutral-900">
 
       {/* Sidebar */}
       <Sidebar />

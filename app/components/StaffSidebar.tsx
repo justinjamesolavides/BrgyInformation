@@ -111,7 +111,7 @@ const StaffSidebar: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 fixed flex flex-col">
+    <div className="h-screen w-64 bg-gray-50 dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 fixed flex flex-col">
 
       {/* Logo */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-800">

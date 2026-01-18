@@ -12,7 +12,7 @@ export default function AdminLayout({
   return (
     <AdminAuthGuard requireAdmin={true}>
       {(user) => (
-        <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-900">
+        <div className="flex min-h-screen bg-white dark:bg-neutral-900">
           {/* Persistent Sidebar */}
           <Sidebar />
           

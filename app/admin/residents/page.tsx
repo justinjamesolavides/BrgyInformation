@@ -17,9 +17,13 @@ import {
   FaFemale,
   FaUserCheck,
   FaUserTimes,
-  FaUserFriends
+  FaUserFriends,
+  FaTrash
 } from "react-icons/fa";
 import AddResidentModal from "./components/AddResidentModal";
+import ViewResidentModal from "./components/ViewResidentModal";
+import EditResidentModal from "./components/EditResidentModal";
+import DeleteResidentModal from "./components/DeleteResidentModal";
 
 interface Resident {
   id: number;
@@ -51,6 +55,12 @@ const AdminResidentsPage: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterGender, setFilterGender] = useState("all");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Modal states
+  const [selectedResident, setSelectedResident] = useState<Resident | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Fetch residents from API
   useEffect(() => {
@@ -94,6 +104,39 @@ const AdminResidentsPage: React.FC = () => {
 
   const handleResidentAdded = (newResident: Resident) => {
     setResidents(prev => [newResident, ...prev]);
+  };
+
+  // Modal handlers
+  const handleViewResident = (resident: Resident) => {
+    setSelectedResident(resident);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEditResident = (resident: Resident) => {
+    setSelectedResident(resident);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteResident = (resident: Resident) => {
+    setSelectedResident(resident);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleResidentUpdated = (updatedResident: Resident) => {
+    setResidents(prev => prev.map(resident =>
+      resident.id === updatedResident.id ? updatedResident : resident
+    ));
+  };
+
+  const handleResidentDeleted = (residentId: number) => {
+    setResidents(prev => prev.filter(resident => resident.id !== residentId));
+  };
+
+  const closeAllModals = () => {
+    setIsViewModalOpen(false);
+    setIsEditModalOpen(false);
+    setIsDeleteModalOpen(false);
+    setSelectedResident(null);
   };
 
   const getStatusColor = (status: string) => {
@@ -362,18 +405,29 @@ const AdminResidentsPage: React.FC = () => {
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
+                          onClick={() => handleViewResident(resident)}
                           className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                          title="View Details"
+                          title="View Resident Details"
                         >
                           <FaEye className="text-sm" />
                         </motion.button>
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
+                          onClick={() => handleEditResident(resident)}
                           className="p-2 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
                           title="Edit Resident"
                         >
                           <FaEdit className="text-sm" />
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleDeleteResident(resident)}
+                          className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          title="Delete Resident"
+                        >
+                          <FaTrash className="text-sm" />
                         </motion.button>
                       </div>
                     </td>
@@ -390,6 +444,29 @@ const AdminResidentsPage: React.FC = () => {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onResidentAdded={handleResidentAdded}
+      />
+
+      {/* View Resident Modal */}
+      <ViewResidentModal
+        isOpen={isViewModalOpen}
+        onClose={closeAllModals}
+        resident={selectedResident}
+      />
+
+      {/* Edit Resident Modal */}
+      <EditResidentModal
+        isOpen={isEditModalOpen}
+        onClose={closeAllModals}
+        resident={selectedResident}
+        onResidentUpdated={handleResidentUpdated}
+      />
+
+      {/* Delete Resident Modal */}
+      <DeleteResidentModal
+        isOpen={isDeleteModalOpen}
+        onClose={closeAllModals}
+        resident={selectedResident}
+        onResidentDeleted={handleResidentDeleted}
       />
     </div>
   );

@@ -2,8 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaUserCog, FaPlus, FaSearch, FaEdit, FaTrash } from "react-icons/fa";
+import { FaUserCog, FaPlus, FaSearch, FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import Link from "next/link";
+import ViewUserModal from "./components/ViewUserModal";
+import EditUserModal from "./components/EditUserModal";
+import DeleteUserModal from "./components/DeleteUserModal";
 
 interface User {
   id: number;
@@ -20,6 +23,12 @@ const AdminUsersPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
+
+  // Modal states
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -50,6 +59,39 @@ const AdminUsersPage: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     return status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+  };
+
+  // Modal handlers
+  const handleViewUser = (user: User) => {
+    setSelectedUser(user);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteUser = (user: User) => {
+    setSelectedUser(user);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleUserUpdated = (updatedUser: User) => {
+    setUsers(prev => prev.map(user =>
+      user.id === updatedUser.id ? updatedUser : user
+    ));
+  };
+
+  const handleUserDeleted = (userId: number) => {
+    setUsers(prev => prev.filter(user => user.id !== userId));
+  };
+
+  const closeAllModals = () => {
+    setIsViewModalOpen(false);
+    setIsEditModalOpen(false);
+    setIsDeleteModalOpen(false);
+    setSelectedUser(null);
   };
 
   return (
@@ -172,12 +214,33 @@ const AdminUsersPage: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400">
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleViewUser(user)}
+                          className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                          title="View User Details"
+                        >
+                          <FaEye className="text-sm" />
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleEditUser(user)}
+                          className="p-2 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
+                          title="Edit User"
+                        >
                           <FaEdit className="text-sm" />
-                        </button>
-                        <button className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400">
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleDeleteUser(user)}
+                          className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          title="Delete User"
+                        >
                           <FaTrash className="text-sm" />
-                        </button>
+                        </motion.button>
                       </div>
                     </td>
                   </tr>
@@ -206,6 +269,27 @@ const AdminUsersPage: React.FC = () => {
             )}
           </div>
         )}
+
+        {/* Modals */}
+        <ViewUserModal
+          isOpen={isViewModalOpen}
+          onClose={closeAllModals}
+          user={selectedUser}
+        />
+
+        <EditUserModal
+          isOpen={isEditModalOpen}
+          onClose={closeAllModals}
+          user={selectedUser}
+          onUserUpdated={handleUserUpdated}
+        />
+
+        <DeleteUserModal
+          isOpen={isDeleteModalOpen}
+          onClose={closeAllModals}
+          user={selectedUser}
+          onUserDeleted={handleUserDeleted}
+        />
       </motion.div>
     </div>
   );

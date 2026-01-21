@@ -70,5 +70,17 @@
     "barangayId": "BRGY-001",
     "id": 6,
     "createdAt": "2026-01-21T11:26:40.455Z"
+  },
+  {
+    "firstName": "sdasd",
+    "lastName": "dsadsa",
+    "email": "justinolavides1@gmail.com",
+    "phone": "4234234",
+    "password": "qweasdzxc",
+    "role": "staff",
+    "status": "active",
+    "barangayId": "BRGY-001",
+    "id": 7,
+    "createdAt": "2026-01-21T12:23:59.075Z"
   }
 ]

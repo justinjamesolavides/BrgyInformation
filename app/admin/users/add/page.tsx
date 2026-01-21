@@ -10,6 +10,7 @@ const AddUserPage: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -25,10 +26,21 @@ const AddUserPage: React.FC = () => {
     role: "staff" as "admin" | "staff"
   });
 
+  const getResponseMessage = (data: unknown): string | null => {
+    if (typeof data === "string") return data;
+    if (!data || typeof data !== "object") return null;
+
+    const record = data as Record<string, unknown>;
+    if (typeof record.error === "string") return record.error;
+    if (typeof record.message === "string") return record.message;
+    return null;
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     setError(null);
+    if (name === "email") setEmailError(null);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +95,7 @@ const AddUserPage: React.FC = () => {
 
     setLoading(true);
     setError(null);
+    setEmailError(null);
 
     try {
       const userData = {
@@ -104,10 +117,20 @@ const AddUserPage: React.FC = () => {
         body: JSON.stringify(userData),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type") || "";
+      const data: unknown = contentType.includes("application/json")
+        ? await response.json().catch(() => null)
+        : await response.text().catch(() => null);
+
+      const message = getResponseMessage(data);
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create user');
+        if (message === "Email already exists") {
+          setEmailError("Email already exists");
+          return;
+        }
+        setError(message || "Failed to create user. Please try again.");
+        return;
       }
 
       setSuccess(true);
@@ -119,7 +142,7 @@ const AddUserPage: React.FC = () => {
 
     } catch (err: any) {
       console.error('Error creating user:', err);
-      setError(err.message || 'Failed to create user. Please try again.');
+      setError('Failed to create user. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -395,15 +418,24 @@ const AddUserPage: React.FC = () => {
                     </tr>
                     <tr className="table-body">
                       <td className="table-body">
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="input-field w-full"
-                          placeholder="user@example.com"
-                          required
-                        />
+                        <div>
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className={`input-field w-full ${emailError ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}
+                            placeholder="user@example.com"
+                            aria-invalid={emailError ? true : undefined}
+                            aria-describedby={emailError ? "email-error" : undefined}
+                            required
+                          />
+                          {emailError && (
+                            <p id="email-error" className="text-xs text-red-600 mt-1">
+                              {emailError}
+                            </p>
+                          )}
+                        </div>
                       </td>
                       <td className="table-body">
                         <input

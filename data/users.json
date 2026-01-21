@@ -46,5 +46,29 @@
     "barangayId": "BRGY-001",
     "id": 4,
     "createdAt": "2026-01-16T05:48:28.330Z"
+  },
+  {
+    "firstName": "James",
+    "lastName": "Justin",
+    "email": "justinolavides81@gmail.com",
+    "phone": "09924136493",
+    "password": "123456",
+    "role": "staff",
+    "status": "active",
+    "barangayId": "BRGY-001",
+    "id": 5,
+    "createdAt": "2026-01-18T07:26:21.876Z"
+  },
+  {
+    "firstName": "James",
+    "lastName": "Jerry",
+    "email": "justinolavides10@gmail.com",
+    "phone": "84923749832679423",
+    "password": "qweasdzxc",
+    "role": "staff",
+    "status": "active",
+    "barangayId": "BRGY-001",
+    "id": 6,
+    "createdAt": "2026-01-21T11:26:40.455Z"
   }
 ]

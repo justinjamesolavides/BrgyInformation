@@ -12,13 +12,17 @@ export default function StaffLayout({
   return (
     <StaffAuthGuard requireStaff={true}>
       {(user) => (
-        <div className="flex min-h-screen bg-white dark:bg-neutral-900">
-          {/* Persistent Sidebar */}
-          <StaffSidebar />
-          
+        <div className="flex min-h-screen bg-white">
+          {/* Modern Sidebar */}
+          <div className="sidebar fixed left-0 top-0 h-full w-64 z-30">
+            <StaffSidebar />
+          </div>
+
           {/* Main Content Area */}
-          <div className="ml-64 flex-1">
-            {children}
+          <div className="flex-1 ml-64">
+            <div className="page-container">
+              {children}
+            </div>
           </div>
         </div>
       )}

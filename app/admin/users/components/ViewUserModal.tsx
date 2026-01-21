@@ -37,14 +37,14 @@ const ViewUserModal: React.FC<ViewUserModalProps> = ({
 
   const getRoleColor = (role: string) => {
     return role === 'admin'
-      ? 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300'
-      : 'bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300';
+      ? 'bg-red-100 text-red-700 border border-red-200'
+      : 'bg-blue-100 text-blue-700 border border-blue-200';
   };
 
   const getStatusColor = (status: string) => {
     return status === 'active'
-      ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300'
-      : 'bg-gray-100 dark:bg-gray-900/20 text-gray-800 dark:text-gray-300';
+      ? 'bg-green-100 text-green-700 border border-green-200'
+      : 'bg-gray-100 text-gray-700 border border-gray-200';
   };
 
   const getRoleDescription = (role: string) => {
@@ -75,52 +75,49 @@ const ViewUserModal: React.FC<ViewUserModalProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-2xl bg-white dark:bg-neutral-800 rounded-3xl shadow-2xl overflow-hidden"
+            className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 px-8 py-6 text-white relative overflow-hidden">
-              <div className="absolute inset-0 bg-black/10"></div>
-              <div className="relative z-10 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                    <FaUser className="text-white text-xl" />
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                    <FaUser className="text-white text-lg" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold">User Details</h2>
-                    <p className="text-purple-100 mt-1">View user information and account status</p>
+                    <h2 className="text-xl font-bold">User Details</h2>
+                    <p className="text-blue-100 text-sm">View user information and account status</p>
                   </div>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={onClose}
-                  className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-white/30 transition-colors"
+                  className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors"
                 >
-                  <FaTimes className="text-white text-lg" />
+                  <FaTimes className="text-white text-sm" />
                 </motion.button>
               </div>
-              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
-              <div className="absolute -top-5 -left-5 w-20 h-20 bg-white/10 rounded-full"></div>
             </div>
 
             {/* Content */}
-            <div className="p-8">
+            <div className="p-6">
               {/* Profile Section */}
-              <div className="flex items-center gap-6 mb-8">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/50 dark:to-indigo-900/50 rounded-full flex items-center justify-center border-4 border-white dark:border-neutral-700 shadow-lg">
-                  <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+              <div className="flex items-center gap-6 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center border-2 border-white shadow-md">
+                  <span className="text-lg font-bold text-blue-600">
                     {user.firstName.charAt(0)}{user.lastName.charAt(0)}
                   </span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h3 className="text-xl font-bold text-gray-900">
                     {user.firstName} {user.lastName}
                   </h3>
-                  <p className="text-gray-600 dark:text-neutral-400 mt-1">
+                  <p className="text-gray-600 mt-1">
                     User ID: {user.id}
                   </p>
                   <div className="flex items-center gap-3 mt-3">
-                    <span className={`px-4 py-2 text-sm font-semibold rounded-full ${getRoleColor(user.role)}`}>
+                    <span className={`px-3 py-1.5 text-sm font-semibold rounded-full ${getRoleColor(user.role)}`}>
                       {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </span>
                     <span className={`px-4 py-2 text-sm font-semibold rounded-full ${getStatusColor(user.status)}`}>

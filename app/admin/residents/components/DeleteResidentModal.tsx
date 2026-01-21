@@ -48,6 +48,7 @@ const DeleteResidentModal: React.FC<DeleteResidentModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [confirmText, setConfirmText] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -72,6 +73,7 @@ const DeleteResidentModal: React.FC<DeleteResidentModalProps> = ({
     if (!resident || confirmText !== "DELETE") return;
 
     setLoading(true);
+    setError(null); // Clear any previous errors
 
     try {
       const response = await fetch(`/api/residents/${resident.id}`, {
@@ -89,7 +91,7 @@ const DeleteResidentModal: React.FC<DeleteResidentModalProps> = ({
 
     } catch (err: any) {
       console.error('Error deleting resident:', err);
-      // You could add error handling here with a toast or alert
+      setError(err.message || 'Failed to delete resident. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -97,6 +99,7 @@ const DeleteResidentModal: React.FC<DeleteResidentModalProps> = ({
 
   const handleClose = () => {
     setConfirmText("");
+    setError(null);
     onClose();
   };
 
@@ -227,6 +230,27 @@ const DeleteResidentModal: React.FC<DeleteResidentModalProps> = ({
                   maxLength={6}
                 />
               </div>
+
+              {/* Error Message */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-6 p-4 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/50 rounded-xl"
+                >
+                  <div className="flex items-start gap-3">
+                    <FaExclamationTriangle className="text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-1">
+                        Deletion Failed
+                      </h4>
+                      <p className="text-sm text-red-700 dark:text-red-300">
+                        {error}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
 
               {/* Action Buttons */}
               <div className="flex gap-3">

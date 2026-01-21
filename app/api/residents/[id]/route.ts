@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 // Mock database reference - in production, this would be imported from a database module
 // For now, we'll access the mock data from the main route
@@ -158,7 +159,7 @@ export async function PUT(
     }
 
     // Check authentication
-    const cookieStore = await request.cookies;
+    const cookieStore = await cookies();
     const sessionToken = cookieStore.get('session_token')?.value;
 
     if (!sessionToken) {
@@ -221,7 +222,7 @@ export async function DELETE(
     }
 
     // Check authentication
-    const cookieStore = await request.cookies;
+    const cookieStore = await cookies();
     const sessionToken = cookieStore.get('session_token')?.value;
 
     if (!sessionToken) {

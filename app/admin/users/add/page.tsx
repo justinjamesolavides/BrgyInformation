@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaUserPlus, FaArrowLeft, FaSave, FaUser, FaEnvelope, FaPhone, FaShieldAlt, FaKey, FaCamera, FaTimes } from "react-icons/fa";
 import Link from "next/link";
@@ -48,6 +48,7 @@ const AddUserPage: React.FC = () => {
       fileInputRef.current.value = "";
     }
   };
+
 
   const validateForm = () => {
     if (!formData.firstName.trim()) return "First name is required";
@@ -303,18 +304,197 @@ const AddUserPage: React.FC = () => {
               </motion.div>
             )}
 
+            {/* User Information Form - Table Format */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-8"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">
+                User Information
+              </h3>
+
+              <div className="table-container">
+                <table className="w-full">
+                  <tbody className="table-body">
+                    {/* First Name & Last Name */}
+                    <tr className="table-body">
+                      <td className="table-body w-1/3">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          First Name <span className="text-red-500">*</span>
+                        </label>
+                      </td>
+                      <td className="table-body w-1/3">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Last Name <span className="text-red-500">*</span>
+                        </label>
+                      </td>
+                      <td className="table-body w-1/3">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Username <span className="text-red-500">*</span>
+                        </label>
+                      </td>
+                    </tr>
+                    <tr className="table-body">
+                      <td className="table-body">
+                        <input
+                          type="text"
+                          name="firstName"
+                          value={formData.firstName}
+                          onChange={handleInputChange}
+                          className="input-field w-full"
+                          placeholder="Enter first name"
+                          required
+                        />
+                      </td>
+                      <td className="table-body">
+                        <input
+                          type="text"
+                          name="lastName"
+                          value={formData.lastName}
+                          onChange={handleInputChange}
+                          className="input-field w-full"
+                          placeholder="Enter last name"
+                          required
+                        />
+                      </td>
+                      <td className="table-body">
+                        <input
+                          type="text"
+                          name="username"
+                          value={formData.username}
+                          onChange={handleInputChange}
+                          className="input-field w-full"
+                          placeholder="Enter username"
+                          required
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Letters, numbers, underscores, and dashes only
+                        </p>
+                      </td>
+                    </tr>
+
+                    {/* Email & Phone */}
+                    <tr className="table-body">
+                      <td className="table-body">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Email Address <span className="text-red-500">*</span>
+                        </label>
+                      </td>
+                      <td className="table-body">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Phone Number
+                        </label>
+                      </td>
+                      <td className="table-body">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Role <span className="text-red-500">*</span>
+                        </label>
+                      </td>
+                    </tr>
+                    <tr className="table-body">
+                      <td className="table-body">
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          className="input-field w-full"
+                          placeholder="user@example.com"
+                          required
+                        />
+                      </td>
+                      <td className="table-body">
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          className="input-field w-full"
+                          placeholder="+63 9XX XXX XXXX"
+                        />
+                      </td>
+                      <td className="table-body">
+                        <select
+                          name="role"
+                          value={formData.role}
+                          onChange={handleInputChange}
+                          className="input-field w-full bg-gray-50 border-gray-200 cursor-pointer"
+                          required
+                        >
+                          <option value="staff">Staff</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {formData.role === 'admin'
+                            ? 'Full system access and user management'
+                            : 'Basic operations and data entry access'
+                          }
+                        </p>
+                      </td>
+                    </tr>
+
+                    {/* Password Fields */}
+                    <tr className="table-body">
+                      <td className="table-body" colSpan={2}>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Password <span className="text-red-500">*</span>
+                        </label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <input
+                              type="password"
+                              name="password"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              className="input-field w-full"
+                              placeholder="Enter password"
+                              required
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                              Minimum 6 characters
+                            </p>
+                          </div>
+                          <div>
+                            <input
+                              type="password"
+                              name="confirmPassword"
+                              value={formData.confirmPassword}
+                              onChange={handleInputChange}
+                              className="input-field w-full"
+                              placeholder="Confirm password"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="table-body">
+                        {/* Empty cell for spacing */}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+
             {/* Profile Picture Section */}
-            <div className="flex flex-col items-center space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col items-center space-y-4"
+            >
               <div className="relative">
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-full flex items-center justify-center border-4 border-white dark:border-neutral-700 shadow-lg">
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center border-2 border-white shadow-md">
                   {profileImage ? (
                     <img
                       src={profileImage}
                       alt="Profile"
-                      className="w-full h-full rounded-full object-cover"
+                      className="w-full h-full rounded-lg object-cover"
                     />
                   ) : (
-                    <FaUser className="text-gray-400 dark:text-neutral-500 text-3xl" />
+                    <FaUser className="text-gray-400 text-3xl" />
                   )}
                 </div>
                 <motion.button
@@ -322,7 +502,7 @@ const AddUserPage: React.FC = () => {
                   whileTap={{ scale: 0.9 }}
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors"
+                  className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center shadow-md hover:bg-blue-700 transition-colors"
                 >
                   <FaCamera className="text-xs" />
                 </motion.button>
@@ -345,152 +525,11 @@ const AddUserPage: React.FC = () => {
                   className="hidden"
                 />
               </div>
-              <p className="text-sm text-gray-500 dark:text-neutral-400 text-center">
+              <p className="text-sm text-gray-500 text-center">
                 Click to upload profile picture<br />
                 <span className="text-xs">JPG, PNG or GIF (max. 5MB)</span>
               </p>
-            </div>
-
-            {/* Form Fields Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Full Name */}
-              <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-neutral-300 mb-3">
-                  Full Name <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
-                      placeholder="First name"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
-                      placeholder="Last name"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Username */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-neutral-300 mb-3">
-                  Username <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
-                  placeholder="Choose a username"
-                  required
-                />
-                <p className="text-xs text-gray-500 dark:text-neutral-400 mt-1">
-                  Letters, numbers, underscores, and dashes only
-                </p>
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-neutral-300 mb-3">
-                  Email Address <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
-                  placeholder="user@example.com"
-                  required
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-neutral-300 mb-3">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
-                  placeholder="+63 9XX XXX XXXX"
-                />
-              </div>
-
-              {/* Role */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-neutral-300 mb-3">
-                  Role <span className="text-red-500">*</span>
-                </label>
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 dark:text-white cursor-pointer"
-                  required
-                >
-                  <option value="staff">Staff</option>
-                  <option value="admin">Admin</option>
-                </select>
-                <p className="text-xs text-gray-500 dark:text-neutral-400 mt-1">
-                  {formData.role === 'admin'
-                    ? 'Full system access and user management'
-                    : 'Basic operations and data entry access'
-                  }
-                </p>
-              </div>
-
-              {/* Password */}
-              <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-neutral-300 mb-3">
-                  Password <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
-                      placeholder="Enter password"
-                      required
-                    />
-                    <p className="text-xs text-gray-500 dark:text-neutral-400 mt-1">
-                      Minimum 6 characters
-                    </p>
-                  </div>
-                  <div>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
-                      placeholder="Confirm password"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            </motion.div>
 
             {/* Action Buttons */}
             <div className="flex gap-4 pt-6 border-t border-gray-200 dark:border-neutral-700">

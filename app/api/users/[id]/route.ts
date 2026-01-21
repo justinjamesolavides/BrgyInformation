@@ -172,10 +172,19 @@ export async function DELETE(
       );
     }
 
-    const userId = parseInt(params.id);
-    if (isNaN(userId)) {
+    // Validate and parse the ID parameter
+    const { id } = params;
+    if (!id || typeof id !== 'string') {
       return NextResponse.json(
-        { error: 'Invalid user ID' },
+        { error: 'Invalid user ID: parameter is missing or not a string' },
+        { status: 400 }
+      );
+    }
+
+    const userId = parseInt(id.trim(), 10);
+    if (isNaN(userId) || userId <= 0) {
+      return NextResponse.json(
+        { error: `Invalid user ID: "${id}" is not a valid positive number` },
         { status: 400 }
       );
     }

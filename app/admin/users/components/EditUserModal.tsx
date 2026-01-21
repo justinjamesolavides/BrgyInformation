@@ -150,32 +150,29 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-2xl bg-white dark:bg-neutral-800 rounded-3xl shadow-2xl overflow-hidden"
+            className="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-8 py-6 text-white relative overflow-hidden">
-              <div className="absolute inset-0 bg-black/10"></div>
-              <div className="relative z-10 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                    <FaUser className="text-white text-xl" />
+            <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4 text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                    <FaUser className="text-white text-lg" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold">Edit User</h2>
-                    <p className="text-indigo-100 mt-1">Modify user information and account settings</p>
+                    <h2 className="text-xl font-bold">Edit User</h2>
+                    <p className="text-indigo-100 text-sm">Modify user information and account settings</p>
                   </div>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={onClose}
-                  className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-white/30 transition-colors"
+                  className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors"
                 >
-                  <FaTimes className="text-white text-lg" />
+                  <FaTimes className="text-white text-sm" />
                 </motion.button>
               </div>
-              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
-              <div className="absolute -top-5 -left-5 w-20 h-20 bg-white/10 rounded-full"></div>
             </div>
 
             {/* Form Content */}
@@ -186,7 +183,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl"
+                    className="p-4 bg-red-50 border border-red-200 rounded-xl"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -226,7 +223,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
+                      className="input-field w-full"
                       placeholder="Enter first name"
                       required
                     />
@@ -242,7 +239,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
+                      className="input-field w-full"
                       placeholder="Enter last name"
                       required
                     />
@@ -261,7 +258,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 placeholder-gray-400 dark:placeholder-neutral-500 text-gray-900 dark:text-white"
+                      className="input-field w-full"
                       placeholder="user@example.com"
                       required
                     />
@@ -316,7 +313,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
 
                 {/* Warning for Role Changes */}
                 {formData.role !== user.role && (
-                  <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/50 rounded-xl p-4">
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
                     <div className="flex items-start gap-3">
                       <FaExclamationTriangle className="text-amber-500 mt-0.5 flex-shrink-0" />
                       <div>
@@ -342,7 +339,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                     whileTap={{ scale: 0.98 }}
                     type="button"
                     onClick={onClose}
-                    className="flex-1 px-6 py-4 bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-neutral-300 rounded-xl hover:bg-gray-200 dark:hover:bg-neutral-600 transition-all duration-200 font-semibold"
+                    className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-semibold"
                   >
                     Cancel
                   </motion.button>

@@ -35,6 +35,7 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [confirmText, setConfirmText] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -46,15 +47,50 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
     if (!user || confirmText !== "DELETE") return;
 
     setLoading(true);
+    setError(null); // Clear any previous errors
 
     try {
-      const response = await fetch(`/api/users/${user.id}`, {
-        method: 'DELETE',
-      });
+      // Comprehensive validation of user ID
+      if (!user || !user.id) {
+        throw new Error('User data is missing or invalid');
+      }
+
+      // Validate and normalize the user ID
+      let userId: number;
+      if (typeof user.id === 'string') {
+        userId = parseInt(user.id.trim(), 10);
+      } else if (typeof user.id === 'number') {
+        userId = user.id;
+      } else {
+        throw new Error('Invalid user ID: must be a number or numeric string');
+      }
+
+      if (isNaN(userId) || userId <= 0) {
+        throw new Error('Invalid user ID: must be a positive number');
+      }
+
+      // Create the API URL with the validated ID
+      const apiUrl = `/api/users/${userId}`;
+
+      let response;
+      try {
+        response = await fetch(apiUrl, {
+          method: 'DELETE',
+        });
+      } catch (fetchError: any) {
+        // Handle network errors
+        throw new Error('Network error. Please check your connection and try again.');
+      }
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to delete user');
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch {
+          // If we can't parse the error response, provide a generic message
+          errorData = { error: `Server error (${response.status})` };
+        }
+        throw new Error(errorData.error || 'Failed to delete user');
       }
 
       onUserDeleted(user.id);
@@ -62,8 +98,32 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
       setConfirmText("");
 
     } catch (err: any) {
-      console.error('Error deleting user:', err);
-      // You could add error handling here with a toast or alert
+      // Handle error silently without console logging
+      let errorMessage = 'Unable to delete this user. Please try again.';
+
+      // Provide user-friendly error messages based on common error types
+      if (err.message) {
+        const errorText = err.message.toLowerCase();
+        if (errorText.includes('invalid user id') || errorText.includes('not a valid positive number') || errorText.includes('parameter is missing')) {
+          errorMessage = 'Invalid user ID. Unable to delete this user.';
+        } else if (errorText.includes('user not found')) {
+          errorMessage = 'User not found. The user may have already been deleted.';
+        } else if (errorText.includes('authentication required') || errorText.includes('unauthorized')) {
+          errorMessage = 'Authentication required. Please log in again.';
+        } else if (errorText.includes('admin access required') || errorText.includes('insufficient permissions')) {
+          errorMessage = 'Insufficient permissions to delete this user.';
+        } else if (errorText.includes('cannot delete your own account')) {
+          errorMessage = 'You cannot delete your own administrator account.';
+        } else if (errorText.includes('network') || errorText.includes('fetch')) {
+          errorMessage = 'Network error. Please check your connection and try again.';
+        } else {
+          // For unknown errors, show a generic message but log the details
+          console.warn('Unexpected delete error:', err);
+          errorMessage = 'Unable to delete this user. Please try again.';
+        }
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -71,14 +131,17 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
 
   const handleClose = () => {
     setConfirmText("");
+    setError(null);
     onClose();
   };
 
   if (!user) return null;
 
-  return (
-    <AnimatePresence>
-      {isOpen && (
+  // Additional safety wrapper to prevent any rendering errors
+  try {
+    return (
+      <AnimatePresence>
+        {isOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -129,15 +192,15 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center">
                     <span className="text-sm font-bold text-gray-600 dark:text-gray-300">
-                      {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                      {(user.firstName?.charAt(0) || 'U')}{(user.lastName?.charAt(0) || '')}
                     </span>
                   </div>
                   <div className="text-left">
                     <h3 className="font-semibold text-gray-900 dark:text-white">
-                      {user.firstName} {user.lastName}
+                      {user.firstName || 'Unknown'} {user.lastName || 'User'}
                     </h3>
                     <p className="text-sm text-gray-500 dark:text-neutral-400">
-                      {user.email}
+                      {user.email || 'No email provided'}
                     </p>
                   </div>
                 </div>
@@ -191,6 +254,27 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
                 />
               </div>
 
+              {/* Error Message */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-6 p-4 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/50 rounded-xl"
+                >
+                  <div className="flex items-start gap-3">
+                    <FaExclamationTriangle className="text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-1">
+                        Deletion Failed
+                      </h4>
+                      <p className="text-sm text-red-700 dark:text-red-300">
+                        {error}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               {/* Action Buttons */}
               <div className="flex gap-3">
                 <motion.button
@@ -227,7 +311,32 @@ const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
         </motion.div>
       )}
     </AnimatePresence>
-  );
+    );
+  } catch (renderError) {
+    // Fallback UI in case of rendering errors
+    console.warn('DeleteUserModal render error:', renderError);
+    return (
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-3xl shadow-2xl p-6 text-center">
+          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaExclamationTriangle className="text-red-500 text-2xl" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            Something went wrong
+          </h3>
+          <p className="text-gray-600 dark:text-neutral-400 mb-4">
+            Unable to display the delete confirmation. Please try again.
+          </p>
+          <button
+            onClick={handleClose}
+            className="px-4 py-2 bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-neutral-300 rounded-xl hover:bg-gray-200 dark:hover:bg-neutral-600 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default DeleteUserModal;

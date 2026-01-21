@@ -81,26 +81,19 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-neutral-900 px-4 relative overflow-hidden">
-
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-48 -translate-y-48" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-white rounded-full translate-x-40 translate-y-40" />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-white rounded-full -translate-x-32 -translate-y-32" />
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-white px-4 py-10">
 
       {/* Logo/Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="absolute top-6 md:top-10 left-6 md:left-20 flex items-center gap-3 cursor-pointer group"
+        className="absolute top-6 left-6 flex items-center gap-3 cursor-pointer group"
         onClick={() => router.push("/")}
       >
-        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center group-hover:bg-white/30 transition-all duration-200">
+        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center border border-neutral-200 shadow-sm group-hover:shadow transition-shadow">
           <Image src="/Logo.png" alt="Barangay Logo" width={28} height={28} />
         </div>
-        <span className="text-white font-bold text-xl md:text-2xl font-display group-hover:text-white/90 transition-colors">
+        <span className="text-neutral-900 font-bold text-lg md:text-xl font-display group-hover:text-neutral-700 transition-colors">
           Brgy InfoSys
         </span>
       </motion.div>
@@ -110,7 +103,7 @@ const LoginPage: React.FC = () => {
         initial={{ opacity: 0, y: 40, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="surface w-full max-w-md p-8 mt-20 md:mt-0 relative overflow-hidden backdrop-blur-xl bg-white/95 dark:bg-neutral-900/95 border-2 border-white/20 dark:border-neutral-700/50"
+        className="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
       >
         {/* Loading overlay - only show during actual authentication */}
         {isLoading && (
@@ -128,25 +121,25 @@ const LoginPage: React.FC = () => {
           </motion.div>
         )}
 
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <motion.div
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-            className="w-20 h-20 bg-primary-100 dark:bg-primary-900/50 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg"
+            className="w-14 h-14 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-primary-100"
           >
-            <FaUser className="text-primary-600 dark:text-primary-400 text-3xl" />
+            <FaUser className="text-primary-700 text-xl" />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-3 font-display">
-              Welcome Back
+            <h2 className="text-2xl font-semibold text-neutral-900 mb-2">
+              Sign in
             </h2>
-            <p className="text-neutral-600 dark:text-neutral-400 text-lg">
-              Sign in to your account
+            <p className="text-neutral-600 text-sm">
+              Enter your username and password to continue.
             </p>
           </motion.div>
         </div>
@@ -157,32 +150,37 @@ const LoginPage: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2"
+              className="mb-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 flex items-center gap-2"
             >
               <FaExclamationTriangle className="text-red-500 text-sm" />
               <span className="text-red-700 text-sm">{errors.general}</span>
             </motion.div>
           )}
 
-          {/* Email Field */}
+          {/* Username Field (UI only; still uses email under the hood) */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
-            className="mb-6"
+            className="mb-4"
           >
+            <label className="block text-sm font-medium text-neutral-800 mb-1.5" htmlFor="login-email">
+              Username
+            </label>
             <div className="relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400">
-                <FaUser className="text-lg" />
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400">
+                <FaUser className="text-base" />
               </div>
               <input
+                id="login-email"
                 type="email"
-                placeholder="Email Address"
+                placeholder="Enter your username"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                className={`input-field pl-12 pr-4 py-4 text-base ${
-                  errors.email ? 'border-error-300 bg-error-50 dark:bg-error-900/20' : ''
+                className={`w-full rounded-xl border px-10 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-sm outline-none transition focus:ring-2 focus:ring-primary-500/40 ${
+                  errors.email ? 'border-red-300 bg-red-50 focus:border-red-400' : 'border-neutral-300 focus:border-primary-500'
                 }`}
+                autoComplete="email"
                 disabled={isLoading}
               />
             </div>
@@ -190,7 +188,7 @@ const LoginPage: React.FC = () => {
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-error-600 dark:text-error-400 text-sm mt-2 flex items-center gap-2"
+                className="text-red-600 text-xs mt-2 flex items-center gap-2"
               >
                 <FaExclamationTriangle className="text-sm" />
                 {errors.email}
@@ -203,36 +201,42 @@ const LoginPage: React.FC = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="mb-6"
+            className="mb-4"
           >
+            <label className="block text-sm font-medium text-neutral-800 mb-1.5" htmlFor="login-password">
+              Password
+            </label>
             <div className="relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400">
-                <FaLock className="text-lg" />
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400">
+                <FaLock className="text-base" />
               </div>
               <input
+                id="login-password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Enter your password"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
-                className={`input-field pl-12 pr-14 py-4 text-base ${
-                  errors.password ? 'border-error-300 bg-error-50 dark:bg-error-900/20' : ''
+                className={`w-full rounded-xl border px-10 py-3 pr-11 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-sm outline-none transition focus:ring-2 focus:ring-primary-500/40 ${
+                  errors.password ? 'border-red-300 bg-red-50 focus:border-red-400' : 'border-neutral-300 focus:border-primary-500'
                 }`}
+                autoComplete="current-password"
                 disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors p-1"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500/40"
                 disabled={isLoading}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
+                {showPassword ? <FaEyeSlash className="text-base" /> : <FaEye className="text-base" />}
               </button>
             </div>
             {errors.password && (
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-error-600 dark:text-error-400 text-sm mt-2 flex items-center gap-2"
+                className="text-red-600 text-xs mt-2 flex items-center gap-2"
               >
                 <FaExclamationTriangle className="text-sm" />
                 {errors.password}
@@ -245,23 +249,23 @@ const LoginPage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="flex items-center justify-between mb-8"
+            className="flex items-center justify-between mb-5"
           >
             <label className="flex items-center gap-3 cursor-pointer group">
               <input
                 type="checkbox"
                 checked={formData.rememberMe}
                 onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
-                className="w-4 h-4 rounded border-2 border-neutral-300 text-primary-600 focus:ring-primary-500 focus:ring-2 transition-colors cursor-pointer"
+                className="w-4 h-4 rounded border border-neutral-300 text-primary-600 focus:ring-primary-500 focus:ring-2 transition-colors cursor-pointer"
                 disabled={isLoading}
               />
-              <span className="text-sm text-neutral-600 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-200 transition-colors">
+              <span className="text-sm text-neutral-600 group-hover:text-neutral-900 transition-colors">
                 Remember me
               </span>
             </label>
             <Link
               href="/forgot-password"
-              className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium transition-colors"
+              className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
             >
               Forgot password?
             </Link>
@@ -276,19 +280,19 @@ const LoginPage: React.FC = () => {
             transition={{ delay: 0.7 }}
             whileTap={{ scale: 0.98 }}
             whileHover={{ scale: isLoading ? 1 : 1.02 }}
-            className={`w-full py-4 font-bold rounded-2xl shadow-lg mb-6 transition-all duration-200 ${
+            className={`w-full rounded-xl px-4 py-3 text-sm font-semibold shadow-sm transition-colors ${
               isLoading
-                ? 'bg-primary-400 cursor-not-allowed shadow-primary-200'
-                : 'bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white shadow-primary-500/25 hover:shadow-primary-500/40'
+                ? 'bg-primary-300 text-white cursor-not-allowed'
+                : 'bg-primary-600 text-white hover:bg-primary-700'
             }`}
           >
             {isLoading ? (
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span className="text-lg">Signing in...</span>
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>Signing in...</span>
               </div>
             ) : (
-              <span className="text-lg">Sign In</span>
+              <span>Enter / Login</span>
             )}
           </motion.button>
         </form>
@@ -297,13 +301,13 @@ const LoginPage: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="text-center mb-6"
+          className="text-center mt-5"
         >
-          <p className="text-neutral-600 dark:text-neutral-400">
+          <p className="text-neutral-600 text-sm">
             Don't have an account?{" "}
             <Link
               href="/register"
-              className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-semibold transition-colors"
+              className="text-primary-600 hover:text-primary-700 font-semibold transition-colors"
             >
               Create one
             </Link>
@@ -315,20 +319,20 @@ const LoginPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9 }}
-          className="bg-neutral-50 dark:bg-neutral-800/50 rounded-2xl p-5 border border-neutral-200 dark:border-neutral-700"
+          className="mt-5 rounded-2xl p-4 border border-neutral-200 bg-neutral-50"
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 bg-warning-100 dark:bg-warning-900/50 rounded-lg flex items-center justify-center">
-              <FaExclamationTriangle className="text-warning-600 dark:text-warning-400 text-sm" />
+            <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+              <FaExclamationTriangle className="text-amber-700 text-sm" />
             </div>
-            <p className="text-sm font-semibold text-neutral-900 dark:text-white">Demo Credentials</p>
+            <p className="text-sm font-semibold text-neutral-900">Demo Credentials</p>
           </div>
-          <div className="bg-white dark:bg-neutral-900 rounded-xl p-4 border border-neutral-200 dark:border-neutral-600">
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">
-              <span className="font-medium text-neutral-900 dark:text-white">Email:</span> admin@brgy.com
+          <div className="bg-white rounded-xl p-3 border border-neutral-200">
+            <p className="text-sm text-neutral-600">
+              <span className="font-medium text-neutral-900">Email:</span> admin@brgy.com
             </p>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-              <span className="font-medium text-neutral-900 dark:text-white">Password:</span> demo123
+            <p className="text-sm text-neutral-600 mt-1">
+              <span className="font-medium text-neutral-900">Password:</span> demo123
             </p>
           </div>
         </motion.div>

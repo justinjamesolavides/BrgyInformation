@@ -49,77 +49,96 @@ const AdminRequestsPage: React.FC = () => {
   const [requests, setRequests] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch requests from API
+  // Mock data for requests
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const response = await fetch(`/api/requests?status=${filterStatus}&type=${filterType}&priority=${filterPriority}&search=${searchTerm}`);
-        if (response.ok) {
-          const data = await response.json();
-          setRequests(data.data || []);
+    // Simulating loading delay
+    const timer = setTimeout(() => {
+      setRequests([
+        {
+          id: 1,
+          type: 'clearance',
+          title: 'Barangay Clearance Request',
+          description: 'Request for barangay clearance for employment purposes',
+          requesterName: 'Juan Dela Cruz',
+          requesterEmail: 'juan@example.com',
+          requesterPhone: '09123456789',
+          requesterAddress: 'Block 1, Lot 2, Sample Street, Barangay Sample',
+          submittedDate: '2024-01-15T10:30:00Z',
+          priority: 'medium',
+          status: 'pending',
+          documents: ['Valid ID', 'Proof of Address']
+        },
+        {
+          id: 2,
+          type: 'permit',
+          title: 'Business Permit Application',
+          description: 'Application for small food cart business permit',
+          requesterName: 'Maria Santos',
+          requesterEmail: 'maria@example.com',
+          requesterPhone: '09234567890',
+          requesterAddress: 'Shop 3, Market Area, Barangay Sample',
+          submittedDate: '2024-01-14T14:20:00Z',
+          priority: 'high',
+          status: 'approved',
+          documents: ['Business Registration', 'Sanitary Permit']
+        },
+        {
+          id: 3,
+          type: 'certificate',
+          title: 'Certificate of Indigency',
+          description: 'Request for indigency certificate for medical assistance',
+          requesterName: 'Pedro Garcia',
+          requesterEmail: 'pedro@example.com',
+          requesterPhone: '09345678901',
+          requesterAddress: 'Room 5, Building B, Barangay Sample',
+          submittedDate: '2024-01-13T09:15:00Z',
+          priority: 'urgent',
+          status: 'pending',
+          documents: ['Medical Certificate', 'Valid ID']
+        },
+        {
+          id: 4,
+          type: 'residency',
+          title: 'Certificate of Residency',
+          description: 'Request for residency certificate for school enrollment',
+          requesterName: 'Ana Reyes',
+          requesterEmail: 'ana@example.com',
+          requesterPhone: '09456789012',
+          requesterAddress: 'Unit 12, Apartment Complex, Barangay Sample',
+          submittedDate: '2024-01-12T16:45:00Z',
+          priority: 'low',
+          status: 'rejected',
+          documents: ['Student ID', 'School Requirements'],
+          notes: 'Incomplete documentation'
         }
-      } catch (error) {
-        console.error("Error fetching requests:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      ]);
+      setLoading(false);
+    }, 500);
 
-    // Debounced search
-    const handler = setTimeout(() => {
-      fetchRequests();
-    }, 300);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [filterStatus, filterType, filterPriority, searchTerm]);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredRequests = requests.filter(request => {
     const matchesSearch = request.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          request.requesterName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          request.requesterEmail.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
+    const matchesStatus = filterStatus === 'all' || request.status === filterStatus;
+    const matchesType = filterType === 'all' || request.type === filterType;
+    const matchesPriority = filterPriority === 'all' || request.priority === filterPriority;
+    
+    return matchesSearch && matchesStatus && matchesType && matchesPriority;
   });
 
-  const handleApproveRequest = async (requestId: number) => {
-    try {
-      const response = await fetch(`/api/requests/${requestId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'approved' }),
-      });
-
-      if (response.ok) {
-        setRequests(prev => prev.map(req => 
-          req.id === requestId ? { ...req, status: 'approved' } : req
-        ));
-      }
-    } catch (error) {
-      console.error("Error approving request:", error);
-    }
+  const handleApproveRequest = (requestId: number) => {
+    setRequests(prev => prev.map(req => 
+      req.id === requestId ? { ...req, status: 'approved' } : req
+    ));
   };
 
-  const handleRejectRequest = async (requestId: number) => {
-    try {
-      const response = await fetch(`/api/requests/${requestId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'rejected' }),
-      });
-
-      if (response.ok) {
-        setRequests(prev => prev.map(req => 
-          req.id === requestId ? { ...req, status: 'rejected' } : req
-        ));
-      }
-    } catch (error) {
-      console.error("Error rejecting request:", error);
-    }
+  const handleRejectRequest = (requestId: number) => {
+    setRequests(prev => prev.map(req => 
+      req.id === requestId ? { ...req, status: 'rejected' } : req
+    ));
   };
 
   const getTypeColor = (type: string) => {

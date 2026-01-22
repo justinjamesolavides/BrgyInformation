@@ -88,12 +88,7 @@ const StaffSidebar: React.FC = () => {
       color: "bg-blue-500 hover:bg-blue-600",
       action: () => console.log("Add resident")
     },
-    {
-      title: "New Request",
-      icon: <FaFileAlt className="text-sm" />,
-      color: "bg-green-500 hover:bg-green-600",
-      action: () => console.log("New request")
-    },
+
     {
       title: "Urgent Tasks",
       icon: <FaExclamationTriangle className="text-sm" />,

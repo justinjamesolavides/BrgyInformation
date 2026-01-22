@@ -175,7 +175,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
       description: "Handle document approvals",
       icon: <FaFileAlt className="text-2xl" />,
       color: "bg-green-500 hover:bg-green-600",
-      path: "/staff/documents"
+      path: "/staff/residents"
     },
     {
       title: "View Reports",
@@ -377,12 +377,14 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
             {quickActions.map((action, index) => (
               <motion.button
                 key={action.title}
+                onClick={() => router.push(action.path)}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className={`group relative overflow-hidden bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm p-6 rounded-2xl border border-neutral-200 dark:border-neutral-700 hover:shadow-xl transition-all duration-300 ${action.color} hover:shadow-2xl`}
+                className={`group relative overflow-hidden bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm p-6 rounded-2xl border border-neutral-200 dark:border-neutral-700 hover:shadow-xl transition-all duration-300 ${action.color} hover:shadow-2xl cursor-pointer`}
+                aria-label={`${action.title}: ${action.description}`}
               >
                 {/* Background gradient */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

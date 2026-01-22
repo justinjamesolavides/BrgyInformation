@@ -118,13 +118,7 @@ const StaffDashboard: React.FC = () => {
       color: "bg-blue-500 hover:bg-blue-600",
       path: "/residents/add"
     },
-    {
-      title: "New Request",
-      description: "Process certificate request",
-      icon: <FaFileAlt className="text-2xl" />,
-      color: "bg-green-500 hover:bg-green-600",
-      path: "/requests/new"
-    },
+
     {
       title: "Review Pending",
       description: "Check pending requests",

@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     global.sessionStore.set(sessionToken, {
       userId: user.id,
       email: user.email,
-      name: user.name,
+      name: `${user.firstName} ${user.lastName}`,
       role: user.role,
       createdAt: new Date()
     });
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        name: `${user.firstName} ${user.lastName}`,
         role: user.role
       },
       redirect: redirectUrl

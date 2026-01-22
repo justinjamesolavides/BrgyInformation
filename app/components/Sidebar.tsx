@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { FaTachometerAlt, FaUsers, FaFileAlt, FaCog, FaHome, FaBullhorn, FaUserCog } from "react-icons/fa";
+import { FaTachometerAlt, FaUsers, FaFileAlt, FaCog, FaHome, FaBullhorn, FaUserCog, FaPlus } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
 
 const Sidebar: React.FC = () => {
@@ -28,6 +28,7 @@ const Sidebar: React.FC = () => {
       label: "Announcements",
       icon: <FaBullhorn />
     },
+
     {
       href: "/admin/users",
       label: "User Management",

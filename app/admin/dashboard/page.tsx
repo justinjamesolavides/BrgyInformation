@@ -165,26 +165,20 @@ const AdminDashboard: React.FC = () => {
       color: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700",
       path: "/residents/add"
     },
-    {
-      title: "New Request",
-      description: "Create certificate request",
-      icon: <FaFileAlt className="text-2xl text-white" />,
-      color: "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700",
-      path: "/requests/new"
-    },
+
     {
       title: "View Reports",
       description: "Generate barangay reports",
       icon: <FaChartLine className="text-2xl text-white" />,
       color: "bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700",
-      path: "/reports"
+      path: "/admin/reports"
     },
     {
       title: "Settings",
       description: "System configuration",
       icon: <FaCog className="text-2xl text-white" />,
       color: "bg-gradient-to-r from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700",
-      path: "/settings"
+      path: "/admin/settings"
     }
   ];
 
@@ -463,6 +457,7 @@ const AdminDashboard: React.FC = () => {
             {quickActions.map((action, index) => (
               <motion.button
                 key={action.title}
+                onClick={() => router.push(action.path)}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{
                   opacity: 1,
@@ -488,7 +483,7 @@ const AdminDashboard: React.FC = () => {
                   boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
                 }}
                 whileTap={{ scale: 0.98 }}
-                className={`group relative overflow-hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-white/20 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 ${action.color} hover:shadow-2xl`}
+                className={`group relative overflow-hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-white/20 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 ${action.color} hover:shadow-2xl cursor-pointer`}
                 aria-label={`${action.title}: ${action.description}`}
               >
                 {/* Background gradient */}

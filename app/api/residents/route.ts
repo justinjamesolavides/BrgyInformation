@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { residentsStorage } from '../../../lib/fileStorage';
 
-// Mock database - in production, replace with actual database connection
-let mockResidents = [
+// Initialize with default residents if storage is empty
+const initializeDefaultResidents = () => {
+  const existingResidents = residentsStorage.getAll();
+  if (existingResidents.length === 0) {
+    // Add default mock residents
+    const defaultResidents = [
   {
     id: 1,
     firstName: "Juan",
@@ -96,23 +101,26 @@ let mockResidents = [
     emergencyPhone: "+63 922 678 9012",
     status: "active" as const,
     registrationDate: "2024-05-12T11:20:00Z",
-    avatar: "CM"
+      avatar: "CM"
+    }
+    ];
+    defaultResidents.forEach(resident => {
+      residentsStorage.create(resident);
+    });
   }
-];
+};
 
-// Helper function to generate next ID
-function getNextId(): number {
-  const maxId = Math.max(...mockResidents.map(r => r.id), 0);
-  return maxId + 1;
-}
+// Initialize default residents on module load
+initializeDefaultResidents();
 
 // Helper function to generate barangay ID
 function generateBarangayId(): string {
-  const existingIds = mockResidents
-    .map(r => r.barangayId)
-    .filter(id => id && id.startsWith('BRGY-'))
-    .map(id => parseInt(id.replace('BRGY-', '')))
-    .filter(num => !isNaN(num));
+  const allResidents = residentsStorage.getAll();
+  const existingIds = allResidents
+    .map((r: any) => r.barangayId)
+    .filter((id: string) => id && id.startsWith('BRGY-'))
+    .map((id: string) => parseInt(id.replace('BRGY-', '')))
+    .filter((num: number) => !isNaN(num));
 
   const nextNum = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
   return `BRGY-${nextNum.toString().padStart(3, '0')}`;
@@ -128,7 +136,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    let filteredResidents = [...mockResidents];
+    let filteredResidents = residentsStorage.getAll();
 
     // Apply search filter
     if (search) {
@@ -209,7 +217,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if email already exists
-    const existingEmail = mockResidents.find(r => r.email === body.email);
+    const existingEmail = residentsStorage.findByEmail(body.email);
     if (existingEmail) {
       return NextResponse.json(
         { error: 'Email already exists' },
@@ -221,8 +229,7 @@ export async function POST(request: NextRequest) {
     const avatar = `${body.firstName.charAt(0)}${body.lastName.charAt(0)}`.toUpperCase();
 
     // Create new resident
-    const newResident = {
-      id: getNextId(),
+    const newResident = residentsStorage.create({
       firstName: body.firstName,
       lastName: body.lastName,
       middleName: body.middleName || null,
@@ -236,13 +243,51 @@ export async function POST(request: NextRequest) {
       occupation: body.occupation || null,
       emergencyContact: body.emergencyContact || null,
       emergencyPhone: body.emergencyPhone || null,
-      status: 'active' as const,
+      status: 'active',
       registrationDate: new Date().toISOString(),
       avatar
-    };
+    });
 
-    // Add to mock database
-    mockResidents.push(newResident);
+    // Create activity log entry
+    try {
+      await fetch(new URL('/api/dashboard/activities', request.url), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': request.headers.get('cookie') || ''
+        },
+        body: JSON.stringify({
+          type: 'resident',
+          title: 'New Resident Registration',
+          user: `${body.firstName} ${body.lastName}`,
+          status: 'completed',
+          message: `New resident ${body.firstName} ${body.lastName} has been registered.`
+        })
+      }).catch(() => {}); // Don't fail if activity log fails
+    } catch (error) {
+      // Ignore activity log errors
+    }
+
+    // Create notification
+    try {
+      const sessionData = (global as any).sessionStore?.get(sessionToken);
+      if (sessionData) {
+        await fetch(new URL('/api/dashboard/notifications', request.url), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': request.headers.get('cookie') || ''
+          },
+          body: JSON.stringify({
+            type: 'info',
+            title: 'New Resident Registered',
+            message: `${body.firstName} ${body.lastName} has been registered as a new resident.`
+          })
+        }).catch(() => {}); // Don't fail if notification fails
+      }
+    } catch (error) {
+      // Ignore notification errors
+    }
 
     return NextResponse.json({
       success: true,

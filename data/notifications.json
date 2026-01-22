@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "type": "info",
+    "title": "New Resident Registered",
+    "message": "James lita has been registered as a new resident.",
+    "read": false,
+    "timestamp": "2026-01-22T10:41:43.343Z",
+    "createdAt": "2026-01-22T10:41:43.343Z"
+  }
+]

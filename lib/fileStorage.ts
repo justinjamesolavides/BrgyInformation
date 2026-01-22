@@ -89,3 +89,4 @@ export class FileStorage {
 
 // Create storage instances
 export const usersStorage = new FileStorage('users.json');
+export const residentsStorage = new FileStorage('residents.json');

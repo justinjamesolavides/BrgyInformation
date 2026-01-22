@@ -32,6 +32,22 @@ const AdminDashboard: React.FC = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
+  
+  // Real-time data state
+  const [stats, setStats] = useState({
+    totalResidents: 0,
+    registeredUsers: 0,
+    pendingRequests: 0,
+    monthlyGrowth: 0
+  });
+  const [trends, setTrends] = useState({
+    residents: "+0",
+    users: "+0",
+    requests: "+0",
+    growth: "+0.0%"
+  });
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const handleLogout = async () => {
     try {
@@ -43,232 +59,103 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  // Mock unread notifications count
-  const unreadCount = 3;
-
-  // Mock data for different periods - in real app this would come from API
-  const getPeriodData = (period: string) => {
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
-
-    switch (period) {
-      case 'week':
-        return {
-          stats: {
-            totalResidents: 1247,
-            registeredUsers: 42,
-            pendingRequests: 8,
-            monthlyGrowth: 3.2
-          },
-          activities: [
-            {
-              id: 1,
-              type: "request",
-              title: "New Barangay Clearance Request",
-              user: "Juan Dela Cruz",
-              time: "2 minutes ago",
-              status: "pending",
-              icon: <FaFileSignature className="text-blue-500" />
-            },
-            {
-              id: 2,
-              type: "user",
-              title: "New Resident Registration",
-              user: "Maria Santos",
-              time: "15 minutes ago",
-              status: "completed",
-              icon: <FaUserPlus className="text-green-500" />
-            },
-            {
-              id: 3,
-              type: "request",
-              title: "Certificate of Indigency Approved",
-              user: "Pedro Garcia",
-              time: "1 hour ago",
-              status: "approved",
-              icon: <FaCheckCircle className="text-green-500" />
-            },
-            {
-              id: 4,
-              type: "system",
-              title: "Weekly Report Generated",
-              user: "System",
-              time: "2 hours ago",
-              status: "completed",
-              icon: <FaFileAlt className="text-purple-500" />
-            }
-          ]
-        };
-
-      case 'month':
-        return {
-          stats: {
-            totalResidents: 1247,
-            registeredUsers: 387,
-            pendingRequests: 23,
-            monthlyGrowth: 12.5
-          },
-          activities: [
-            {
-              id: 1,
-              type: "request",
-              title: "New Barangay Clearance Request",
-              user: "Juan Dela Cruz",
-              time: "2 minutes ago",
-              status: "pending",
-              icon: <FaFileSignature className="text-blue-500" />
-            },
-            {
-              id: 2,
-              type: "user",
-              title: "New Resident Registration",
-              user: "Maria Santos",
-              time: "15 minutes ago",
-              status: "completed",
-              icon: <FaUserPlus className="text-green-500" />
-            },
-            {
-              id: 3,
-              type: "request",
-              title: "Certificate of Indigency Approved",
-              user: "Pedro Garcia",
-              time: "1 hour ago",
-              status: "approved",
-              icon: <FaCheckCircle className="text-green-500" />
-            },
-            {
-              id: 4,
-              type: "request",
-              title: "Business Permit Application",
-              user: "Ana Reyes",
-              time: "3 hours ago",
-              status: "pending",
-              icon: <FaClipboardList className="text-yellow-500" />
-            },
-            {
-              id: 5,
-              type: "system",
-              title: "Monthly Census Update",
-              user: "System",
-              time: "1 day ago",
-              status: "completed",
-              icon: <FaChartLine className="text-purple-500" />
-            }
-          ]
-        };
-
-      case 'quarter':
-        return {
-          stats: {
-            totalResidents: 1247,
-            registeredUsers: 892,
-            pendingRequests: 45,
-            monthlyGrowth: 28.7
-          },
-          activities: [
-            {
-              id: 1,
-              type: "request",
-              title: "Quarterly Tax Assessment",
-              user: "Barangay Treasurer",
-              time: "2 days ago",
-              status: "completed",
-              icon: <FaFileAlt className="text-purple-500" />
-            },
-            {
-              id: 2,
-              type: "user",
-              title: "Bulk Resident Import",
-              user: "Admin",
-              time: "1 week ago",
-              status: "completed",
-              icon: <FaUsers className="text-blue-500" />
-            },
-            {
-              id: 3,
-              type: "system",
-              title: "Quarterly Report Generated",
-              user: "System",
-              time: "2 weeks ago",
-              status: "completed",
-              icon: <FaChartLine className="text-green-500" />
-            },
-            {
-              id: 4,
-              type: "request",
-              title: "Community Development Grant",
-              user: "Barangay Captain",
-              time: "3 weeks ago",
-              status: "approved",
-              icon: <FaCheckCircle className="text-green-500" />
-            }
-          ]
-        };
-
-      case 'year':
-        return {
-          stats: {
-            totalResidents: 1247,
-            registeredUsers: 2156,
-            pendingRequests: 67,
-            monthlyGrowth: 45.3
-          },
-          activities: [
-            {
-              id: 1,
-              type: "system",
-              title: "Annual Census Completed",
-              user: "System",
-              time: "1 month ago",
-              status: "completed",
-              icon: <FaUsers className="text-blue-500" />
-            },
-            {
-              id: 2,
-              type: "request",
-              title: "Year-End Financial Report",
-              user: "Barangay Treasurer",
-              time: "2 months ago",
-              status: "completed",
-              icon: <FaFileAlt className="text-purple-500" />
-            },
-            {
-              id: 3,
-              type: "system",
-              title: "Annual Budget Approved",
-              user: "Barangay Council",
-              time: "3 months ago",
-              status: "approved",
-              icon: <FaCheckCircle className="text-green-500" />
-            },
-            {
-              id: 4,
-              type: "user",
-              title: "New Barangay Officials Elected",
-              user: "COMELEC",
-              time: "6 months ago",
-              status: "completed",
-              icon: <FaUserPlus className="text-green-500" />
-            }
-          ]
-        };
-
-      default:
-        return {
-          stats: {
-            totalResidents: 1247,
-            registeredUsers: 387,
-            pendingRequests: 23,
-            monthlyGrowth: 12.5
-          },
-          activities: []
-        };
+  // Fetch dashboard stats
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/dashboard/stats');
+      const data = await response.json();
+      if (data.success && data.data) {
+        setStats({
+          totalResidents: data.data.totalResidents,
+          registeredUsers: data.data.totalUsers,
+          pendingRequests: data.data.pendingRequests,
+          monthlyGrowth: data.data.monthlyGrowth
+        });
+        if (data.data.changes) {
+          setTrends({
+            residents: data.data.changes.residents || "+0",
+            users: data.data.changes.users || "+0",
+            requests: data.data.changes.requests || "+0",
+            growth: data.data.changes.growth || "+0.0%"
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
     }
   };
 
-  const periodData = getPeriodData(selectedPeriod);
-  const { stats, activities: recentActivities } = periodData;
+  // Fetch recent activities
+  const fetchActivities = async () => {
+    try {
+      const response = await fetch(`/api/dashboard/activities?period=${selectedPeriod}&limit=10`);
+      const data = await response.json();
+      if (data.success && data.data) {
+        // Map activities to include icons
+        const activitiesWithIcons = data.data.map((activity: any) => {
+          let icon;
+          switch (activity.type) {
+            case 'request':
+              icon = <FaFileSignature className="text-blue-500" />;
+              break;
+            case 'user':
+            case 'resident':
+              icon = <FaUserPlus className="text-green-500" />;
+              break;
+            case 'approval':
+              icon = <FaCheckCircle className="text-green-500" />;
+              break;
+            case 'system':
+              icon = <FaFileAlt className="text-purple-500" />;
+              break;
+            default:
+              icon = <FaClipboardList className="text-yellow-500" />;
+          }
+          return { ...activity, icon };
+        });
+        setRecentActivities(activitiesWithIcons);
+      }
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+    }
+  };
+
+  // Fetch notifications count
+  const fetchNotifications = async () => {
+    try {
+      const response = await fetch('/api/dashboard/notifications');
+      const data = await response.json();
+      if (data.success && data.data) {
+        setUnreadCount(data.data.unreadCount || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  // Initial fetch
+  useEffect(() => {
+    fetchStats();
+    fetchActivities();
+    fetchNotifications();
+  }, []);
+
+  // Poll for updates every 2 seconds for instant updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchStats();
+      fetchActivities();
+      fetchNotifications();
+    }, 2000); // Update every 2 seconds for faster response
+
+    return () => clearInterval(interval);
+  }, [selectedPeriod]);
+
+  // Refetch activities when period changes
+  useEffect(() => {
+    fetchActivities();
+  }, [selectedPeriod]);
+
 
   const quickActions = [
     {
@@ -460,7 +347,7 @@ const AdminDashboard: React.FC = () => {
                   icon: <FaUsers className="text-blue-600" />,
                   bgGradient: "from-blue-500 via-blue-600 to-indigo-600",
                   bgLight: "bg-blue-50/80 dark:bg-blue-900/30",
-                  trend: "+12%",
+                  trend: trends.residents,
                   trendColor: "text-emerald-600 dark:text-emerald-400"
                 },
                 {
@@ -469,7 +356,7 @@ const AdminDashboard: React.FC = () => {
                   icon: <FaUserPlus className="text-emerald-600" />,
                   bgGradient: "from-emerald-500 via-green-500 to-teal-600",
                   bgLight: "bg-emerald-50/80 dark:bg-emerald-900/30",
-                  trend: "+8%",
+                  trend: trends.users,
                   trendColor: "text-emerald-600 dark:text-emerald-400"
                 },
                 {
@@ -478,16 +365,16 @@ const AdminDashboard: React.FC = () => {
                   icon: <FaClipboardList className="text-amber-600" />,
                   bgGradient: "from-amber-500 via-orange-500 to-red-500",
                   bgLight: "bg-amber-50/80 dark:bg-amber-900/30",
-                  trend: "+3",
+                  trend: trends.requests,
                   trendColor: "text-orange-600 dark:text-orange-400"
                 },
                 {
                   title: "Monthly Growth",
-                  value: `${stats.monthlyGrowth}%`,
+                  value: `${stats.monthlyGrowth.toFixed(1)}%`,
                   icon: <FaChartLine className="text-purple-600" />,
                   bgGradient: "from-purple-500 via-violet-500 to-indigo-600",
                   bgLight: "bg-purple-50/80 dark:bg-purple-900/30",
-                  trend: "+2.1%",
+                  trend: trends.growth,
                   trendColor: "text-emerald-600 dark:text-emerald-400"
                 }
               ].map((stat, index) => (

@@ -40,6 +40,22 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
 
+  // Real-time data state
+  const [stats, setStats] = useState({
+    totalResidents: 0,
+    totalUsers: 0,
+    pendingRequests: 0,
+    monthlyGrowth: 0
+  });
+  const [trends, setTrends] = useState({
+    residents: "+0",
+    users: "+0",
+    requests: "+0",
+    growth: "+0.0%"
+  });
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
@@ -50,63 +66,101 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
     }
   };
 
-  // Mock data - in real app this would come from API
-  const stats = {
-    totalResidents: 1247,
-    totalUsers: 387,
-    pendingRequests: 23,
-    approvedRequests: 156,
-    rejectedRequests: 12,
-    monthlyGrowth: 8.3
+  // Fetch dashboard stats
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/dashboard/stats');
+      const data = await response.json();
+      if (data.success && data.data) {
+        setStats({
+          totalResidents: data.data.totalResidents,
+          totalUsers: data.data.totalUsers,
+          pendingRequests: data.data.pendingRequests,
+          monthlyGrowth: data.data.monthlyGrowth
+        });
+        if (data.data.changes) {
+          setTrends({
+            residents: data.data.changes.residents || "+0",
+            users: data.data.changes.users || "+0",
+            requests: data.data.changes.requests || "+0",
+            growth: data.data.changes.growth || "+0.0%"
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
   };
 
-  const recentActivities = [
-    {
-      id: 1,
-      type: "request",
-      title: "New Barangay Clearance Request",
-      user: "Juan Dela Cruz",
-      time: "2 minutes ago",
-      status: "pending",
-      icon: <FaFileAlt className="text-blue-500" />
-    },
-    {
-      id: 2,
-      type: "approval",
-      title: "Certificate of Indigency Approved",
-      user: "Maria Santos",
-      time: "15 minutes ago",
-      status: "approved",
-      icon: <FaCheckCircle className="text-green-500" />
-    },
-    {
-      id: 3,
-      type: "request",
-      title: "Business Permit Application",
-      user: "Pedro Garcia",
-      time: "1 hour ago",
-      status: "pending",
-      icon: <FaClipboardList className="text-yellow-500" />
-    },
-    {
-      id: 4,
-      type: "rejection",
-      title: "Certificate Request Rejected",
-      user: "Ana Reyes",
-      time: "2 hours ago",
-      status: "rejected",
-      icon: <FaTimesCircle className="text-red-500" />
-    },
-    {
-      id: 5,
-      type: "system",
-      title: "Weekly Report Generated",
-      user: "System",
-      time: "3 hours ago",
-      status: "completed",
-      icon: <FaChartLine className="text-purple-500" />
+  // Fetch recent activities
+  const fetchActivities = async () => {
+    try {
+      const response = await fetch(`/api/dashboard/activities?period=${selectedPeriod}&limit=10`);
+      const data = await response.json();
+      if (data.success && data.data) {
+        // Map activities to include icons
+        const activitiesWithIcons = data.data.map((activity: any) => {
+          let icon;
+          switch (activity.type) {
+            case 'request':
+              icon = <FaFileAlt className="text-blue-500" />;
+              break;
+            case 'approval':
+              icon = <FaCheckCircle className="text-green-500" />;
+              break;
+            case 'rejection':
+              icon = <FaTimesCircle className="text-red-500" />;
+              break;
+            case 'system':
+              icon = <FaChartLine className="text-purple-500" />;
+              break;
+            default:
+              icon = <FaClipboardList className="text-yellow-500" />;
+          }
+          return { ...activity, icon };
+        });
+        setRecentActivities(activitiesWithIcons);
+      }
+    } catch (error) {
+      console.error('Error fetching activities:', error);
     }
-  ];
+  };
+
+  // Fetch notifications count
+  const fetchNotifications = async () => {
+    try {
+      const response = await fetch('/api/dashboard/notifications');
+      const data = await response.json();
+      if (data.success && data.data) {
+        setUnreadCount(data.data.unreadCount || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  // Initial fetch
+  useEffect(() => {
+    fetchStats();
+    fetchActivities();
+    fetchNotifications();
+  }, []);
+
+  // Poll for updates every 2 seconds for instant updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchStats();
+      fetchActivities();
+      fetchNotifications();
+    }, 2000); // Update every 2 seconds for faster response
+
+    return () => clearInterval(interval);
+  }, [selectedPeriod]);
+
+  // Refetch activities when period changes
+  useEffect(() => {
+    fetchActivities();
+  }, [selectedPeriod]);
 
   const quickActions = [
     {
@@ -194,9 +248,11 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               >
                 <FaBell className="text-sm" />
                 <span className="hidden md:inline">Notifications</span>
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                  3
-                </span>
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
               </motion.button>
 
               <NotificationPanel
@@ -222,8 +278,8 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               icon: <FaUsers className="text-blue-500" />,
               bgColor: "bg-blue-50 dark:bg-blue-900/20",
               iconBg: "bg-blue-100 dark:bg-blue-900/40",
-              change: "+12",
-              changeType: "positive" as const
+              change: trends.residents,
+              changeType: trends.residents.startsWith('+') ? "positive" as const : "neutral" as const
             },
             {
               title: "Total Users",
@@ -231,8 +287,8 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               icon: <FaUserCheck className="text-green-500" />,
               bgColor: "bg-green-50 dark:bg-green-900/20",
               iconBg: "bg-green-100 dark:bg-green-900/40",
-              change: "+8",
-              changeType: "positive" as const
+              change: trends.users,
+              changeType: trends.users.startsWith('+') ? "positive" as const : "neutral" as const
             },
             {
               title: "Pending Requests",
@@ -240,16 +296,16 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               icon: <FaClipboardList className="text-yellow-500" />,
               bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
               iconBg: "bg-yellow-100 dark:bg-yellow-900/40",
-              change: "+3",
+              change: trends.requests,
               changeType: "neutral" as const
             },
             {
               title: "Monthly Growth",
-              value: `${stats.monthlyGrowth}%`,
+              value: `${stats.monthlyGrowth.toFixed(1)}%`,
               icon: <FaChartLine className="text-purple-500" />,
               bgColor: "bg-purple-50 dark:bg-purple-900/20",
               iconBg: "bg-purple-100 dark:bg-purple-900/40",
-              change: "+2.1%",
+              change: trends.growth,
               changeType: "positive" as const
             }
           ].map((stat, index) => (

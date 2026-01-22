@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "type": "resident",
+    "title": "New Resident Registration",
+    "user": "James lita",
+    "status": "completed",
+    "timestamp": "2026-01-22T10:41:43.048Z",
+    "createdAt": "2026-01-22T10:41:43.048Z",
+    "message": "New resident James lita has been registered."
+  }
+]

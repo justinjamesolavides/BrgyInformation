@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { FaEye, FaEyeSlash, FaUser, FaLock, FaExclamationTriangle } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaUser, FaLock, FaExclamationTriangle, FaSignInAlt } from "react-icons/fa";
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
@@ -292,7 +292,10 @@ const LoginPage: React.FC = () => {
                 <span>Signing in...</span>
               </div>
             ) : (
-              <span>Enter / Login</span>
+              <div className="flex items-center justify-center gap-2">
+                <FaSignInAlt className="text-base" />
+                <span>Login</span>
+              </div>
             )}
           </motion.button>
         </form>

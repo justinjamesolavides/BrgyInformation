@@ -27,23 +27,23 @@ const StaffSettingsContent: React.FC = () => {
   ];
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 bg-white">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
+        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4"
       >
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
-                <FaCog className="text-blue-600 dark:text-blue-400 text-xl" />
+          <div className="flex-1 w-full md:w-auto">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shadow-sm">
+                <FaCog className="text-blue-600 text-xl" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-neutral-900 dark:text-white font-display">
+                <h1 className="text-xl font-semibold text-gray-900">
                   Staff - Settings
                 </h1>
-                <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+                <p className="text-gray-600 text-sm mt-1">
                   Manage your account and preferences (Staff Access)
                 </p>
               </div>
@@ -51,29 +51,29 @@ const StaffSettingsContent: React.FC = () => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Sidebar Navigation */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="lg:col-span-1"
           >
-            <div className="card sticky top-6">
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-4">Settings</h3>
+            <div className="bg-white border border-gray-200 rounded-lg shadow-sm sticky top-6">
+              <div className="p-4">
+                <h3 className="text-base font-semibold text-gray-900 mb-3">Settings</h3>
                 <nav className="space-y-2">
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all duration-200 ${
                         activeTab === tab.id
-                          ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
+                          ? "bg-blue-50 text-blue-700"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                       }`}
                     >
                       {tab.icon}
-                      <span className="font-medium">{tab.label}</span>
+                      <span className="text-sm font-medium">{tab.label}</span>
                     </button>
                   ))}
                 </nav>
@@ -88,82 +88,82 @@ const StaffSettingsContent: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="lg:col-span-3"
           >
-            <div className="card">
-              <div className="p-6">
+            <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+              <div className="p-4">
                 {/* Profile Settings */}
                 {activeTab === "profile" && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="space-y-6"
+                    className="space-y-4"
                   >
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-2xl flex items-center justify-center">
-                        <FaUser className="text-blue-600 dark:text-blue-400 text-2xl" />
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shadow-sm">
+                        <FaUser className="text-blue-600 text-lg" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Profile Settings</h2>
-                        <p className="text-neutral-600 dark:text-neutral-400">Manage your personal information</p>
+                        <h2 className="text-lg font-semibold text-gray-900">Profile Settings</h2>
+                        <p className="text-gray-600 text-sm">Manage your personal information</p>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                        <label className="block text-xs font-medium text-gray-700 mb-1.5">
                           First Name
                         </label>
                         <input
                           type="text"
                           defaultValue="Staff"
-                          className="input-field w-full"
+                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                           placeholder="Enter your first name"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                        <label className="block text-xs font-medium text-gray-700 mb-1.5">
                           Last Name
                         </label>
                         <input
                           type="text"
                           defaultValue="Member"
-                          className="input-field w-full"
+                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                           placeholder="Enter your last name"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                        <label className="block text-xs font-medium text-gray-700 mb-1.5">
                           Email Address
                         </label>
                         <input
                           type="email"
                           defaultValue="staff@brgy.com"
-                          className="input-field w-full"
+                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                           placeholder="Enter your email"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                        <label className="block text-xs font-medium text-gray-700 mb-1.5">
                           Phone Number
                         </label>
                         <input
                           type="tel"
                           defaultValue="+63 917 123 4567"
-                          className="input-field w-full"
+                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                           placeholder="Enter your phone number"
                         />
                       </div>
                     </div>
 
-                    <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700">
+                    <div className="pt-4 border-t border-gray-200">
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1.5 text-sm"
                       >
-                        <FaSave className="text-sm" />
+                        <FaSave className="text-xs" />
                         Save Changes
                       </motion.button>
                     </div>

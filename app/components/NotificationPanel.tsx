@@ -87,8 +87,8 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose, 
   };
 
   const getNotificationStyles = (type: string, read: boolean) => {
-    const baseStyles = read ? 'bg-gray-50 dark:bg-gray-700' : 'bg-white dark:bg-gray-800';
-    return `${baseStyles} hover:bg-gray-100 dark:hover:bg-gray-700 border-l-4 ${
+    const baseStyles = read ? 'bg-gray-50' : 'bg-white';
+    return `${baseStyles} hover:bg-gray-50 border-l-4 ${
       type === 'success' ? 'border-green-500' :
       type === 'error' ? 'border-red-500' :
       type === 'warning' ? 'border-yellow-500' :
@@ -121,44 +121,44 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose, 
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="absolute right-0 mt-2 w-96 max-w-sm bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg rounded-xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden z-50"
+          className="absolute right-0 mt-2 w-80 max-w-sm bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden z-50"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-4">
+          <div className="bg-white p-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <div className="relative">
-                  <FaBell className="text-xl" />
+                  <FaBell className="text-sm" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[0.6rem] rounded-full h-4 w-4 flex items-center justify-center font-bold">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
                 </div>
                 <div>
-                  <h3 className="font-semibold">Notifications</h3>
-                  <p className="text-sm text-blue-100">
+                  <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
+                  <p className="text-xs text-gray-600">
                     {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up!'}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="text-blue-200 hover:text-white transition-colors"
+                className="text-gray-500 hover:text-gray-700 transition-colors"
               >
-                <FaTimes />
+                <FaTimes className="text-xs" />
               </button>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex border-b border-gray-200 dark:border-gray-700">
-            <button className="flex-1 px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
-              <FaCheck className="inline mr-2" />
+          <div className="flex border-b border-gray-200">
+            <button className="flex-1 px-3 py-2 text-xs font-medium text-blue-600 hover:bg-blue-50 transition-colors">
+              <FaCheck className="inline mr-1.5 text-[0.7rem]" />
               Mark All Read
             </button>
-            <button className="flex-1 px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-l border-gray-200 dark:border-gray-700">
-              <FaTrash className="inline mr-2" />
+            <button className="flex-1 px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors border-l border-gray-200">
+              <FaTrash className="inline mr-1.5 text-[0.7rem]" />
               Clear All
             </button>
           </div>
@@ -166,42 +166,42 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose, 
           {/* Notifications List */}
           <div className="max-h-96 overflow-y-auto">
             {allNotifications.length === 0 ? (
-              <div className="p-8 text-center text-gray-500 dark:text-gray-400">
-                <FaBell className="mx-auto text-3xl mb-3 opacity-50" />
-                <p>No notifications yet</p>
-                <p className="text-sm mt-1">We'll notify you when there's something new</p>
+              <div className="p-6 text-center text-gray-500">
+                <FaBell className="mx-auto text-lg mb-2 opacity-50" />
+                <p className="text-sm">No notifications yet</p>
+                <p className="text-xs mt-1">We'll notify you when there's something new</p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              <div className="divide-y divide-gray-200">
                 {allNotifications.map((notification, index) => (
                   <motion.div
                     key={notification.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className={`p-4 cursor-pointer transition-colors ${getNotificationStyles(notification.type, notification.read)}`}
+                    className={`p-3 transition-colors ${getNotificationStyles(notification.type, notification.read)}`}
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-1">
+                    <div className="flex items-start gap-2.5">
+                      <div className="flex-shrink-0 mt-0.5">
                         {getNotificationIcon(notification.type)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between">
-                          <h4 className={`text-sm font-medium truncate ${
-                            notification.read ? 'text-gray-600 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'
+                          <h4 className={`text-xs font-medium truncate ${
+                            notification.read ? 'text-gray-600' : 'text-gray-900'
                           }`}>
                             {notification.title}
                           </h4>
                           {!notification.read && (
-                            <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>
                           )}
                         </div>
-                        <p className={`text-sm mt-1 ${
-                          notification.read ? 'text-gray-500 dark:text-gray-500' : 'text-gray-700 dark:text-gray-300'
+                        <p className={`text-xs mt-1 ${
+                          notification.read ? 'text-gray-500' : 'text-gray-700'
                         }`}>
                           {notification.message}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                        <p className="text-[0.6rem] text-gray-500 mt-1.5">
                           {getTimeAgo(notification.timestamp)}
                         </p>
                       </div>
@@ -211,9 +211,9 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose, 
                           // In real app, this would remove the notification
                           console.log('Remove notification:', notification.id);
                         }}
-                        className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                        className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
                       >
-                        <FaTimes className="text-xs" />
+                        <FaTimes className="text-[0.6rem]" />
                       </button>
                     </div>
                   </motion.div>

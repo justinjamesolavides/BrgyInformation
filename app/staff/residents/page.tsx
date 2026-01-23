@@ -118,23 +118,23 @@ const StaffResidentsContent: React.FC = () => {
   };
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 bg-white">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
+        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4"
       >
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
-                <FaUsers className="text-blue-600 dark:text-blue-400 text-xl" />
+          <div className="flex-1 w-full md:w-auto">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shadow-sm">
+                <FaUsers className="text-blue-600 text-xl" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-neutral-900 dark:text-white font-display">
+                <h1 className="text-xl font-semibold text-gray-900">
                   Staff - Residents Management
                 </h1>
-                <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+                <p className="text-gray-600 text-sm mt-1">
                   View and manage resident information (Staff Access)
                 </p>
               </div>
@@ -145,7 +145,7 @@ const StaffResidentsContent: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl shadow-sm transition-all flex items-center gap-2 font-medium"
+              className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-lg transition-all flex items-center gap-2 font-medium"
             >
               <FaDownload className="text-sm" />
               Export Data
@@ -158,20 +158,20 @@ const StaffResidentsContent: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="card mb-6"
+          className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 mb-6"
         >
-          <div className="p-6">
-            <div className="flex flex-col lg:flex-row gap-4">
+          <div>
+            <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1 relative">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400">
-                  <FaSearch className="text-lg" />
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <FaSearch className="text-sm" />
                 </div>
                 <input
                   type="text"
                   placeholder="Search residents by name, email, or barangay ID..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input-field pl-12 pr-4 py-4 text-base"
+                  className="w-full pl-10 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -183,7 +183,7 @@ const StaffResidentsContent: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
         >
           {filteredResidents.map((resident, index) => (
             <motion.div
@@ -191,20 +191,20 @@ const StaffResidentsContent: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}
-              whileHover={{ y: -4 }}
-              className="card card-interactive"
+              whileHover={{ y: -2 }}
+              className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
             >
               {/* Header */}
-              <div className="p-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+              <div className="p-4 bg-blue-500 text-white rounded-t-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-white font-bold text-xl">
+                  <div className="w-12 h-12 bg-white/30 rounded-xl flex items-center justify-center text-white font-bold text-lg">
                     {resident.avatar}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-xl text-white truncate">
+                    <h3 className="font-semibold text-sm text-white truncate">
                       {resident.firstName} {resident.lastName}
                     </h3>
-                    <p className="text-blue-100 text-sm">{resident.barangayId}</p>
+                    <p className="text-blue-100 text-xs">{resident.barangayId}</p>
                     <p className="text-blue-200 text-xs mt-1">
                       Age: {calculateAge(resident.dateOfBirth)} • {resident.occupation}
                     </p>
@@ -213,39 +213,39 @@ const StaffResidentsContent: React.FC = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6">
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
-                      <FaEnvelope className="text-neutral-500 dark:text-neutral-400 text-xs" />
+              <div className="p-4">
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center gap-2.5 text-sm">
+                    <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <FaEnvelope className="text-gray-500 text-xs" />
                     </div>
-                    <span className="text-neutral-700 dark:text-neutral-300 font-medium truncate">{resident.email}</span>
+                    <span className="text-gray-700 font-medium truncate text-xs">{resident.email}</span>
                   </div>
 
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
-                      <FaPhone className="text-neutral-500 dark:text-neutral-400 text-xs" />
+                  <div className="flex items-center gap-2.5 text-sm">
+                    <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <FaPhone className="text-gray-500 text-xs" />
                     </div>
-                    <span className="text-neutral-700 dark:text-neutral-300 font-medium">{resident.phone}</span>
+                    <span className="text-gray-700 font-medium text-xs">{resident.phone}</span>
                   </div>
 
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
-                      <FaMapMarkerAlt className="text-neutral-500 dark:text-neutral-400 text-xs" />
+                  <div className="flex items-center gap-2.5 text-sm">
+                    <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <FaMapMarkerAlt className="text-gray-500 text-xs" />
                     </div>
-                    <span className="text-neutral-700 dark:text-neutral-300 font-medium truncate">{resident.address}</span>
+                    <span className="text-gray-700 font-medium truncate text-xs">{resident.address}</span>
                   </div>
                 </div>
 
                 {/* Status Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getGenderColor(resident.gender)}`}>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded ${getGenderColor(resident.gender)}`}>
                     {resident.gender === 'male' ? '👨' : resident.gender === 'female' ? '👩' : '🧑'} {resident.gender}
                   </span>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200`}>
+                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded bg-gray-100 text-gray-800`}>
                     {resident.civilStatus}
                   </span>
-                  <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(resident.status)}`}>
+                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded ${getStatusColor(resident.status)}`}>
                     {resident.status === 'active' ? '✅' : '⏸️'} {resident.status}
                   </span>
                 </div>
@@ -255,9 +255,9 @@ const StaffResidentsContent: React.FC = () => {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all duration-200 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 border border-blue-200 dark:border-blue-800"
+                    className="flex-1 py-2 px-3 text-xs font-medium rounded-lg transition-all duration-200 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200"
                   >
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center gap-1.5">
                       <FaEye className="text-xs" />
                       View Details
                     </div>
@@ -265,8 +265,8 @@ const StaffResidentsContent: React.FC = () => {
                 </div>
 
                 {/* Staff Notice */}
-                <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
-                  <p className="text-xs text-yellow-800 dark:text-yellow-200">
+                <div className="mt-3 p-2 bg-yellow-50 rounded-lg border border-yellow-200 mt-3">
+                  <p className="text-[0.6rem] text-yellow-800">
                     🔒 Staff Access: Limited editing permissions. Contact admin for modifications.
                   </p>
                 </div>
@@ -279,13 +279,13 @@ const StaffResidentsContent: React.FC = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-16"
+            className="text-center py-12"
           >
-            <div className="w-24 h-24 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FaUsers className="text-neutral-400 dark:text-neutral-500 text-3xl" />
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FaUsers className="text-gray-400 text-lg" />
             </div>
-            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">No residents found</h3>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">No residents found</h3>
+            <p className="text-gray-600 text-sm max-w-md mx-auto">
               {searchTerm ? "Try adjusting your search criteria." : "No residents available for staff review."}
             </p>
           </motion.div>

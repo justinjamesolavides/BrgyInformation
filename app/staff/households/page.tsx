@@ -9,7 +9,8 @@ import {
   FaEye,
   FaUsers,
   FaPhone,
-  FaMapMarkerAlt
+  FaMapMarkerAlt,
+  FaExclamationTriangle
 } from "react-icons/fa";
 
 interface Household {
@@ -108,22 +109,22 @@ const StaffHouseholdsPage: React.FC = () => {
   };
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-4 md:p-6 bg-white">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-6 mb-8"
+        className="flex items-center gap-4 mb-6"
       >
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900 rounded-2xl flex items-center justify-center shadow-lg">
-            <FaHome className="text-amber-600 dark:text-amber-400 text-2xl" />
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center shadow-sm">
+            <FaHome className="text-amber-600 text-xl" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold text-neutral-900 dark:text-white font-display leading-tight">
+            <h1 className="text-xl font-semibold text-gray-900">
               Household Directory
             </h1>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-2 text-lg">
+            <p className="text-gray-600 text-sm mt-1">
               View and manage barangay households
             </p>
           </div>
@@ -135,36 +136,36 @@ const StaffHouseholdsPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
       >
         {[
           {
             title: "Total Households",
             value: households.length.toString(),
             icon: <FaHome className="text-amber-500" />,
-            bgColor: "bg-amber-50 dark:bg-amber-900/20",
-            iconBg: "bg-amber-100 dark:bg-amber-900/40"
+            bgColor: "bg-amber-50",
+            iconBg: "bg-amber-100"
           },
           {
             title: "Active Households",
             value: households.filter(h => h.status === 'active').length.toString(),
             icon: <FaUsers className="text-green-500" />,
-            bgColor: "bg-green-50 dark:bg-green-900/20",
-            iconBg: "bg-green-100 dark:bg-green-900/40"
+            bgColor: "bg-green-50",
+            iconBg: "bg-green-100"
           },
           {
             title: "Nuclear Families",
             value: households.filter(h => h.householdType === 'nuclear').length.toString(),
             icon: <FaUsers className="text-blue-500" />,
-            bgColor: "bg-blue-50 dark:bg-blue-900/20",
-            iconBg: "bg-blue-100 dark:bg-blue-900/40"
+            bgColor: "bg-blue-50",
+            iconBg: "bg-blue-100"
           },
           {
             title: "Extended Families",
             value: households.filter(h => h.householdType === 'extended').length.toString(),
             icon: <FaHome className="text-purple-500" />,
-            bgColor: "bg-purple-50 dark:bg-purple-900/20",
-            iconBg: "bg-purple-100 dark:bg-purple-900/40"
+            bgColor: "bg-purple-50",
+            iconBg: "bg-purple-100"
           }
         ].map((stat, index) => (
           <motion.div
@@ -172,19 +173,19 @@ const StaffHouseholdsPage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 + index * 0.1 }}
-            whileHover={{ y: -4, scale: 1.02 }}
-            className="card card-interactive"
+            whileHover={{ y: -2 }}
+            className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-1">
+                <p className="text-xs font-medium text-gray-600 mb-1">
                   {stat.title}
                 </p>
-                <p className="text-3xl font-bold text-neutral-900 dark:text-white">
+                <p className="text-lg font-semibold text-gray-900">
                   {stat.value}
                 </p>
               </div>
-              <div className={`p-4 rounded-xl ${stat.iconBg} group-hover:scale-110 transition-transform duration-200`}>
+              <div className={`p-2 rounded-lg ${stat.iconBg}`}>
                 {stat.icon}
               </div>
             </div>
@@ -197,31 +198,31 @@ const StaffHouseholdsPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="card mb-6"
+        className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 mb-6"
       >
-        <div className="p-6">
-          <div className="flex flex-col lg:flex-row gap-4">
+        <div>
+          <div className="flex flex-col md:flex-row gap-3">
             {/* Search Input */}
             <div className="flex-1 relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400">
-                <FaSearch className="text-lg" />
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <FaSearch className="text-sm" />
               </div>
               <input
                 type="text"
                 placeholder="Search households by ID, address, or head of household..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-12 pr-4 py-4 text-base"
+                className="w-full pl-10 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
               />
             </div>
 
             {/* Filters */}
             <div className="flex gap-3">
-              <div className="relative">
+              <div className="relative flex-1">
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="input-field px-4 py-4 pr-10 appearance-none cursor-pointer bg-neutral-50 dark:bg-neutral-800"
+                  className="w-full px-3 py-2 pr-8 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none appearance-none cursor-pointer"
                 >
                   <option value="all">All Types</option>
                   <option value="nuclear">Nuclear</option>
@@ -229,22 +230,22 @@ const StaffHouseholdsPage: React.FC = () => {
                   <option value="single_parent">Single Parent</option>
                   <option value="blended">Blended</option>
                 </select>
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 pointer-events-none">
+                <div className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
                   <FaFilter className="text-sm" />
                 </div>
               </div>
 
-              <div className="relative">
+              <div className="relative flex-1">
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="input-field px-4 py-4 pr-10 appearance-none cursor-pointer bg-neutral-50 dark:bg-neutral-800"
+                  className="w-full px-3 py-2 pr-8 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none appearance-none cursor-pointer"
                 >
                   <option value="all">All Status</option>
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 pointer-events-none">
+                <div className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
                   <FaFilter className="text-sm" />
                 </div>
               </div>
@@ -258,10 +259,10 @@ const StaffHouseholdsPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center py-16"
+          className="text-center py-12"
         >
-          <div className="w-12 h-12 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-neutral-600 dark:text-neutral-400">Loading households...</p>
+          <div className="w-8 h-8 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-gray-600 text-sm">Loading households...</p>
         </motion.div>
       )}
 
@@ -270,16 +271,16 @@ const StaffHouseholdsPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center py-16"
+          className="text-center py-12"
         >
-          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FaExclamationTriangle className="text-red-500 text-2xl" />
+          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <FaExclamationTriangle className="text-red-500 text-lg" />
           </div>
-          <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">Error Loading Households</h3>
-          <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">{error}</p>
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">Error Loading Households</h3>
+          <p className="text-gray-600 mb-4 max-w-md mx-auto text-sm">{error}</p>
           <button
             onClick={fetchHouseholds}
-            className="btn-primary"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
           >
             Try Again
           </button>
@@ -292,7 +293,7 @@ const StaffHouseholdsPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4"
         >
           {households.length > 0 ? (
             households.map((household, index) => (
@@ -301,32 +302,26 @@ const StaffHouseholdsPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.3 }}
-                whileHover={{ y: -4 }}
-                className="card card-interactive group overflow-hidden"
+                whileHover={{ y: -2 }}
+                className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
               >
                 {/* Header */}
-                <div className="relative p-6 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 text-white overflow-hidden">
-                  {/* Background pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16" />
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12" />
-                  </div>
-
+                <div className="relative p-4 bg-amber-500 text-white rounded-t-lg">
                   <div className="relative flex items-start justify-between">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                          <FaHome className="text-2xl" />
+                        <div className="w-12 h-12 bg-white/30 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                          <FaHome className="text-lg" />
                         </div>
-                        <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                          household.status === 'active' ? 'bg-green-500' : 'bg-neutral-400'
+                        <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border border-white ${
+                          household.status === 'active' ? 'bg-green-500' : 'bg-gray-400'
                         }`} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-xl text-white mb-1">
+                        <h3 className="font-semibold text-sm text-white mb-0.5">
                           {household.householdId}
                         </h3>
-                        <p className="text-amber-100 text-sm font-medium">{household.headOfHousehold.name}</p>
+                        <p className="text-amber-100 text-xs font-medium">{household.headOfHousehold.name}</p>
                         <p className="text-amber-200 text-xs mt-1">
                           {household.totalMembers} members • {household.householdType}
                         </p>
@@ -334,77 +329,77 @@ const StaffHouseholdsPage: React.FC = () => {
                     </div>
 
                     {/* Action buttons */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="p-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-all duration-200"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="p-1.5 bg-white/30 rounded-lg hover:bg-white/40 transition-all duration-200"
                         title="View Details"
                       >
-                        <FaEye className="text-white text-sm" />
+                        <FaEye className="text-white text-xs" />
                       </motion.button>
                     </div>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
+                <div className="p-4">
                   {/* Address */}
-                  <div className="flex items-start gap-3 text-sm mb-4">
-                    <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <FaMapMarkerAlt className="text-neutral-500 dark:text-neutral-400 text-xs" />
+                  <div className="flex items-start gap-2.5 text-sm mb-3">
+                    <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <FaMapMarkerAlt className="text-gray-500 text-xs" />
                     </div>
-                    <span className="text-neutral-700 dark:text-neutral-300 font-medium leading-relaxed">
+                    <span className="text-gray-700 font-medium text-xs leading-relaxed">
                       {household.address}
                     </span>
                   </div>
 
                   {/* Contact */}
                   {household.contactNumber && (
-                    <div className="flex items-center gap-3 text-sm mb-4">
-                      <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <FaPhone className="text-neutral-500 dark:text-neutral-400 text-xs" />
+                    <div className="flex items-center gap-2.5 text-sm mb-3">
+                      <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <FaPhone className="text-gray-500 text-xs" />
                       </div>
-                      <span className="text-neutral-700 dark:text-neutral-300 font-medium">
+                      <span className="text-gray-700 font-medium text-xs">
                         {household.contactNumber}
                       </span>
                     </div>
                   )}
 
                   {/* Household Info */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getHouseholdTypeColor(household.householdType)}`}>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded ${getHouseholdTypeColor(household.householdType)}`}>
                       {household.householdType.replace('_', ' ')}
                     </span>
-                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getEconomicStatusColor(household.economicStatus)}`}>
+                    <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded ${getEconomicStatusColor(household.economicStatus)}`}>
                       {household.economicStatus}
                     </span>
-                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(household.status)}`}>
+                    <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded ${getStatusColor(household.status)}`}>
                       {household.status}
                     </span>
                   </div>
 
                   {/* Members Preview */}
-                  <div className="border-t border-neutral-200 dark:border-neutral-700 pt-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-sm font-semibold text-neutral-900 dark:text-white">
+                  <div className="border-t border-gray-200 pt-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-xs font-medium text-gray-900">
                         Household Members ({household.members.length})
                       </h4>
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       {household.members.slice(0, 3).map((member, idx) => (
                         <div key={idx} className="flex items-center justify-between text-sm">
-                          <span className="text-neutral-700 dark:text-neutral-300 font-medium">
+                          <span className="text-gray-700 font-medium text-xs">
                             {member.name}
                           </span>
-                          <span className="text-neutral-500 dark:text-neutral-400 text-xs">
+                          <span className="text-gray-500 text-[0.6rem]">
                             {member.relationship} • {member.age}y
                           </span>
                         </div>
                       ))}
                       {household.members.length > 3 && (
                         <div className="text-center">
-                          <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                          <span className="text-[0.6rem] text-gray-500">
                             +{household.members.length - 3} more members
                           </span>
                         </div>
@@ -418,13 +413,13 @@ const StaffHouseholdsPage: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="col-span-full text-center py-16"
+              className="col-span-full text-center py-12"
             >
-              <div className="w-24 h-24 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-6">
-                <FaHome className="text-neutral-400 dark:text-neutral-500 text-3xl" />
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FaHome className="text-gray-400 text-lg" />
               </div>
-              <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">No households found</h3>
-              <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">No households found</h3>
+              <p className="text-gray-600 mb-3 max-w-md mx-auto text-sm">
                 {searchTerm || filterType !== "all" || filterStatus !== "all"
                   ? "Try adjusting your search or filter criteria to find what you're looking for."
                   : "No households available at this time."}
@@ -436,7 +431,7 @@ const StaffHouseholdsPage: React.FC = () => {
                     setFilterType('all');
                     setFilterStatus('all');
                   }}
-                  className="btn-secondary"
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-lg text-xs font-medium"
                 >
                   Clear all filters
                 </button>

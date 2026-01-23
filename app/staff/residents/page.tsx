@@ -192,20 +192,20 @@ const StaffResidentsContent: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}
               whileHover={{ y: -2 }}
-              className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
             >
               {/* Header */}
-              <div className="p-4 bg-blue-500 text-white rounded-t-lg">
+              <div className="p-4 bg-white border-b border-gray-100 rounded-t-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/30 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-800 font-bold text-lg">
                     {resident.avatar}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm text-white truncate">
+                    <h3 className="font-semibold text-gray-900 text-sm truncate">
                       {resident.firstName} {resident.lastName}
                     </h3>
-                    <p className="text-blue-100 text-xs">{resident.barangayId}</p>
-                    <p className="text-blue-200 text-xs mt-1">
+                    <p className="text-gray-500 text-xs">{resident.barangayId}</p>
+                    <p className="text-gray-600 text-xs mt-1">
                       Age: {calculateAge(resident.dateOfBirth)} • {resident.occupation}
                     </p>
                   </div>
@@ -216,21 +216,21 @@ const StaffResidentsContent: React.FC = () => {
               <div className="p-4">
                 <div className="space-y-3 mb-4">
                   <div className="flex items-center gap-2.5 text-sm">
-                    <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="w-7 h-7 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-200">
                       <FaEnvelope className="text-gray-500 text-xs" />
                     </div>
                     <span className="text-gray-700 font-medium truncate text-xs">{resident.email}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5 text-sm">
-                    <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="w-7 h-7 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-200">
                       <FaPhone className="text-gray-500 text-xs" />
                     </div>
                     <span className="text-gray-700 font-medium text-xs">{resident.phone}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5 text-sm">
-                    <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="w-7 h-7 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-200">
                       <FaMapMarkerAlt className="text-gray-500 text-xs" />
                     </div>
                     <span className="text-gray-700 font-medium truncate text-xs">{resident.address}</span>
@@ -239,23 +239,23 @@ const StaffResidentsContent: React.FC = () => {
 
                 {/* Status Tags */}
                 <div className="flex flex-wrap gap-1.5 mb-4">
-                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded ${getGenderColor(resident.gender)}`}>
+                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded-full bg-gray-100 text-gray-800`}>
                     {resident.gender === 'male' ? '👨' : resident.gender === 'female' ? '👩' : '🧑'} {resident.gender}
                   </span>
-                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded bg-gray-100 text-gray-800`}>
+                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded-full bg-gray-100 text-gray-800`}>
                     {resident.civilStatus}
                   </span>
-                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded ${getStatusColor(resident.status)}`}>
+                  <span className={`px-2 py-0.5 text-[0.6rem] font-medium rounded-full ${getStatusColor(resident.status)}`}>
                     {resident.status === 'active' ? '✅' : '⏸️'} {resident.status}
                   </span>
                 </div>
 
                 {/* Staff Actions - Limited permissions */}
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1 py-2 px-3 text-xs font-medium rounded-lg transition-all duration-200 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200"
+                    className="flex-1 py-2 px-3 text-xs font-medium rounded-lg transition-all duration-200 bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
                   >
                     <div className="flex items-center justify-center gap-1.5">
                       <FaEye className="text-xs" />
@@ -264,10 +264,9 @@ const StaffResidentsContent: React.FC = () => {
                   </motion.button>
                 </div>
 
-                {/* Staff Notice */}
-                <div className="mt-3 p-2 bg-yellow-50 rounded-lg border border-yellow-200 mt-3">
-                  <p className="text-[0.6rem] text-yellow-800">
-                    🔒 Staff Access: Limited editing permissions. Contact admin for modifications.
+                <div className="mt-3 p-2 bg-blue-50 rounded-lg border border-blue-200">
+                  <p className="text-[0.6rem] text-blue-800">
+                    🔒 Staff Access: Limited permissions
                   </p>
                 </div>
               </div>

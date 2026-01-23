@@ -103,14 +103,14 @@ const AdminUsersPage: React.FC = () => {
         className="flex items-center justify-between mb-8"
       >
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
-            <FaUserCog className="text-blue-600 text-xl" />
+          <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center shadow-sm">
+            <FaUserCog className="text-gray-700 text-xl" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl font-semibold text-gray-900">
               User Management
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-gray-600 text-sm mt-1">
               Manage admin and staff accounts
             </p>
           </div>
@@ -146,14 +146,14 @@ const AdminUsersPage: React.FC = () => {
                 placeholder="Search users by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-10 pr-4 py-3 w-full"
+                className="input-field pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg"
               />
             </div>
 
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
-              className="input-field px-4 py-3 pr-10 bg-gray-50 border-gray-200 cursor-pointer min-w-[140px]"
+              className="input-field px-3 py-2 border border-gray-200 rounded-lg cursor-pointer min-w-[140px] bg-white"
             >
               <option value="all">All Roles</option>
               <option value="admin">Admin</option>
@@ -202,12 +202,12 @@ const AdminUsersPage: React.FC = () => {
                       </div>
                     </td>
                     <td className="table-body">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${getRoleColor(user.role)}`}>
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
                         {user.role}
                       </span>
                     </td>
                     <td className="table-body">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(user.status)}`}>
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
                         {user.status}
                       </span>
                     </td>
@@ -226,7 +226,7 @@ const AdminUsersPage: React.FC = () => {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleViewUser(user)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-all duration-200 group"
+                          className="p-2 text-blue-600 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-all duration-200 group border border-transparent"
                           title="View User Details"
                         >
                           <FaEye className="text-xs group-hover:scale-110 transition-transform" />
@@ -235,7 +235,7 @@ const AdminUsersPage: React.FC = () => {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleEditUser(user)}
-                          className="p-2 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition-all duration-200 group"
+                          className="p-2 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition-all duration-200 group border border-transparent"
                           title="Edit User"
                         >
                           <FaEdit className="text-xs group-hover:scale-110 transition-transform" />
@@ -244,7 +244,7 @@ const AdminUsersPage: React.FC = () => {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleDeleteUser(user)}
-                          className="p-2 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg transition-all duration-200 group"
+                          className="p-2 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg transition-all duration-200 group border border-transparent"
                           title="Delete User"
                         >
                           <FaTrash className="text-xs group-hover:scale-110 transition-transform" />

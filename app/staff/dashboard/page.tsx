@@ -363,11 +363,59 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
           ))}
         </motion.div>
 
-        {/* Quick Actions */}
+        {/* Pending & Today's Docs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+        >
+          {/* Pending Requests Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            whileHover={{ y: -2, scale: 1.01 }}
+            className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-all duration-300 cursor-pointer"
+            onClick={() => router.push('/staff/requests')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-medium text-gray-600 mb-1">Pending Requests</h3>
+                <p className="text-3xl font-bold text-gray-900">{stats.pendingRequests}</p>
+              </div>
+              <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <FaClock className="text-yellow-600 text-xl" />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Today's Documents Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ y: -2, scale: 1.01 }}
+            className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-all duration-300 cursor-pointer"
+            onClick={() => router.push('/staff/documents')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-medium text-gray-600 mb-1">Today's Documents</h3>
+                <p className="text-3xl font-bold text-gray-900">12</p>
+              </div>
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <FaFileAlt className="text-green-600 text-xl" />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-4">
@@ -381,7 +429,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
                 onClick={() => router.push(action.path)}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 + index * 0.1 }}
+                transition={{ delay: 0.6 + index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"

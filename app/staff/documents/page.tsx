@@ -139,9 +139,15 @@ const DocumentServices: React.FC = () => {
                   </div>
                 </div>
 
-                <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                  Process Document
-                </button>
+                <a href={
+                  doc.category === 'clearance' ? '/staff/clearance-simple' : 
+                  doc.category === 'tax' ? '/staff/cedula' : 
+                  '/staff/clearance-simple'
+                }>
+                  <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    Process Document
+                  </button>
+                </a>
               </div>
             </div>
           </motion.div>

@@ -149,33 +149,7 @@ const StaffSidebar: React.FC = () => {
         <ThemeToggle />
       </div>
 
-      {/* Quick Stats */}
-      <div className="px-4 py-3 border-b border-gray-200">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-blue-700 font-medium uppercase tracking-wide">Pending</p>
-                <p className="text-lg font-bold text-blue-800">{pendingRequests}</p>
-              </div>
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <FaClock className="text-blue-600 text-sm" />
-              </div>
-            </div>
-          </div>
-          <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-green-700 font-medium uppercase tracking-wide">Today's Docs</p>
-                <p className="text-lg font-bold text-green-800">12</p>
-              </div>
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                <FaFileAlt className="text-green-600 text-sm" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
       {/* Navigation */}
       <nav className="sidebar-nav flex-1">

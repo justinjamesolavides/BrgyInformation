@@ -204,7 +204,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <div className="p-4 md:p-6 bg-white min-h-screen">
+    <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -212,16 +212,16 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
           className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6"
         >
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shadow-sm">
-                <FaTachometerAlt className="text-blue-600 text-xl" />
+            <div className="flex items-center gap-4 mb-2">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <FaTachometerAlt className="text-white text-2xl" />
               </div>
               <div>
-                <h1 className="text-2xl font-semibold text-gray-900">
+                <h1 className="text-3xl font-bold text-gray-900">
                   Staff Dashboard
                 </h1>
-                <p className="text-gray-600 text-sm mt-1">
-                  Welcome back, {user.name}! Here's your barangay overview.
+                <p className="text-gray-600 text-sm mt-2">
+                  Welcome back, <span className="font-semibold text-gray-800">{user.name}</span>! Here's your barangay overview.
                 </p>
               </div>
             </div>
@@ -232,9 +232,9 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleLogout}
-              className="flex items-center gap-2 px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-xs font-medium border border-red-200"
+              className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all text-sm font-medium shadow-md"
             >
-              <FaSignOutAlt className="text-xs" />
+              <FaSignOutAlt className="text-sm" />
               Logout
             </motion.button>
 
@@ -242,16 +242,16 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               <motion.button
                 ref={notificationButtonRef}
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-all flex items-center gap-1.5 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2.5 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-1.5 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : '(no unread)'}`}
                 aria-expanded={isNotificationOpen}
                 aria-haspopup="dialog"
               >
-                <FaBell className="text-xs" />
-                <span className="hidden md:inline text-xs font-medium">Notifications</span>
-                <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[0.6rem] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                <FaBell className="text-sm" />
+                <span className="hidden md:inline text-sm font-medium">Notifications</span>
+                <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                   {unreadCount}
                 </span>
               </motion.button>
@@ -316,34 +316,38 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 + index * 0.1 }}
               whileHover={{ y: -4, scale: 1.02 }}
-              className="card card-interactive"
+              className="bg-white rounded-xl shadow-md border border-gray-100 p-6 transition-all duration-300 hover:shadow-lg"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-1">
+                  <p className="text-sm font-medium text-gray-600 mb-1">
                     {stat.title}
                   </p>
                   <div className="flex items-baseline gap-2 mb-2">
-                    <p className="text-3xl font-bold text-neutral-900 dark:text-white">
+                    <p className="text-3xl font-bold text-gray-900">
                       {stat.value}
                     </p>
                     <span className={`text-sm font-medium px-2 py-1 rounded-full ${
                       stat.changeType === 'positive'
-                        ? 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300'
-                        : 'bg-neutral-100 dark:bg-neutral-900/30 text-neutral-700 dark:text-neutral-300'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-gray-100 text-gray-700'
                     }`}>
                       {stat.change}
                     </span>
                   </div>
                 </div>
-                <div className={`p-4 rounded-xl ${stat.iconBg} group-hover:scale-110 transition-transform duration-200`}>
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                  stat.title.includes('Residents') ? 'bg-blue-100' :
+                  stat.title.includes('Users') ? 'bg-green-100' :
+                  stat.title.includes('Pending') ? 'bg-yellow-100' : 'bg-purple-100'
+                }`}>
                   {stat.icon}
                 </div>
               </div>
 
               {/* Mini chart visualization */}
-              <div className="mt-4">
-                <div className="flex items-end gap-1 h-8">
+              <div className="mt-2">
+                <div className="flex items-end gap-1 h-6">
                   {[0.3, 0.5, 0.7, 0.4, 0.8, 0.6, 0.9].map((height, i) => (
                     <motion.div
                       key={i}
@@ -376,7 +380,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             whileHover={{ y: -2, scale: 1.01 }}
-            className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-all duration-300 cursor-pointer"
+            className="bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-all duration-300 cursor-pointer"
             onClick={() => router.push('/staff/requests')}
           >
             <div className="flex items-center justify-between">
@@ -384,8 +388,8 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
                 <h3 className="text-sm font-medium text-gray-600 mb-1">Pending Requests</h3>
                 <p className="text-3xl font-bold text-gray-900">{stats.pendingRequests}</p>
               </div>
-              <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <FaClock className="text-yellow-600 text-xl" />
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center">
+                <FaClock className="text-white text-xl" />
               </div>
             </div>
           </motion.div>
@@ -396,7 +400,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
             whileHover={{ y: -2, scale: 1.01 }}
-            className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-all duration-300 cursor-pointer"
+            className="bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-all duration-300 cursor-pointer"
             onClick={() => router.push('/staff/documents')}
           >
             <div className="flex items-center justify-between">
@@ -404,8 +408,8 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
                 <h3 className="text-sm font-medium text-gray-600 mb-1">Today's Documents</h3>
                 <p className="text-3xl font-bold text-gray-900">12</p>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <FaFileAlt className="text-green-600 text-xl" />
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                <FaFileAlt className="text-white text-xl" />
               </div>
             </div>
           </motion.div>
@@ -420,7 +424,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="w-1.5 h-6 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-600 rounded-full"></div>
-            <h2 className="text-lg font-bold text-gray-800" id="quick-actions-heading">Quick Actions</h2>
+            <h2 className="text-xl font-bold text-gray-900" id="quick-actions-heading">Quick Actions</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
@@ -432,18 +436,18 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
                 transition={{ delay: 0.6 + index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                className="bg-white rounded-xl shadow-md border border-gray-100 p-5 hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 aria-label={`${action.title}: ${action.description}`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gray-100 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 text-white">
                     {action.icon}
                   </div>
                   <div className="text-left">
-                    <h3 className="font-medium text-gray-800 text-sm">
+                    <h3 className="font-semibold text-gray-900 text-base">
                       {action.title}
                     </h3>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-sm text-gray-600 mt-1">
                       {action.description}
                     </p>
                   </div>
@@ -458,103 +462,99 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-neutral-200 dark:border-neutral-700 p-6 overflow-hidden relative"
+          className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 overflow-hidden"
         >
-          {/* Background decoration */}
-
-          <div className="relative z-10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-1.5 h-6 bg-gradient-to-b from-purple-500 via-pink-500 to-red-500 rounded-full"></div>
-                <h3 className="text-base font-bold text-gray-800" id="recent-activities-heading">Recent Activities</h3>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100">
-                <div className={`w-2 h-2 rounded-full ${
-                  selectedPeriod === 'week' ? 'bg-green-500' :
-                  selectedPeriod === 'month' ? 'bg-blue-500' :
-                  selectedPeriod === 'quarter' ? 'bg-purple-500' : 'bg-orange-500'
-                }`}></div>
-                <span className="text-xs font-medium text-blue-700 capitalize">
-                  {selectedPeriod === 'week' ? 'This Week' :
-                   selectedPeriod === 'month' ? 'This Month' :
-                   selectedPeriod === 'quarter' ? 'This Quarter' : 'This Year'}
-                </span>
-              </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-1.5 h-6 bg-gradient-to-b from-purple-500 via-pink-500 to-red-500 rounded-full"></div>
+              <h3 className="text-lg font-bold text-gray-900" id="recent-activities-heading">Recent Activities</h3>
             </div>
-
-            <div className="space-y-3">
-              {recentActivities.map((activity, index) => (
-                <motion.div
-                  key={activity.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ delay: index * 0.1, duration: 0.3 }}
-                  className="group flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all duration-300 cursor-pointer border border-transparent hover:border-gray-200"
-                  whileHover={{
-                    x: 3,
-                    scale: 1.01,
-                    boxShadow: "0 2px 4px -1px rgba(0, 0, 0, 0.1)"
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Activity: ${activity.title} by ${activity.user}, ${activity.time}, status: ${activity.status}`}
-                >
-                  <div className="relative">
-                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-300">
-                      {activity.icon}
-                    </div>
-                    <div className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border-2 border-white ${
-                      activity.status === 'pending' ? 'bg-yellow-400' :
-                      activity.status === 'approved' ? 'bg-green-400' :
-                      activity.status === 'rejected' ? 'bg-red-400' :
-                      activity.status === 'completed' ? 'bg-blue-400' :
-                      'bg-gray-400'
-                    }`}></div>
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-800 group-hover:text-blue-700 transition-colors text-sm line-clamp-1">
-                      {activity.title}
-                    </p>
-                    <p className="text-xs text-gray-600 flex items-center gap-2 mt-1">
-                      <span className="font-medium">by {activity.user}</span>
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span className="flex items-center gap-1 font-medium">
-                        <FaClock className="text-xs" />
-                        {activity.time}
-                      </span>
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col items-end gap-1">
-                    <span className={`px-2 py-1 rounded-full text-[0.6rem] font-semibold ${
-                      activity.status === 'pending' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
-                      activity.status === 'approved' ? 'bg-green-100 text-green-800 border border-green-200' :
-                      activity.status === 'rejected' ? 'bg-red-100 text-red-800 border border-red-200' :
-                      activity.status === 'completed' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
-                      'bg-gray-100 text-gray-800 border border-gray-200'
-                    }`}>
-                      {activity.status}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100">
+              <div className={`w-2 h-2 rounded-full ${
+                selectedPeriod === 'week' ? 'bg-green-500' :
+                selectedPeriod === 'month' ? 'bg-blue-500' :
+                selectedPeriod === 'quarter' ? 'bg-purple-500' : 'bg-orange-500'
+              }`}></div>
+              <span className="text-xs font-medium text-blue-700 capitalize">
+                {selectedPeriod === 'week' ? 'This Week' :
+                 selectedPeriod === 'month' ? 'This Month' :
+                 selectedPeriod === 'quarter' ? 'This Quarter' : 'This Year'}
+              </span>
             </div>
-
-            {recentActivities.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-700/50"
-              >
-                <button className="w-full text-center text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors py-1">
-                  View All Activities →
-                </button>
-              </motion.div>
-            )}
           </div>
+          
+          <div className="space-y-3">
+            {recentActivities.map((activity, index) => (
+              <motion.div
+                key={activity.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ delay: index * 0.1, duration: 0.3 }}
+                className="group flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all duration-300 cursor-pointer border border-transparent hover:border-gray-200"
+                whileHover={{
+                  x: 3,
+                  scale: 1.01,
+                  boxShadow: "0 2px 4px -1px rgba(0, 0, 0, 0.1)"
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Activity: ${activity.title} by ${activity.user}, ${activity.time}, status: ${activity.status}`}
+              >
+                <div className="relative">
+                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+                    {activity.icon}
+                  </div>
+                  <div className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border-2 border-white ${
+                    activity.status === 'pending' ? 'bg-yellow-400' :
+                    activity.status === 'approved' ? 'bg-green-400' :
+                    activity.status === 'rejected' ? 'bg-red-400' :
+                    activity.status === 'completed' ? 'bg-blue-400' :
+                    'bg-gray-400'
+                  }`}></div>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-gray-800 group-hover:text-blue-700 transition-colors text-sm line-clamp-1">
+                    {activity.title}
+                  </p>
+                  <p className="text-xs text-gray-600 flex items-center gap-2 mt-1">
+                    <span className="font-medium">by {activity.user}</span>
+                    <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                    <span className="flex items-center gap-1 font-medium">
+                      <FaClock className="text-xs" />
+                      {activity.time}
+                    </span>
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-end gap-1">
+                  <span className={`px-2 py-1 rounded-full text-[0.6rem] font-semibold ${
+                    activity.status === 'pending' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                    activity.status === 'approved' ? 'bg-green-100 text-green-800 border border-green-200' :
+                    activity.status === 'rejected' ? 'bg-red-100 text-red-800 border border-red-200' :
+                    activity.status === 'completed' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                    'bg-gray-100 text-gray-800 border border-gray-200'
+                  }`}>
+                    {activity.status}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {recentActivities.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-6 pt-4 border-t border-gray-100"
+            >
+              <button className="w-full text-center text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors py-1">
+                View All Activities →
+              </button>
+            </motion.div>
+          )}
         </motion.div>
     </div>
   );

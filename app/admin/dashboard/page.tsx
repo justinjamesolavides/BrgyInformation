@@ -163,7 +163,7 @@ const AdminDashboard: React.FC = () => {
       description: "Register new barangay resident",
       icon: <FaUserPlus className="text-2xl text-white" />,
       color: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700",
-      path: "/residents/add"
+      path: "/admin/residents"
     },
 
     {

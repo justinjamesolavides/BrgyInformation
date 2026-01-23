@@ -51,6 +51,17 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose, 
     }
   ]);
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update the current time every minute for live time ago updates
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Update every minute
+
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -97,7 +108,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onClose, 
   };
 
   const getTimeAgo = (timestamp: Date) => {
-    const now = new Date();
+    const now = currentTime;
     const diffInMinutes = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60));
 
     if (diffInMinutes < 1) return 'Just now';

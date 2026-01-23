@@ -125,25 +125,25 @@ const StaffSidebar: React.FC = () => {
       {/* Quick Stats */}
       <div className="px-4 py-3 border-b border-gray-200">
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
+          <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-blue-600 font-medium uppercase tracking-wide">Pending</p>
-                <p className="text-lg font-bold text-blue-700">{pendingRequests}</p>
+                <p className="text-xs text-blue-700 dark:text-blue-300 font-medium uppercase tracking-wide">Pending</p>
+                <p className="text-lg font-bold text-blue-800 dark:text-blue-200">{pendingRequests}</p>
               </div>
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <FaClock className="text-blue-600 text-sm" />
+              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-800/30 rounded-lg flex items-center justify-center">
+                <FaClock className="text-blue-600 dark:text-blue-400 text-sm" />
               </div>
             </div>
           </div>
-          <div className="bg-red-50 p-3 rounded-lg border border-red-100">
+          <div className="bg-red-50 p-3 rounded-lg border border-red-200 dark:bg-red-900/20 dark:border-red-800/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-red-600 font-medium uppercase tracking-wide">Urgent</p>
-                <p className="text-lg font-bold text-red-700">{urgentTasks}</p>
+                <p className="text-xs text-red-700 dark:text-red-300 font-medium uppercase tracking-wide">Urgent</p>
+                <p className="text-lg font-bold text-red-800 dark:text-red-200">{urgentTasks}</p>
               </div>
-              <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                <FaExclamationTriangle className="text-red-600 text-sm" />
+              <div className="w-8 h-8 bg-red-100 dark:bg-red-800/30 rounded-lg flex items-center justify-center">
+                <FaExclamationTriangle className="text-red-600 dark:text-red-400 text-sm" />
               </div>
             </div>
           </div>
@@ -167,14 +167,14 @@ const StaffSidebar: React.FC = () => {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">{item.label}</span>
+                  <span className="font-medium text-gray-800 dark:text-gray-200">{item.label}</span>
                   {item.badge && (
-                    <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-semibold rounded-full">
+                    <span className="px-2 py-0.5 bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-300 text-xs font-semibold rounded-full">
                       {item.badge}
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
                   {item.description}
                 </p>
               </div>
@@ -189,8 +189,8 @@ const StaffSidebar: React.FC = () => {
 
       {/* Quick Actions */}
       <div className="px-4 py-3 border-t border-gray-200">
-        <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <FaPlus className="text-gray-500" />
+        <h3 className="text-xs font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+          <FaPlus className="text-gray-500 dark:text-gray-400" />
           Quick Actions
         </h3>
         <div className="space-y-2">

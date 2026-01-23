@@ -203,24 +203,24 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 mobile-spacing transition-all duration-300 bg-white dark:bg-neutral-900 min-h-screen">
+    <div className="p-4 md:p-6 bg-white min-h-screen">
 
         {/* Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 lg:mb-10 gap-4 lg:gap-6">
-          <div className="flex-1 w-full lg:w-auto">
-            <div className="flex items-center gap-3 lg:gap-4 mb-3">
-              <div className="w-1.5 h-8 lg:h-10 bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-600 rounded-full shadow-sm"></div>
-              <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 dark:from-white dark:via-blue-200 dark:to-indigo-200 bg-clip-text text-transparent leading-tight">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <div className="flex-1 w-full md:w-auto">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-1.5 h-6 bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-600 rounded-full"></div>
+              <h1 className="text-xl font-semibold text-gray-900">
                 Barangay Dashboard
               </h1>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-              <p className="text-gray-600 dark:text-gray-400 text-base lg:text-xl font-medium leading-relaxed">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <p className="text-gray-700 text-sm font-medium">
                 Welcome back, {user.name}!
               </p>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors text-sm font-medium"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-xs font-medium border border-red-200"
               >
                 <FaSignOutAlt className="text-xs" />
                 Logout
@@ -228,13 +228,13 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 lg:gap-3 w-full lg:w-auto justify-between lg:justify-start">
+          <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-start">
             <motion.div
-              className="flex items-center gap-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-3 lg:px-4 py-2 lg:py-3 rounded-xl border border-white/20 dark:border-gray-700/50 shadow-lg hover:shadow-xl transition-all duration-300 flex-1 lg:flex-none"
+              className="flex items-center gap-1.5 bg-white px-2.5 py-2 rounded-lg border border-gray-300 shadow-sm transition-all duration-300 flex-1 md:flex-none"
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
             >
-              <FaCalendarAlt className="text-blue-500 dark:text-blue-400 text-sm lg:text-base" />
+              <FaCalendarAlt className="text-blue-500 text-xs" />
               <select
                 value={selectedPeriod}
                 onChange={(e) => {
@@ -244,13 +244,13 @@ const AdminDashboard: React.FC = () => {
                   setTimeout(() => setIsLoading(false), 800);
                 }}
                 disabled={isLoading}
-                className="bg-transparent border-none outline-none text-xs lg:text-sm font-medium text-gray-900 dark:text-white cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors disabled:opacity-50 w-full lg:w-auto focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 rounded"
+                className="bg-white border border-gray-300 text-xs font-medium text-gray-900 cursor-pointer transition-colors disabled:opacity-50 w-full md:w-auto focus:ring-2 focus:ring-blue-500 rounded px-2 py-1.5"
                 aria-label="Select time period"
               >
-                <option value="week">📅 This Week</option>
-                <option value="month">📆 This Month</option>
-                <option value="quarter">📊 This Quarter</option>
-                <option value="year">📈 This Year</option>
+                <option value="week">Week</option>
+                <option value="month">Month</option>
+                <option value="quarter">Quarter</option>
+                <option value="year">Year</option>
               </select>
             </motion.div>
 
@@ -258,37 +258,16 @@ const AdminDashboard: React.FC = () => {
               <motion.button
                 ref={notificationButtonRef}
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-4 py-3 rounded-xl hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center gap-2 relative shadow-lg hover:shadow-xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
-                whileHover={{
-                  scale: 1.05,
-                  rotate: [0, -1, 1, 0],
-                  boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.4), 0 10px 10px -5px rgba(59, 130, 246, 0.2)"
-                }}
+                className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-all flex items-center gap-1.5 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                animate={{
-                  boxShadow: [
-                    "0 4px 6px -1px rgba(59, 130, 246, 0.3)",
-                    "0 10px 15px -3px rgba(59, 130, 246, 0.2)",
-                    "0 4px 6px -1px rgba(59, 130, 246, 0.3)"
-                  ]
-                }}
-                transition={{
-                  boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-                  rotate: { duration: 0.3 }
-                }}
                 aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : '(no unread)'}`}
                 aria-expanded={isNotificationOpen}
                 aria-haspopup="dialog"
               >
-                {/* Animated background effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0"
-                  animate={{ x: ["-100%", "100%"] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <FaBell className="text-sm" />
-                <span className="hidden lg:inline font-medium">Notifications</span>
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
+                <FaBell className="text-xs" />
+                <span className="hidden md:inline text-xs font-medium">Notifications</span>
+                <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[0.6rem] rounded-full h-4 w-4 flex items-center justify-center font-bold">
                   {unreadCount}
                 </span>
               </motion.button>
@@ -310,7 +289,7 @@ const AdminDashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
           >
             {isLoading ? (
               // Loading skeletons
@@ -320,15 +299,15 @@ const AdminDashboard: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1, duration: 0.3 }}
-                  className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/30 dark:border-gray-700/60 overflow-hidden"
+                  className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 overflow-hidden"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <div className="loading-skeleton-text h-4 w-24 mb-2"></div>
-                      <div className="loading-skeleton-text h-8 w-16 mb-2"></div>
-                      <div className="loading-skeleton-text h-3 w-20"></div>
+                      <div className="h-3 w-20 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-5 w-12 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-2 w-16 bg-gray-200 rounded"></div>
                     </div>
-                    <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-2xl loading-skeleton"></div>
+                    <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
                   </div>
                 </motion.div>
               ))
@@ -338,38 +317,26 @@ const AdminDashboard: React.FC = () => {
                 {
                   title: "Total Residents",
                   value: stats.totalResidents.toLocaleString(),
-                  icon: <FaUsers className="text-blue-600" />,
-                  bgGradient: "from-blue-500 via-blue-600 to-indigo-600",
-                  bgLight: "bg-blue-50/80 dark:bg-blue-900/30",
-                  trend: trends.residents,
-                  trendColor: "text-emerald-600 dark:text-emerald-400"
+                  icon: <FaUsers className="text-blue-500" />,
+                  color: "blue"
                 },
                 {
                   title: "Registered Users",
                   value: stats.registeredUsers.toLocaleString(),
-                  icon: <FaUserPlus className="text-emerald-600" />,
-                  bgGradient: "from-emerald-500 via-green-500 to-teal-600",
-                  bgLight: "bg-emerald-50/80 dark:bg-emerald-900/30",
-                  trend: trends.users,
-                  trendColor: "text-emerald-600 dark:text-emerald-400"
+                  icon: <FaUserPlus className="text-green-500" />,
+                  color: "green"
                 },
                 {
                   title: "Pending Requests",
                   value: stats.pendingRequests.toString(),
-                  icon: <FaClipboardList className="text-amber-600" />,
-                  bgGradient: "from-amber-500 via-orange-500 to-red-500",
-                  bgLight: "bg-amber-50/80 dark:bg-amber-900/30",
-                  trend: trends.requests,
-                  trendColor: "text-orange-600 dark:text-orange-400"
+                  icon: <FaClipboardList className="text-amber-500" />,
+                  color: "amber"
                 },
                 {
                   title: "Monthly Growth",
                   value: `${stats.monthlyGrowth.toFixed(1)}%`,
-                  icon: <FaChartLine className="text-purple-600" />,
-                  bgGradient: "from-purple-500 via-violet-500 to-indigo-600",
-                  bgLight: "bg-purple-50/80 dark:bg-purple-900/30",
-                  trend: trends.growth,
-                  trendColor: "text-emerald-600 dark:text-emerald-400"
+                  icon: <FaChartLine className="text-purple-500" />,
+                  color: "purple"
                 }
               ].map((stat, index) => (
                 <motion.div
@@ -377,65 +344,26 @@ const AdminDashboard: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1, duration: 0.3 }}
-                  whileHover={{ y: -4, scale: 1.03 }}
-                  className="group relative overflow-hidden bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-white/30 dark:border-gray-700/60 hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+                  whileHover={{ y: -2 }}
+                  className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow"
                 >
-                  {/* Background gradient overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgGradient} opacity-0 group-hover:opacity-8 transition-opacity duration-300`}></div>
-
-                  <div className="relative z-10 flex items-center justify-between">
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">{stat.title}</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-gray-600 uppercase tracking-wide">{stat.title}</p>
                       <motion.p
                         key={`${selectedPeriod}-${stat.title}`}
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: 0.2 + index * 0.1, duration: 0.3 }}
-                        className="text-4xl font-black text-gray-900 dark:text-white mb-3 leading-none"
+                        className="text-xl font-semibold text-gray-900 mt-1"
                       >
                         {stat.value}
                       </motion.p>
-                      <div className="flex items-center gap-2">
-                        <div className={`flex items-center gap-1 text-sm font-bold ${stat.trendColor} px-2 py-1 rounded-full bg-white/60 dark:bg-black/30 backdrop-blur-sm shadow-sm`}>
-                          <FaArrowUp className="text-xs" />
-                          {stat.trend}
-                        </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">vs last period</span>
-                      </div>
-
-                      {/* Progress bar */}
-                      <div className="mt-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
-                        <motion.div
-                          className={`h-full rounded-full bg-gradient-to-r ${stat.bgGradient}`}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${Math.min(parseFloat(stat.trend.replace('%', '').replace('+', '')), 100)}%` }}
-                          transition={{ delay: 0.5 + index * 0.1, duration: 0.8, ease: "easeOut" }}
-                        />
-                      </div>
                     </div>
-                    <div className={`p-4 rounded-2xl ${stat.bgLight} transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-lg`}>
+                    <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center">
                       {stat.icon}
                     </div>
                   </div>
-
-                  {/* Mini chart visualization */}
-                  <div className="absolute top-2 right-2 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
-                    <div className="flex items-end gap-0.5 h-8">
-                      {[0.4, 0.7, 0.5, 0.8, 0.6, 0.9].map((height, i) => (
-                        <motion.div
-                          key={i}
-                          className={`w-1 bg-gradient-to-t ${stat.bgGradient} rounded-sm`}
-                          initial={{ height: 0 }}
-                          animate={{ height: `${height * 100}%` }}
-                          transition={{ delay: 0.7 + index * 0.1 + i * 0.05, duration: 0.4 }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Decorative elements */}
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/20 to-transparent rounded-full -translate-y-10 translate-x-10"></div>
-                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-white/10 to-transparent rounded-full translate-y-8 -translate-x-8"></div>
                 </motion.div>
               ))
             )}
@@ -447,64 +375,37 @@ const AdminDashboard: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.3 }}
-          className="mb-8 lg:mb-10"
+          className="mb-6"
         >
-          <div className="flex items-center gap-3 lg:gap-4 mb-6 lg:mb-8">
-            <div className="w-1.5 h-8 lg:h-10 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-600 rounded-full shadow-sm"></div>
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white" id="quick-actions-heading">Quick Actions</h2>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-1.5 h-6 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-600 rounded-full"></div>
+            <h2 className="text-lg font-bold text-gray-800" id="quick-actions-heading">Quick Actions</h2>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {quickActions.map((action, index) => (
               <motion.button
                 key={action.title}
                 onClick={() => router.push(action.path)}
                 initial={{ opacity: 0, scale: 0.9 }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  boxShadow: [
-                    "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                    "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-                    "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
-                  ]
-                }}
-                transition={{
-                  delay: 0.5 + index * 0.1,
-                  duration: 0.3,
-                  boxShadow: {
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }
-                }}
-                whileHover={{
-                  scale: 1.05,
-                  y: -2,
-                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-                }}
-                whileTap={{ scale: 0.98 }}
-                className={`group relative overflow-hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-white/20 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 ${action.color} hover:shadow-2xl cursor-pointer`}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 + index * 0.1, duration: 0.3 }}
+                whileHover={{ y: -2 }}
+                className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 aria-label={`${action.title}: ${action.description}`}
               >
-                {/* Background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                <div className="relative z-10 flex items-center gap-4">
-                  <div className="p-3 bg-white/80 dark:bg-gray-700/80 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-gray-100 rounded-lg">
                     {action.icon}
                   </div>
                   <div className="text-left">
-                    <h3 className="font-semibold text-gray-800 dark:text-white group-hover:text-white transition-colors">
+                    <h3 className="font-medium text-gray-800 text-sm">
                       {action.title}
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-white/80 transition-colors">
+                    <p className="text-xs text-gray-600">
                       {action.description}
                     </p>
                   </div>
                 </div>
-
-                {/* Hover effect line */}
-                <div className="absolute bottom-0 left-0 w-0 h-1 bg-white/50 group-hover:w-full transition-all duration-300"></div>
               </motion.button>
             ))}
           </div>
@@ -518,30 +419,30 @@ const AdminDashboard: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/30 dark:border-gray-700/60 p-6 overflow-hidden relative"
+            className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 overflow-hidden relative"
           >
 
             <div className="relative z-10">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 lg:mb-8 gap-3 lg:gap-4">
-                <div className="flex items-center gap-3 lg:gap-4">
-                  <div className="w-1.5 h-8 lg:h-10 bg-gradient-to-b from-purple-500 via-pink-500 to-red-500 rounded-full shadow-sm"></div>
-                  <h3 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white" id="recent-activities-heading">Recent Activities</h3>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-1.5 h-6 bg-gradient-to-b from-purple-500 via-pink-500 to-red-500 rounded-full"></div>
+                  <h3 className="text-base font-bold text-gray-800" id="recent-activities-heading">Recent Activities</h3>
                 </div>
-                <div className="flex items-center gap-2 lg:gap-3 px-4 lg:px-5 py-2 lg:py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-full border border-blue-100 dark:border-blue-800/50 shadow-sm">
-                  <div className={`w-3 lg:w-4 h-3 lg:h-4 rounded-full ${
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100">
+                  <div className={`w-2 h-2 rounded-full ${
                     selectedPeriod === 'week' ? 'bg-green-500' :
                     selectedPeriod === 'month' ? 'bg-blue-500' :
                     selectedPeriod === 'quarter' ? 'bg-purple-500' : 'bg-orange-500'
-                  } animate-pulse shadow-lg`}></div>
-                  <span className="text-sm lg:text-base font-bold text-blue-700 dark:text-blue-300 capitalize tracking-wide">
-                    {selectedPeriod === 'week' ? 'This Week' :
-                     selectedPeriod === 'month' ? 'This Month' :
-                     selectedPeriod === 'quarter' ? 'This Quarter' : 'This Year'}
+                  }`}></div>
+                  <span className="text-xs font-medium text-blue-700 capitalize">
+                    {selectedPeriod === 'week' ? 'Week' :
+                     selectedPeriod === 'month' ? 'Month' :
+                     selectedPeriod === 'quarter' ? 'Quarter' : 'Year'}
                   </span>
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <AnimatePresence>
                   {isLoading ? (
                     // Loading skeletons for activities
@@ -551,15 +452,15 @@ const AdminDashboard: React.FC = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1, duration: 0.3 }}
-                        className="flex items-center gap-4 p-4 rounded-xl border border-transparent"
+                        className="flex items-center gap-3 p-3 rounded-lg border border-transparent"
                       >
-                        <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl loading-skeleton"></div>
+                        <div className="w-10 h-10 bg-gray-100 rounded-lg"></div>
                         <div className="flex-1 min-w-0">
-                          <div className="loading-skeleton-text h-5 w-48 mb-2"></div>
-                          <div className="loading-skeleton-text h-4 w-32"></div>
+                          <div className="h-4 w-32 bg-gray-200 rounded mb-1"></div>
+                          <div className="h-3 w-24 bg-gray-200 rounded"></div>
                         </div>
-                        <div className="flex flex-col items-end gap-2">
-                          <div className="loading-skeleton-text h-6 w-20 rounded-full"></div>
+                        <div className="flex flex-col items-end gap-1">
+                          <div className="h-5 w-16 bg-gray-200 rounded-full"></div>
                         </div>
                       </motion.div>
                     ))
@@ -571,22 +472,21 @@ const AdminDashboard: React.FC = () => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
                       transition={{ delay: index * 0.1, duration: 0.3 }}
-                      className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 dark:hover:from-blue-900/10 dark:hover:to-indigo-900/10 transition-all duration-300 cursor-pointer border border-transparent hover:border-blue-100/50 dark:hover:border-blue-800/30 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:bg-blue-50/30 dark:focus:bg-blue-900/20"
+                      className="group flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all duration-300 cursor-pointer border border-transparent hover:border-gray-200"
                       whileHover={{
-                        x: 6,
+                        x: 3,
                         scale: 1.01,
-                        boxShadow: "0 4px 12px -2px rgba(59, 130, 246, 0.15)"
+                        boxShadow: "0 2px 4px -1px rgba(0, 0, 0, 0.1)"
                       }}
-                      whileTap={{ scale: 0.99 }}
                       role="button"
                       tabIndex={0}
                       aria-label={`Activity: ${activity.title} by ${activity.user}, ${activity.time}, status: ${activity.status}`}
                     >
                       <div className="relative">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-300">
                           {activity.icon}
                         </div>
-                        <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white dark:border-gray-800 ${
+                        <div className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border-2 border-white ${
                           activity.status === 'pending' ? 'bg-yellow-400' :
                           activity.status === 'completed' ? 'bg-green-400' :
                           activity.status === 'approved' ? 'bg-blue-400' :
@@ -595,25 +495,25 @@ const AdminDashboard: React.FC = () => {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors line-clamp-1 text-lg">
+                        <p className="font-medium text-gray-800 group-hover:text-blue-700 transition-colors text-sm line-clamp-1">
                           {activity.title}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-3 mt-1">
+                        <p className="text-xs text-gray-600 flex items-center gap-2 mt-1">
                           <span className="font-medium">by {activity.user}</span>
-                          <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
-                          <span className="flex items-center gap-1.5 font-medium">
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                          <span className="flex items-center gap-1 font-medium">
                             <FaClock className="text-xs" />
                             {activity.time}
                           </span>
                         </p>
                       </div>
 
-                      <div className="flex flex-col items-end gap-2">
-                        <span className={`px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${
-                          activity.status === 'pending' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-800/50' :
-                          activity.status === 'completed' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800/50' :
-                          activity.status === 'approved' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50' :
-                          'bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50'
+                      <div className="flex flex-col items-end gap-1">
+                        <span className={`px-2 py-1 rounded-full text-[0.6rem] font-semibold ${
+                          activity.status === 'pending' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                          activity.status === 'completed' ? 'bg-green-100 text-green-800 border border-green-200' :
+                          activity.status === 'approved' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                          'bg-gray-100 text-gray-800 border border-gray-200'
                         }`}>
                           {activity.status}
                         </span>
@@ -628,13 +528,13 @@ const AdminDashboard: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-12"
+                  className="text-center py-8"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <FaClock className="text-2xl text-gray-400 dark:text-gray-500" />
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <FaClock className="text-xl text-gray-400" />
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400 font-semibold text-lg">No activities for the selected period</p>
-                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-2 font-medium">Activities will appear here as they happen</p>
+                  <p className="text-gray-600 font-medium text-sm">No activities for the selected period</p>
+                  <p className="text-xs text-gray-500 mt-1">Activities will appear here as they happen</p>
                 </motion.div>
               )}
 
@@ -643,9 +543,9 @@ const AdminDashboard: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
-                  className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700/50"
+                  className="mt-4 pt-3 border-t border-gray-100"
                 >
-                  <button className="w-full text-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors py-2">
+                  <button className="w-full text-center text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors py-1">
                     View All Activities →
                   </button>
                 </motion.div>

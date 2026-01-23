@@ -6,22 +6,22 @@ import { FaFileAlt, FaDownload, FaChartBar, FaCalendarAlt } from "react-icons/fa
 
 const AdminReportsPage: React.FC = () => {
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-4 md:p-6 bg-white">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-6 mb-8"
+        className="flex items-center gap-4 mb-6"
       >
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-2xl flex items-center justify-center shadow-lg">
-            <FaFileAlt className="text-green-600 dark:text-green-400 text-2xl" />
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center shadow-sm">
+            <FaFileAlt className="text-green-600 text-xl" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold text-neutral-900 dark:text-white font-display">
+            <h1 className="text-xl font-semibold text-gray-900">
               Reports & Analytics
             </h1>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-2 text-lg">
+            <p className="text-gray-600 text-sm mt-1">
               Admin access to comprehensive barangay reports and analytics
             </p>
           </div>
@@ -33,36 +33,32 @@ const AdminReportsPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
       >
         {[
           {
             title: "Total Reports",
             value: "24",
-            icon: <FaFileAlt className="text-green-500" />,
-            bgColor: "bg-green-50 dark:bg-green-900/20",
-            iconBg: "bg-green-100 dark:bg-green-900/40"
+            icon: <FaFileAlt className="text-blue-500" />,
+            color: "blue"
           },
           {
             title: "This Month",
             value: "8",
-            icon: <FaCalendarAlt className="text-blue-500" />,
-            bgColor: "bg-blue-50 dark:bg-blue-900/20",
-            iconBg: "bg-blue-100 dark:bg-blue-900/40"
+            icon: <FaCalendarAlt className="text-green-500" />,
+            color: "green"
           },
           {
             title: "Analytics",
             value: "12",
             icon: <FaChartBar className="text-purple-500" />,
-            bgColor: "bg-purple-50 dark:bg-purple-900/20",
-            iconBg: "bg-purple-100 dark:bg-purple-900/40"
+            color: "purple"
           },
           {
             title: "Downloads",
             value: "156",
             icon: <FaDownload className="text-orange-500" />,
-            bgColor: "bg-orange-50 dark:bg-orange-900/20",
-            iconBg: "bg-orange-100 dark:bg-orange-900/40"
+            color: "orange"
           }
         ].map((stat, index) => (
           <motion.div
@@ -70,19 +66,19 @@ const AdminReportsPage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 + index * 0.1 }}
-            whileHover={{ y: -4, scale: 1.02 }}
-            className="card card-interactive"
+            whileHover={{ y: -2 }}
+            className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-1">
+              <div>
+                <p className="text-xs font-medium text-gray-600 uppercase tracking-wide">
                   {stat.title}
                 </p>
-                <p className="text-3xl font-bold text-neutral-900 dark:text-white">
+                <p className="text-lg font-semibold text-gray-900 mt-1">
                   {stat.value}
                 </p>
               </div>
-              <div className={`p-4 rounded-xl ${stat.iconBg} group-hover:scale-110 transition-transform duration-200`}>
+              <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center">
                 {stat.icon}
               </div>
             </div>
@@ -95,32 +91,32 @@ const AdminReportsPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
       >
         {[
           {
             title: "Resident Reports",
             description: "Comprehensive resident statistics and demographics",
             icon: <FaFileAlt className="text-blue-500" />,
-            color: "bg-blue-50 dark:bg-blue-900/20"
+            color: "blue"
           },
           {
             title: "Household Reports",
             description: "Household composition and living arrangements",
             icon: <FaFileAlt className="text-green-500" />,
-            color: "bg-green-50 dark:bg-green-900/20"
+            color: "green"
           },
           {
             title: "Announcement Reports",
             description: "Announcement reach and engagement metrics",
             icon: <FaFileAlt className="text-purple-500" />,
-            color: "bg-purple-50 dark:bg-purple-900/20"
+            color: "purple"
           },
           {
             title: "Request Reports",
             description: "Service request trends and completion rates",
             icon: <FaFileAlt className="text-orange-500" />,
-            color: "bg-orange-50 dark:bg-orange-900/20"
+            color: "orange"
           }
         ].map((report, index) => (
           <motion.div
@@ -128,24 +124,26 @@ const AdminReportsPage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 + index * 0.1 }}
-            whileHover={{ y: -4 }}
-            className="card card-interactive group"
+            whileHover={{ y: -2 }}
+            className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 hover:shadow-md transition-shadow"
           >
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className={`w-12 h-12 ${report.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center flex-shrink-0">
                   {report.icon}
                 </div>
-                <button className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors opacity-0 group-hover:opacity-100">
-                  <FaDownload className="text-neutral-600 dark:text-neutral-400 text-sm" />
-                </button>
+                <div>
+                  <h3 className="font-semibold text-gray-900 text-sm">
+                    {report.title}
+                  </h3>
+                  <p className="text-gray-600 text-xs mt-1">
+                    {report.description}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
-                {report.title}
-              </h3>
-              <p className="text-neutral-600 dark:text-neutral-400 text-sm">
-                {report.description}
-              </p>
+              <button className="p-1.5 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors opacity-0 group-hover:opacity-100">
+                <FaDownload className="text-gray-600 text-xs" />
+              </button>
             </div>
           </motion.div>
         ))}
@@ -156,23 +154,23 @@ const AdminReportsPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="mt-8 card"
+        className="bg-white border border-gray-200 rounded-lg shadow-sm p-8 text-center"
       >
-        <div className="p-8 text-center">
-          <div className="w-24 h-24 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-6">
-            <FaChartBar className="text-neutral-400 dark:text-neutral-500 text-3xl" />
-          </div>
-          <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
-            Advanced Analytics Coming Soon
-          </h3>
-          <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
-            Comprehensive reporting and analytics features are currently under development for admin users.
-          </p>
-          <button className="btn-primary">
-            <FaDownload className="text-sm mr-2" />
-            Generate Sample Report
-          </button>
+        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <FaChartBar className="text-gray-400 text-xl" />
         </div>
+        <h3 className="font-semibold text-gray-900 mb-1">
+          Advanced Analytics Coming Soon
+        </h3>
+        <p className="text-gray-600 text-sm mb-4 max-w-md mx-auto">
+          Comprehensive reporting and analytics features are currently under development for admin users.
+        </p>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+          <div className="flex items-center gap-2 justify-center">
+            <FaDownload className="text-xs" />
+            Generate Sample Report
+          </div>
+        </button>
       </motion.div>
     </div>
   );

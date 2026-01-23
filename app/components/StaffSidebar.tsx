@@ -18,7 +18,11 @@ import {
   FaHome,
   FaBell,
   FaPlus,
-  FaFileAlt
+  FaFileAlt,
+  FaCertificate,
+  FaIdCard,
+  FaBuilding,
+  FaMoneyBill
 } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
 
@@ -55,6 +59,24 @@ const StaffSidebar: React.FC = () => {
       description: "View Households"
     },
     {
+      href: "/staff/documents",
+      label: "Document Services",
+      icon: <FaFileAlt className="text-lg" />,
+      description: "Clearance & Certificates"
+    },
+    {
+      href: "/staff/cedula",
+      label: "Cedula",
+      icon: <FaIdCard className="text-lg" />,
+      description: "Community Tax Certificate"
+    },
+    {
+      href: "/staff/clearance-simple",
+      label: "Barangay Clearance",
+      icon: <FaCertificate className="text-lg" />,
+      description: "Simple 3-step clearance"
+    },
+    {
       href: "/staff/announcements",
       label: "Announcements",
       icon: <FaBullhorn className="text-lg" />,
@@ -83,12 +105,17 @@ const StaffSidebar: React.FC = () => {
 
   const quickActions = [
     {
-      title: "Add Resident",
-      icon: <FaPlus className="text-sm" />,
+      title: "Issue Clearance",
+      icon: <FaCertificate className="text-sm" />,
       color: "bg-blue-500 hover:bg-blue-600",
-      action: () => console.log("Add resident")
+      action: () => console.log("Issue barangay clearance")
     },
-
+    {
+      title: "Process Cedula",
+      icon: <FaIdCard className="text-sm" />,
+      color: "bg-green-500 hover:bg-green-600",
+      action: () => console.log("Process community tax certificate")
+    },
     {
       title: "Urgent Tasks",
       icon: <FaExclamationTriangle className="text-sm" />,
@@ -125,25 +152,25 @@ const StaffSidebar: React.FC = () => {
       {/* Quick Stats */}
       <div className="px-4 py-3 border-b border-gray-200">
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800/50">
+          <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-blue-700 dark:text-blue-300 font-medium uppercase tracking-wide">Pending</p>
-                <p className="text-lg font-bold text-blue-800 dark:text-blue-200">{pendingRequests}</p>
+                <p className="text-xs text-blue-700 font-medium uppercase tracking-wide">Pending</p>
+                <p className="text-lg font-bold text-blue-800">{pendingRequests}</p>
               </div>
-              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-800/30 rounded-lg flex items-center justify-center">
-                <FaClock className="text-blue-600 dark:text-blue-400 text-sm" />
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <FaClock className="text-blue-600 text-sm" />
               </div>
             </div>
           </div>
-          <div className="bg-red-50 p-3 rounded-lg border border-red-200 dark:bg-red-900/20 dark:border-red-800/50">
+          <div className="bg-green-50 p-3 rounded-lg border border-green-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-red-700 dark:text-red-300 font-medium uppercase tracking-wide">Urgent</p>
-                <p className="text-lg font-bold text-red-800 dark:text-red-200">{urgentTasks}</p>
+                <p className="text-xs text-green-700 font-medium uppercase tracking-wide">Today's Docs</p>
+                <p className="text-lg font-bold text-green-800">12</p>
               </div>
-              <div className="w-8 h-8 bg-red-100 dark:bg-red-800/30 rounded-lg flex items-center justify-center">
-                <FaExclamationTriangle className="text-red-600 dark:text-red-400 text-sm" />
+              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <FaFileAlt className="text-green-600 text-sm" />
               </div>
             </div>
           </div>
@@ -167,14 +194,14 @@ const StaffSidebar: React.FC = () => {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-800 dark:text-gray-200">{item.label}</span>
+                  <span className="font-medium text-gray-800">{item.label}</span>
                   {item.badge && (
                     <span className="px-2 py-0.5 bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-300 text-xs font-semibold rounded-full">
                       {item.badge}
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                <p className="text-xs text-gray-600 mt-0.5">
                   {item.description}
                 </p>
               </div>
@@ -189,8 +216,8 @@ const StaffSidebar: React.FC = () => {
 
       {/* Quick Actions */}
       <div className="px-4 py-3 border-t border-gray-200">
-        <h3 className="text-xs font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-          <FaPlus className="text-gray-500 dark:text-gray-400" />
+        <h3 className="text-xs font-semibold text-gray-800 mb-3 flex items-center gap-2">
+          <FaPlus className="text-gray-500" />
           Quick Actions
         </h3>
         <div className="space-y-2">
@@ -198,7 +225,7 @@ const StaffSidebar: React.FC = () => {
             <button
               key={action.title}
               onClick={action.action}
-              className={`w-full flex items-center justify-between p-3 rounded-lg text-white transition-all duration-200 ${action.color} hover:shadow-md`}
+              className={`w-full flex items-center justify-between p-3 rounded-lg text-white transition-all duration-200 ${action.color}`}
             >
               <div className="flex items-center gap-3">
                 <div className="p-1.5 bg-white/20 rounded-md">
@@ -219,15 +246,15 @@ const StaffSidebar: React.FC = () => {
       {/* User Section */}
       <div className="px-4 py-3 border-t border-gray-200">
         <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border border-gray-200">
-          <div className="w-9 h-9 bg-green-100 rounded-lg flex items-center justify-center">
-            <FaUser className="text-green-600 text-sm" />
+          <div className="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center">
+            <FaUser className="text-blue-600 text-sm" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-gray-900 truncate">
-              Staff Member
+              Barangay Staff
             </p>
             <p className="text-xs text-gray-500 truncate">
-              staff@brgy.com
+              Front Desk Officer
             </p>
           </div>
         </div>
@@ -235,14 +262,12 @@ const StaffSidebar: React.FC = () => {
         <div className="mt-3 space-y-1">
           <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
             <FaCog className="text-xs" />
-            Account Settings
+            Profile Settings
           </button>
-
           <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
             <FaBell className="text-xs" />
-            Notification Settings
+            Notifications
           </button>
-
           <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
             <FaSignOutAlt className="text-xs" />
             Sign Out

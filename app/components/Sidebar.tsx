@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { FaTachometerAlt, FaUsers, FaFileAlt, FaCog, FaHome, FaBullhorn, FaUserCog, FaPlus } from "react-icons/fa";
+import { FaTachometerAlt, FaUsers, FaFileAlt, FaCog, FaHome, FaBullhorn, FaUserCog, FaPlus, FaCertificate, FaIdCard, FaChartLine, FaDatabase } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
 
 const Sidebar: React.FC = () => {
@@ -24,11 +24,25 @@ const Sidebar: React.FC = () => {
       icon: <FaHome />
     },
     {
+      href: "/admin/documents",
+      label: "Document Templates",
+      icon: <FaFileAlt />
+    },
+    {
+      href: "/admin/cedula-config",
+      label: "Cedula Settings",
+      icon: <FaIdCard />
+    },
+    {
+      href: "/admin/clearance-fees",
+      label: "Clearance Fees",
+      icon: <FaCertificate />
+    },
+    {
       href: "/admin/announcements",
       label: "Announcements",
       icon: <FaBullhorn />
     },
-
     {
       href: "/admin/users",
       label: "User Management",
@@ -37,7 +51,12 @@ const Sidebar: React.FC = () => {
     {
       href: "/admin/reports",
       label: "Reports",
-      icon: <FaFileAlt />
+      icon: <FaChartLine />
+    },
+    {
+      href: "/admin/document-logs",
+      label: "Document Logs",
+      icon: <FaDatabase />
     },
     {
       href: "/admin/settings",
@@ -63,8 +82,8 @@ const Sidebar: React.FC = () => {
             <span className="text-white font-bold text-sm">B</span>
           </div>
           <div>
-            <h1 className="text-lg font-bold text-gray-900 dark:text-white">Barangay</h1>
-            <p className="text-xs text-gray-600 dark:text-gray-400">Management System</p>
+            <h1 className="text-lg font-bold text-gray-900">Barangay</h1>
+            <p className="text-xs text-gray-600">Admin Panel</p>
           </div>
         </div>
         <ThemeToggle />
@@ -78,7 +97,7 @@ const Sidebar: React.FC = () => {
               key={item.href}
               href={item.href}
               className={`sidebar-nav-item ${
-                isActive(item.href) ? 'active bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-semibold' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                isActive(item.href) ? 'active bg-blue-50 text-blue-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'
               }`}
             >
               <div className="flex-shrink-0">
@@ -95,8 +114,8 @@ const Sidebar: React.FC = () => {
 
       {/* Footer */}
       <div className="p-4 border-t border-gray-200">
-        <div className="text-xs text-gray-600 dark:text-gray-400 text-center">
-          Admin Panel v1.0
+        <div className="text-xs text-gray-600 text-center">
+          Barangay Admin v1.0
         </div>
       </div>
 

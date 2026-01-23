@@ -204,7 +204,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <div className="p-4 md:p-6 mobile-spacing bg-white dark:bg-neutral-900 min-h-screen">
+    <div className="p-4 md:p-6 mobile-spacing bg-white white:bg-neutral-900 min-h-screen">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

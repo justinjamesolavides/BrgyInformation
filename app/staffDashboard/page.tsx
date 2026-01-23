@@ -163,7 +163,7 @@ const StaffDashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-white">
 
       {/* Sidebar */}
       <StaffSidebar />

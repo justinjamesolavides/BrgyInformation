@@ -204,7 +204,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <div className="p-4 md:p-6 mobile-spacing bg-white white:bg-neutral-900 min-h-screen">
+    <div className="p-4 md:p-6 bg-white min-h-screen">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -213,15 +213,15 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
         >
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
-                <FaTachometerAlt className="text-green-600 dark:text-green-400 text-xl" />
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shadow-sm">
+                <FaTachometerAlt className="text-blue-600 text-xl" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-neutral-900 dark:text-white font-display">
+                <h1 className="text-2xl font-semibold text-gray-900">
                   Staff Dashboard
                 </h1>
-                <p className="text-neutral-600 dark:text-neutral-400 mt-1">
-                  Welcome back, {user.name}! Here's your overview for today.
+                <p className="text-gray-600 text-sm mt-1">
+                  Welcome back, {user.name}! Here's your barangay overview.
                 </p>
               </div>
             </div>
@@ -232,9 +232,9 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-xs font-medium border border-red-200"
             >
-              <FaSignOutAlt className="text-sm" />
+              <FaSignOutAlt className="text-xs" />
               Logout
             </motion.button>
 
@@ -242,17 +242,18 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
               <motion.button
                 ref={notificationButtonRef}
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                className="bg-green-600 text-white px-4 py-3 rounded-xl hover:bg-green-700 transition-all flex items-center gap-2 relative shadow-lg hover:shadow-xl"
+                className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-all flex items-center gap-1.5 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : '(no unread)'}`}
+                aria-expanded={isNotificationOpen}
+                aria-haspopup="dialog"
               >
-                <FaBell className="text-sm" />
-                <span className="hidden md:inline">Notifications</span>
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </span>
-                )}
+                <FaBell className="text-xs" />
+                <span className="hidden md:inline text-xs font-medium">Notifications</span>
+                <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[0.6rem] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                  {unreadCount}
+                </span>
               </motion.button>
 
               <NotificationPanel
@@ -369,9 +370,9 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-1 h-8 bg-gradient-to-b from-green-500 to-green-600 rounded-full"></div>
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Quick Actions</h2>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-1.5 h-6 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-600 rounded-full"></div>
+            <h2 className="text-lg font-bold text-gray-800" id="quick-actions-heading">Quick Actions</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
@@ -383,28 +384,22 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
                 transition={{ delay: 0.3 + index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className={`group relative overflow-hidden bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm p-6 rounded-2xl border border-neutral-200 dark:border-neutral-700 hover:shadow-xl transition-all duration-300 ${action.color} hover:shadow-2xl cursor-pointer`}
+                className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 aria-label={`${action.title}: ${action.description}`}
               >
-                {/* Background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                <div className="relative z-10 flex items-center gap-4">
-                  <div className="p-3 bg-white/80 dark:bg-neutral-700/80 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-gray-100 rounded-lg">
                     {action.icon}
                   </div>
                   <div className="text-left">
-                    <h3 className="font-semibold text-neutral-900 dark:text-white group-hover:text-white transition-colors">
+                    <h3 className="font-medium text-gray-800 text-sm">
                       {action.title}
                     </h3>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 group-hover:text-white/80 transition-colors">
+                    <p className="text-xs text-gray-600">
                       {action.description}
                     </p>
                   </div>
                 </div>
-
-                {/* Hover effect line */}
-                <div className="absolute bottom-0 left-0 w-0 h-1 bg-white/50 group-hover:w-full transition-all duration-300"></div>
               </motion.button>
             ))}
           </div>
@@ -422,16 +417,16 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
           <div className="relative z-10">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
-                <h3 className="text-xl font-bold text-neutral-900 dark:text-white">Recent Activities</h3>
+                <div className="w-1.5 h-6 bg-gradient-to-b from-purple-500 via-pink-500 to-red-500 rounded-full"></div>
+                <h3 className="text-base font-bold text-gray-800" id="recent-activities-heading">Recent Activities</h3>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-full border border-green-100 dark:border-green-800/50">
-                <div className={`w-3 h-3 rounded-full ${
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100">
+                <div className={`w-2 h-2 rounded-full ${
                   selectedPeriod === 'week' ? 'bg-green-500' :
                   selectedPeriod === 'month' ? 'bg-blue-500' :
                   selectedPeriod === 'quarter' ? 'bg-purple-500' : 'bg-orange-500'
-                } animate-pulse shadow-lg`}></div>
-                <span className="text-sm font-semibold text-green-700 dark:text-green-300 capitalize">
+                }`}></div>
+                <span className="text-xs font-medium text-blue-700 capitalize">
                   {selectedPeriod === 'week' ? 'This Week' :
                    selectedPeriod === 'month' ? 'This Month' :
                    selectedPeriod === 'quarter' ? 'This Quarter' : 'This Year'}
@@ -445,15 +440,23 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
                   key={activity.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
                   transition={{ delay: index * 0.1, duration: 0.3 }}
-                  className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-green-50/50 hover:to-blue-50/50 dark:hover:from-green-900/10 dark:hover:to-blue-900/10 transition-all duration-300 cursor-pointer border border-transparent hover:border-green-100 dark:hover:border-green-800/30"
-                  whileHover={{ x: 6, scale: 1.01 }}
+                  className="group flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all duration-300 cursor-pointer border border-transparent hover:border-gray-200"
+                  whileHover={{
+                    x: 3,
+                    scale: 1.01,
+                    boxShadow: "0 2px 4px -1px rgba(0, 0, 0, 0.1)"
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Activity: ${activity.title} by ${activity.user}, ${activity.time}, status: ${activity.status}`}
                 >
                   <div className="relative">
-                    <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/50 dark:to-blue-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-300">
                       {activity.icon}
                     </div>
-                    <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white dark:border-neutral-800 ${
+                    <div className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border-2 border-white ${
                       activity.status === 'pending' ? 'bg-yellow-400' :
                       activity.status === 'approved' ? 'bg-green-400' :
                       activity.status === 'rejected' ? 'bg-red-400' :
@@ -463,26 +466,26 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-neutral-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-300 transition-colors line-clamp-1">
+                    <p className="font-medium text-gray-800 group-hover:text-blue-700 transition-colors text-sm line-clamp-1">
                       {activity.title}
                     </p>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
-                      <span>by {activity.user}</span>
-                      <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
-                      <span className="flex items-center gap-1">
+                    <p className="text-xs text-gray-600 flex items-center gap-2 mt-1">
+                      <span className="font-medium">by {activity.user}</span>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      <span className="flex items-center gap-1 font-medium">
                         <FaClock className="text-xs" />
                         {activity.time}
                       </span>
                     </p>
                   </div>
 
-                  <div className="flex flex-col items-end gap-2">
-                    <span className={`px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${
-                      activity.status === 'pending' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-800/50' :
-                      activity.status === 'approved' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800/50' :
-                      activity.status === 'rejected' ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800/50' :
-                      activity.status === 'completed' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50' :
-                      'bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50'
+                  <div className="flex flex-col items-end gap-1">
+                    <span className={`px-2 py-1 rounded-full text-[0.6rem] font-semibold ${
+                      activity.status === 'pending' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                      activity.status === 'approved' ? 'bg-green-100 text-green-800 border border-green-200' :
+                      activity.status === 'rejected' ? 'bg-red-100 text-red-800 border border-red-200' :
+                      activity.status === 'completed' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                      'bg-gray-100 text-gray-800 border border-gray-200'
                     }`}>
                       {activity.status}
                     </span>
@@ -498,7 +501,7 @@ const StaffDashboardContent: React.FC<{ user: User }> = ({ user }) => {
                 transition={{ delay: 0.5 }}
                 className="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-700/50"
               >
-                <button className="w-full text-center text-sm font-medium text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors py-2">
+                <button className="w-full text-center text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors py-1">
                   View All Activities →
                 </button>
               </motion.div>

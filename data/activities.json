@@ -8,5 +8,15 @@
     "timestamp": "2026-01-22T10:41:43.048Z",
     "createdAt": "2026-01-22T10:41:43.048Z",
     "message": "New resident James lita has been registered."
+  },
+  {
+    "id": 2,
+    "type": "resident",
+    "title": "New Resident Registration",
+    "user": "Olavides fdsfsdf",
+    "status": "completed",
+    "timestamp": "2026-01-23T12:20:50.228Z",
+    "createdAt": "2026-01-23T12:20:50.228Z",
+    "message": "New resident Olavides fdsfsdf has been registered."
   }
 ]

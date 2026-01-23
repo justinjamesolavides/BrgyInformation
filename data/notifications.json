@@ -7,5 +7,14 @@
     "read": false,
     "timestamp": "2026-01-22T10:41:43.343Z",
     "createdAt": "2026-01-22T10:41:43.343Z"
+  },
+  {
+    "id": 2,
+    "type": "info",
+    "title": "New Resident Registered",
+    "message": "Olavides fdsfsdf has been registered as a new resident.",
+    "read": false,
+    "timestamp": "2026-01-23T12:20:50.373Z",
+    "createdAt": "2026-01-23T12:20:50.373Z"
   }
 ]

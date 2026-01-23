@@ -118,5 +118,25 @@
     "avatar": "JL",
     "id": 6,
     "createdAt": "2026-01-22T10:41:42.897Z"
+  },
+  {
+    "firstName": "Olavides",
+    "lastName": "fdsfsdf",
+    "middleName": "fdsf",
+    "email": "justinolavides12ds@gmail.com",
+    "phone": "09959651089",
+    "address": "gfdgfd",
+    "barangayId": "BRGY-007",
+    "dateOfBirth": "2004-06-05",
+    "gender": "male",
+    "civilStatus": "single",
+    "occupation": null,
+    "emergencyContact": "gfdg",
+    "emergencyPhone": "09924136493",
+    "status": "active",
+    "registrationDate": "2026-01-23T12:20:50.066Z",
+    "avatar": "OF",
+    "id": 7,
+    "createdAt": "2026-01-23T12:20:50.066Z"
   }
 ]

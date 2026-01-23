@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaUserPlus,
@@ -170,6 +170,24 @@ const AddResidentModal: React.FC<AddResidentModalProps> = ({
 
       onResidentAdded(newResident);
       onClose();
+
+      // Notify backend to broadcast update to all staff members
+      try {
+        fetch('/api/residents/updates', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'RESIDENT_ADDED',
+            resident: newResident
+          })
+        }).catch(error => {
+          console.error('Error broadcasting update:', error);
+        });
+      } catch (error) {
+        console.error('Error broadcasting update:', error);
+      }
 
       // Reset form
       setFormData({

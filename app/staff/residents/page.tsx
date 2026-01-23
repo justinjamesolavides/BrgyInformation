@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FaUsers,
@@ -36,54 +36,33 @@ interface Resident {
 const StaffResidentsContent: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Mock data - in real app this would come from API
-  const [residents] = useState<Resident[]>([
-    {
-      id: 1,
-      firstName: "Juan",
-      lastName: "Dela Cruz",
-      email: "juan@example.com",
-      phone: "+63 917 123 4567",
-      address: "123 Main St, Barangay Central",
-      barangayId: "BRGY-001",
-      dateOfBirth: "1985-03-15",
-      gender: "male",
-      civilStatus: "married",
-      occupation: "Teacher",
-      status: "active",
-      avatar: "JD"
-    },
-    {
-      id: 2,
-      firstName: "Maria",
-      lastName: "Santos",
-      email: "maria@example.com",
-      phone: "+63 918 234 5678",
-      address: "456 Oak Ave, Barangay North",
-      barangayId: "BRGY-002",
-      dateOfBirth: "1990-07-22",
-      gender: "female",
-      civilStatus: "single",
-      occupation: "Nurse",
-      status: "active",
-      avatar: "MS"
-    },
-    {
-      id: 3,
-      firstName: "Pedro",
-      lastName: "Garcia",
-      email: "pedro@example.com",
-      phone: "+63 919 345 6789",
-      address: "789 Pine Rd, Barangay South",
-      barangayId: "BRGY-003",
-      dateOfBirth: "1978-11-08",
-      gender: "male",
-      civilStatus: "married",
-      occupation: "Farmer",
-      status: "inactive",
-      avatar: "PG"
-    }
-  ]);
+  const [residents, setResidents] = useState<Resident[]>([]);
+  
+  // Fetch residents from API with periodic updates
+  useEffect(() => {
+    const fetchResidents = async () => {
+      try {
+        const response = await fetch('/api/residents');
+        const data = await response.json();
+        if (data.success && data.data) {
+          setResidents(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching residents:', error);
+      }
+    };
+
+    // Initial fetch
+    fetchResidents();
+    
+    // Set up polling for updates every 5 seconds
+    const intervalId = setInterval(fetchResidents, 5000);
+    
+    // Cleanup function
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const filteredResidents = residents.filter(resident => {
     const fullName = `${resident.firstName} ${resident.lastName}`.toLowerCase();

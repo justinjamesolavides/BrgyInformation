@@ -158,6 +158,72 @@ const StaffReportsContent: React.FC = () => {
     });
   };
 
+  const downloadReportCSV = (report: Report) => {
+    // Create CSV content
+    let csvContent = '';
+    
+    // Report metadata
+    csvContent += `Report Title,${report.title}\n`;
+    csvContent += `Report Type,${report.type}\n`;
+    csvContent += `Period,${report.period}\n`;
+    csvContent += `Generated Date,${formatDate(report.generatedDate)}\n`;
+    csvContent += `Status,${report.status}\n\n`;
+    
+    // Summary
+    if (report.data?.summary) {
+      csvContent += `Summary,${report.data.summary.replace(/,/g, ';')}\n\n`;
+    }
+    
+    // Statistics
+    if (report.data?.statistics) {
+      csvContent += 'Statistics,\n';
+      Object.entries(report.data.statistics).forEach(([key, value]) => {
+        if (typeof value !== 'object') {
+          csvContent += `${key},${value}\n`;
+        }
+      });
+      csvContent += '\n';
+    }
+    
+    // Demographics data
+    if (report.data?.demographics) {
+      csvContent += 'Demographics,Count,Percentage\n';
+      report.data.demographics.forEach((item: any) => {
+        csvContent += `${item.category},${item.count},${item.percentage}%\n`;
+      });
+      csvContent += '\n';
+    }
+    
+    // Request types data
+    if (report.data?.requestTypes) {
+      csvContent += 'Request Type,Total,Approved,Rejected,Pending\n';
+      report.data.requestTypes.forEach((item: any) => {
+        csvContent += `${item.type},${item.count},${item.approved},${item.rejected},${item.pending}\n`;
+      });
+      csvContent += '\n';
+    }
+    
+    // Age groups data
+    if (report.data?.ageGroups) {
+      csvContent += 'Age Range,Male,Female,Total\n';
+      report.data.ageGroups.forEach((item: any) => {
+        csvContent += `${item.range},${item.male},${item.female},${item.total}\n`;
+      });
+      csvContent += '\n';
+    }
+    
+    // Convert to Blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${report.title.replace(/[^a-zA-Z0-9]/g, '_')}_${report.period.replace(/[^a-zA-Z0-9]/g, '_')}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="p-4 md:p-6 bg-white">
       {/* Header */}
@@ -325,7 +391,8 @@ const StaffReportsContent: React.FC = () => {
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="px-3 py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors border border-green-200"
+                      onClick={() => downloadReportCSV(report)}
+                      className="px-3 py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors border border-green-200 cursor-pointer flex items-center gap-1"
                     >
                       <FaDownload className="text-xs" />
                       {t('reports.download')}
@@ -611,10 +678,11 @@ const StaffReportsContent: React.FC = () => {
                 </button>
                 {selectedReport.status === 'available' && (
                   <button
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                    onClick={() => downloadReportCSV(selectedReport)}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 cursor-pointer"
                   >
                     <FaDownload className="text-sm" />
-                    Download Report
+                    {t('reports.downloadReport')}
                   </button>
                 )}
               </div>

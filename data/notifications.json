@@ -16,5 +16,14 @@
     "read": false,
     "timestamp": "2026-01-23T12:20:50.373Z",
     "createdAt": "2026-01-23T12:20:50.373Z"
+  },
+  {
+    "id": 3,
+    "type": "info",
+    "title": "New Resident Registered",
+    "message": "example justin has been registered as a new resident.",
+    "read": false,
+    "timestamp": "2026-01-24T14:14:31.607Z",
+    "createdAt": "2026-01-24T14:14:31.607Z"
   }
 ]

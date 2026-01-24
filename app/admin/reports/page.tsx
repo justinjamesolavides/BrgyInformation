@@ -1,10 +1,43 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaDownload, FaChartBar, FaCalendarAlt } from "react-icons/fa";
 
 const AdminReportsPage: React.FC = () => {
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const generateSampleReport = () => {
+    setIsGenerating(true);
+    
+    // Simulate report generation delay
+    setTimeout(() => {
+      // Create sample CSV data
+      const csvContent = `Name,Age,Gender,Address,Contact Number,Occupation,Date Registered
+John Doe,35,Male,123 Main St,+63 917 123 4567,Teacher,2024-01-15
+Jane Smith,28,Female,456 Oak Ave,+63 918 234 5678,Nurse,2024-01-16
+Robert Johnson,42,Male,789 Pine Rd,+63 919 345 6789,Engineer,2024-01-17
+Maria Garcia,31,Female,321 Elm St,+63 920 456 7890,Doctor,2024-01-18
+Carlos Santos,38,Male,654 Maple Dr,+63 921 567 8901,Business Owner,2024-01-19
+Ana Reyes,26,Female,987 Cedar Ln,+63 922 678 9012,Software Developer,2024-01-20
+Michael Brown,45,Male,147 Birch Blvd,+63 923 789 0123,Accountant,2024-01-21
+Lisa Wilson,33,Female,258 Spruce Way,+63 924 890 1234,Lawyer,2024-01-22`;
+
+      // Create blob and download
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `barangay_sample_report_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      setIsGenerating(false);
+    }, 1500);
+  };
+
   return (
     <div className="p-4 md:p-6 bg-white">
       {/* Header */}
@@ -154,23 +187,36 @@ const AdminReportsPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-white border border-gray-200 rounded-lg shadow-sm p-8 text-center"
+        className="bg-white border border-gray-200 rounded-lg shadow-sm p-8 text-center flex flex-col items-center justify-center min-h-[300px]"
       >
-        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
           <FaChartBar className="text-gray-400 text-xl" />
         </div>
         <h3 className="font-semibold text-gray-900 mb-1">
           Advanced Analytics Coming Soon
         </h3>
-        <p className="text-gray-600 text-sm mb-4 max-w-md mx-auto">
+        <p className="text-gray-600 text-sm mb-6 max-w-md">
           Comprehensive reporting and analytics features are currently under development for admin users.
         </p>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-          <div className="flex items-center gap-2 justify-center">
-            <FaDownload className="text-xs" />
-            Generate Sample Report
-          </div>
-        </button>
+        <div className="flex justify-center">
+          <button 
+            onClick={generateSampleReport}
+            disabled={isGenerating}
+            className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+          >
+            {isGenerating ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Generating...
+              </>
+            ) : (
+              <>
+                <FaDownload className="text-sm" />
+                Generate Sample Report
+              </>
+            )}
+          </button>
+        </div>
       </motion.div>
     </div>
   );

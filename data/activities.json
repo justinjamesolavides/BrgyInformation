@@ -18,5 +18,15 @@
     "timestamp": "2026-01-23T12:20:50.228Z",
     "createdAt": "2026-01-23T12:20:50.228Z",
     "message": "New resident Olavides fdsfsdf has been registered."
+  },
+  {
+    "id": 3,
+    "type": "resident",
+    "title": "New Resident Registration",
+    "user": "example justin",
+    "status": "completed",
+    "timestamp": "2026-01-24T14:14:30.472Z",
+    "createdAt": "2026-01-24T14:14:30.472Z",
+    "message": "New resident example justin has been registered."
   }
 ]

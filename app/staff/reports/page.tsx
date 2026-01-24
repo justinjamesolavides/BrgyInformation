@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "../../../contexts/LanguageContext";
 import {
   FaFileAlt,
   FaChartLine,
@@ -33,6 +34,7 @@ const StaffReportsContent: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const { t } = useLanguage();
 
   // Mock data with detailed report information
   const [reports] = useState<Report[]>([
@@ -171,10 +173,10 @@ const StaffReportsContent: React.FC = () => {
             </div>
             <div>
               <h1 className="text-xl font-semibold text-gray-900">
-                Staff - Reports & Analytics
+                {t('reports.title')}
               </h1>
               <p className="text-gray-600 text-sm mt-1">
-                Generate and view barangay reports (Staff Access)
+                {t('reports.subtitle')}
               </p>
             </div>
           </div>
@@ -206,25 +208,25 @@ const StaffReportsContent: React.FC = () => {
         >
           {[
             {
-              title: "Total Reports",
+              title: t('reports.totalReports'),
               value: reports.length.toString(),
               icon: <FaFileAlt className="text-blue-500" />,
               bgColor: "bg-blue-50"
             },
             {
-              title: "Available",
+              title: t('reports.available'),
               value: reports.filter(r => r.status === 'available').length.toString(),
               icon: <FaDownload className="text-green-500" />,
               bgColor: "bg-green-50"
             },
             {
-              title: "This Month",
+              title: t('reports.thisMonth'),
               value: reports.filter(r => r.period.includes('January')).length.toString(),
               icon: <FaCalendarAlt className="text-purple-500" />,
               bgColor: "bg-purple-50"
             },
             {
-              title: "Generating",
+              title: t('reports.generating'),
               value: reports.filter(r => r.status === 'generating').length.toString(),
               icon: <FaChartLine className="text-orange-500" />,
               bgColor: "bg-orange-50"
@@ -302,7 +304,7 @@ const StaffReportsContent: React.FC = () => {
                 </div>
 
                 <div className="text-[0.6rem] text-gray-500 mb-4">
-                  Generated: {new Date(report.generatedDate).toLocaleDateString()}
+                  {t('reports.generated')}: {new Date(report.generatedDate).toLocaleDateString()}
                 </div>
 
                 {/* Staff Actions */}
@@ -315,7 +317,7 @@ const StaffReportsContent: React.FC = () => {
                   >
                     <div className="flex items-center justify-center gap-1.5">
                       <FaEye className="text-xs" />
-                      View Report
+                      {t('reports.viewReport')}
                     </div>
                   </motion.button>
 
@@ -326,6 +328,7 @@ const StaffReportsContent: React.FC = () => {
                       className="px-3 py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors border border-green-200"
                     >
                       <FaDownload className="text-xs" />
+                      {t('reports.download')}
                     </motion.button>
                   )}
                 </div>
@@ -333,7 +336,7 @@ const StaffReportsContent: React.FC = () => {
                 {/* Staff Notice */}
                 <div className="mt-3 p-2 bg-yellow-50 rounded-lg border border-yellow-200 mt-3">
                   <p className="text-[0.6rem] text-yellow-800">
-                    📊 Staff Access: Can view and download reports. Report generation requires admin approval.
+                    📊 {t('reports.staffNotice')}
                   </p>
                 </div>
               </div>
@@ -349,24 +352,24 @@ const StaffReportsContent: React.FC = () => {
           className="mt-6 bg-white border border-gray-200 rounded-lg shadow-sm p-4"
         >
           <div>
-            <h3 className="text-base font-semibold text-gray-900 mb-4">Generate New Report</h3>
+            <h3 className="text-base font-semibold text-gray-900 mb-4">{t('reports.generateNew')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {[
                 {
-                  title: "Resident Summary",
-                  description: "Current resident statistics and demographics",
+                  title: t('reports.residentSummary'),
+                  description: t('reports.residentSummaryDesc'),
                   icon: <FaUsers className="text-blue-500" />,
                   color: "bg-blue-500 hover:bg-blue-600"
                 },
                 {
-                  title: "Request Analytics",
-                  description: "Processing times and approval rates",
+                  title: t('reports.requestAnalytics'),
+                  description: t('reports.requestAnalyticsDesc'),
                   icon: <FaClipboardList className="text-green-500" />,
                   color: "bg-green-500 hover:bg-green-600"
                 },
                 {
-                  title: "Clearance Report",
-                  description: "Monthly clearance certificate summary",
+                  title: t('reports.clearanceReport'),
+                  description: t('reports.clearanceReportDesc'),
                   icon: <FaCheckCircle className="text-purple-500" />,
                   color: "bg-purple-500 hover:bg-purple-600"
                 }

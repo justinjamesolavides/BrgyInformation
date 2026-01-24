@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import ThemeToggle from "../../components/ThemeToggle";
 import { motion } from "framer-motion";
+import { useLanguage } from "../../../contexts/LanguageContext";
 import {
   FaCog,
   FaUser,
@@ -18,12 +19,13 @@ import {
 const StaffSettingsContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
 
   const tabs = [
-    { id: "profile", label: "Profile", icon: <FaUser className="text-lg" /> },
-    { id: "notifications", label: "Notifications", icon: <FaBell className="text-lg" /> },
-    { id: "security", label: "Security", icon: <FaShieldAlt className="text-lg" /> },
-    { id: "preferences", label: "Preferences", icon: <FaCog className="text-lg" /> }
+    { id: "profile", label: t('settings.profile'), icon: <FaUser className="text-lg" /> },
+    { id: "notifications", label: t('settings.notifications'), icon: <FaBell className="text-lg" /> },
+    { id: "security", label: t('settings.security'), icon: <FaShieldAlt className="text-lg" /> },
+    { id: "preferences", label: t('settings.preferences'), icon: <FaCog className="text-lg" /> }
   ];
 
   return (
@@ -41,10 +43,10 @@ const StaffSettingsContent: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-xl font-semibold text-gray-900">
-                  Staff - Settings
+                  {t('settings.title')}
                 </h1>
                 <p className="text-gray-600 text-sm mt-1">
-                  Manage your account and preferences (Staff Access)
+                  {t('settings.subtitle')}
                 </p>
               </div>
             </div>
@@ -102,15 +104,15 @@ const StaffSettingsContent: React.FC = () => {
                         <FaUser className="text-blue-600 text-lg" />
                       </div>
                       <div>
-                        <h2 className="text-lg font-semibold text-gray-900">Profile Settings</h2>
-                        <p className="text-gray-600 text-sm">Manage your personal information</p>
+                        <h2 className="text-lg font-semibold text-gray-900">{t('settings.profileTitle')}</h2>
+                        <p className="text-gray-600 text-sm">{t('settings.profileSubtitle')}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          First Name
+                          {t('settings.firstName')}
                         </label>
                         <input
                           type="text"
@@ -122,7 +124,7 @@ const StaffSettingsContent: React.FC = () => {
 
                       <div>
                         <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          Last Name
+                          {t('settings.lastName')}
                         </label>
                         <input
                           type="text"
@@ -134,7 +136,7 @@ const StaffSettingsContent: React.FC = () => {
 
                       <div>
                         <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          Email Address
+                          {t('settings.email')}
                         </label>
                         <input
                           type="email"
@@ -146,7 +148,7 @@ const StaffSettingsContent: React.FC = () => {
 
                       <div>
                         <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          Phone Number
+                          {t('settings.phone')}
                         </label>
                         <input
                           type="tel"
@@ -164,7 +166,7 @@ const StaffSettingsContent: React.FC = () => {
                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1.5 text-sm"
                       >
                         <FaSave className="text-xs" />
-                        Save Changes
+                        {t('settings.saveChanges')}
                       </motion.button>
                     </div>
                   </motion.div>
@@ -182,31 +184,31 @@ const StaffSettingsContent: React.FC = () => {
                         <FaBell className="text-green-600 dark:text-green-400 text-2xl" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Notification Settings</h2>
-                        <p className="text-neutral-600 dark:text-neutral-400">Configure how you receive notifications</p>
+                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">{t('settings.notificationTitle')}</h2>
+                        <p className="text-neutral-600 dark:text-neutral-400">{t('settings.notificationSubtitle')}</p>
                       </div>
                     </div>
 
                     <div className="space-y-4">
                       {[
                         {
-                          title: "New Requests",
-                          description: "Get notified when new requests are submitted",
+                          title: t('settings.newRequests'),
+                          description: t('settings.newRequestsDesc'),
                           enabled: true
                         },
                         {
-                          title: "Urgent Tasks",
-                          description: "Receive alerts for urgent tasks requiring attention",
+                          title: t('settings.urgentTasks'),
+                          description: t('settings.urgentTasksDesc'),
                           enabled: true
                         },
                         {
-                          title: "System Updates",
-                          description: "Notifications about system maintenance and updates",
+                          title: t('settings.systemUpdates'),
+                          description: t('settings.systemUpdatesDesc'),
                           enabled: false
                         },
                         {
-                          title: "Weekly Reports",
-                          description: "Receive weekly summary reports",
+                          title: t('settings.weeklyReports'),
+                          description: t('settings.weeklyReportsDesc'),
                           enabled: true
                         }
                       ].map((setting, index) => (
@@ -247,15 +249,15 @@ const StaffSettingsContent: React.FC = () => {
                         <FaShieldAlt className="text-red-600 dark:text-red-400 text-2xl" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Security Settings</h2>
-                        <p className="text-neutral-600 dark:text-neutral-400">Manage your account security</p>
+                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">{t('settings.securityTitle')}</h2>
+                        <p className="text-neutral-600 dark:text-neutral-400">{t('settings.securitySubtitle')}</p>
                       </div>
                     </div>
 
                     <div className="space-y-6">
                       <div>
                         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                          Current Password
+                          {t('settings.currentPassword')}
                         </label>
                         <div className="relative">
                           <input
@@ -275,7 +277,7 @@ const StaffSettingsContent: React.FC = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                          New Password
+                          {t('settings.newPassword')}
                         </label>
                         <input
                           type="password"
@@ -286,7 +288,7 @@ const StaffSettingsContent: React.FC = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                          Confirm New Password
+                          {t('settings.confirmPassword')}
                         </label>
                         <input
                           type="password"
@@ -299,12 +301,12 @@ const StaffSettingsContent: React.FC = () => {
                         <div className="flex items-start gap-3">
                           <FaShieldAlt className="text-yellow-600 dark:text-yellow-400 mt-1" />
                           <div>
-                            <h4 className="font-medium text-yellow-800 dark:text-yellow-200">Password Requirements</h4>
+                            <h4 className="font-medium text-yellow-800 dark:text-yellow-200">{t('settings.passwordRequirements')}</h4>
                             <ul className="text-sm text-yellow-700 dark:text-yellow-300 mt-1 space-y-1">
-                              <li>• At least 8 characters long</li>
-                              <li>• Contains at least one uppercase letter</li>
-                              <li>• Contains at least one number</li>
-                              <li>• Contains at least one special character</li>
+                              <li>• {t('settings.passwordReq1')}</li>
+                              <li>• {t('settings.passwordReq2')}</li>
+                              <li>• {t('settings.passwordReq3')}</li>
+                              <li>• {t('settings.passwordReq4')}</li>
                             </ul>
                           </div>
                         </div>
@@ -316,7 +318,7 @@ const StaffSettingsContent: React.FC = () => {
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2"
                       >
                         <FaKey className="text-sm" />
-                        Update Password
+                        {t('settings.updatePassword')}
                       </motion.button>
                     </div>
                   </motion.div>
@@ -334,33 +336,37 @@ const StaffSettingsContent: React.FC = () => {
                         <FaCog className="text-purple-600 dark:text-purple-400 text-2xl" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Preferences</h2>
-                        <p className="text-neutral-600 dark:text-neutral-400">Customize your experience</p>
+                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">{t('settings.preferencesTitle')}</h2>
+                        <p className="text-neutral-600 dark:text-neutral-400">{t('settings.preferencesSubtitle')}</p>
                       </div>
                     </div>
 
                     <div className="space-y-6">
                       <div>
                         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
-                          Theme
+                          {t('settings.theme')}
                         </label>
                         <div className="flex items-center gap-4">
                           <ThemeToggle />
                           <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                            Toggle between light and dark mode
+                            {t('settings.toggleTheme')}
                           </span>
                         </div>
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
-                          Language
+                          {t('settings.language')}
                         </label>
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                             <FaLanguage className="text-blue-600 dark:text-blue-400 text-sm" />
                           </div>
-                          <select className="input-field flex-1 max-w-xs">
+                          <select 
+                            className="input-field flex-1 max-w-xs"
+                            value={language}
+                            onChange={(e) => setLanguage(e.target.value as 'en' | 'tl')}
+                          >
                             <option value="en">English</option>
                             <option value="tl">Filipino (Tagalog)</option>
                           </select>
@@ -369,12 +375,12 @@ const StaffSettingsContent: React.FC = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
-                          Default Dashboard View
+                          {t('settings.defaultView')}
                         </label>
                         <select className="input-field max-w-xs">
-                          <option value="overview">Overview</option>
-                          <option value="requests">Requests</option>
-                          <option value="residents">Residents</option>
+                          <option value="overview">{t('settings.overview')}</option>
+                          <option value="requests">{t('settings.requests')}</option>
+                          <option value="residents">{t('settings.residents')}</option>
                         </select>
                       </div>
                     </div>
@@ -384,9 +390,9 @@ const StaffSettingsContent: React.FC = () => {
                       <div className="flex items-start gap-3">
                         <FaCog className="text-blue-600 dark:text-blue-400 mt-1" />
                         <div>
-                          <h4 className="font-medium text-blue-800 dark:text-blue-200">Staff Account Limitations</h4>
+                          <h4 className="font-medium text-blue-800 dark:text-blue-200">{t('settings.staffNotice')}</h4>
                           <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                            Some settings may be restricted for staff accounts. Contact your administrator for advanced configuration options.
+                            {t('settings.staffNoticeDesc')}
                           </p>
                         </div>
                       </div>

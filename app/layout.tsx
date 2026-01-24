@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { NotificationProvider } from "./components/NotificationProvider";
+import { LanguageProvider } from "../contexts/LanguageContext";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 const geistSans = Geist({
@@ -56,12 +57,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground transition-colors font-body touch-manipulation`}
       >
-        <ThemeProvider>
-          <NotificationProvider>
-            {children}
-            <PWAInstallPrompt />
-          </NotificationProvider>
-        </ThemeProvider>
+        <LanguageProvider>
+          <ThemeProvider>
+            <NotificationProvider>
+              {children}
+              <PWAInstallPrompt />
+            </NotificationProvider>
+          </ThemeProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

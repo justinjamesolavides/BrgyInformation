@@ -20,6 +20,65 @@ const StaffSettingsContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  
+  // Profile settings state
+  const [profileData, setProfileData] = useState({
+    firstName: "Staff",
+    lastName: "Member",
+    email: "staff@brgy.com",
+    phone: "+63 917 123 4567"
+  });
+  
+  // Notification settings state
+  const [notifications, setNotifications] = useState({
+    newRequests: true,
+    urgentTasks: true,
+    systemUpdates: false,
+    weeklyReports: true
+  });
+  
+  // Security settings state
+  const [securityData, setSecurityData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
+  
+  // Preferences settings state
+  const [preferences, setPreferences] = useState({
+    theme: "light",
+    defaultView: "overview"
+  });
+  
+  // Helper functions
+  const saveProfileChanges = () => {
+    console.log('Saving profile changes:', profileData);
+    // In a real app, this would make an API call
+    alert('Profile changes saved successfully!');
+  };
+  
+  const updatePassword = () => {
+    if (!securityData.currentPassword) {
+      alert('Please enter your current password');
+      return;
+    }
+    if (securityData.newPassword !== securityData.confirmPassword) {
+      alert('New passwords do not match');
+      return;
+    }
+    if (securityData.newPassword.length < 8) {
+      alert('Password must be at least 8 characters long');
+      return;
+    }
+    console.log('Updating password');
+    // In a real app, this would make an API call
+    alert('Password updated successfully!');
+    setSecurityData({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+  };
 
   const tabs = [
     { id: "profile", label: t('settings.profile'), icon: <FaUser className="text-lg" /> },
@@ -116,7 +175,8 @@ const StaffSettingsContent: React.FC = () => {
                         </label>
                         <input
                           type="text"
-                          defaultValue="Staff"
+                          value={profileData.firstName}
+                          onChange={(e) => setProfileData({...profileData, firstName: e.target.value})}
                           className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                           placeholder="Enter your first name"
                         />
@@ -128,7 +188,8 @@ const StaffSettingsContent: React.FC = () => {
                         </label>
                         <input
                           type="text"
-                          defaultValue="Member"
+                          value={profileData.lastName}
+                          onChange={(e) => setProfileData({...profileData, lastName: e.target.value})}
                           className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                           placeholder="Enter your last name"
                         />
@@ -140,7 +201,8 @@ const StaffSettingsContent: React.FC = () => {
                         </label>
                         <input
                           type="email"
-                          defaultValue="staff@brgy.com"
+                          value={profileData.email}
+                          onChange={(e) => setProfileData({...profileData, email: e.target.value})}
                           className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                           placeholder="Enter your email"
                         />
@@ -152,7 +214,8 @@ const StaffSettingsContent: React.FC = () => {
                         </label>
                         <input
                           type="tel"
-                          defaultValue="+63 917 123 4567"
+                          value={profileData.phone}
+                          onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
                           className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
                           placeholder="Enter your phone number"
                         />
@@ -163,7 +226,8 @@ const StaffSettingsContent: React.FC = () => {
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1.5 text-sm"
+                        onClick={saveProfileChanges}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1.5 text-sm cursor-pointer"
                       >
                         <FaSave className="text-xs" />
                         {t('settings.saveChanges')}
@@ -192,26 +256,30 @@ const StaffSettingsContent: React.FC = () => {
                     <div className="space-y-4">
                       {[
                         {
+                          id: 'newRequests',
                           title: t('settings.newRequests'),
                           description: t('settings.newRequestsDesc'),
                           enabled: true
                         },
                         {
+                          id: 'urgentTasks',
                           title: t('settings.urgentTasks'),
                           description: t('settings.urgentTasksDesc'),
                           enabled: true
                         },
                         {
+                          id: 'systemUpdates',
                           title: t('settings.systemUpdates'),
                           description: t('settings.systemUpdatesDesc'),
                           enabled: false
                         },
                         {
+                          id: 'weeklyReports',
                           title: t('settings.weeklyReports'),
                           description: t('settings.weeklyReportsDesc'),
                           enabled: true
                         }
-                      ].map((setting, index) => (
+                      ].map((setting: { id: string; title: string; description: string; enabled: boolean }, index) => (
                         <motion.div
                           key={setting.title}
                           initial={{ opacity: 0, y: 10 }}
@@ -226,7 +294,11 @@ const StaffSettingsContent: React.FC = () => {
                           <label className="relative inline-flex items-center cursor-pointer">
                             <input
                               type="checkbox"
-                              defaultChecked={setting.enabled}
+                              checked={notifications[setting.id as keyof typeof notifications]}
+                              onChange={(e) => setNotifications({
+                                ...notifications,
+                                [setting.id]: e.target.checked
+                              })}
                               className="sr-only peer"
                             />
                             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -262,6 +334,8 @@ const StaffSettingsContent: React.FC = () => {
                         <div className="relative">
                           <input
                             type={showPassword ? "text" : "password"}
+                            value={securityData.currentPassword}
+                            onChange={(e) => setSecurityData({...securityData, currentPassword: e.target.value})}
                             className="input-field w-full pr-12"
                             placeholder="Enter current password"
                           />
@@ -281,6 +355,8 @@ const StaffSettingsContent: React.FC = () => {
                         </label>
                         <input
                           type="password"
+                          value={securityData.newPassword}
+                          onChange={(e) => setSecurityData({...securityData, newPassword: e.target.value})}
                           className="input-field w-full"
                           placeholder="Enter new password"
                         />
@@ -292,6 +368,8 @@ const StaffSettingsContent: React.FC = () => {
                         </label>
                         <input
                           type="password"
+                          value={securityData.confirmPassword}
+                          onChange={(e) => setSecurityData({...securityData, confirmPassword: e.target.value})}
                           className="input-field w-full"
                           placeholder="Confirm new password"
                         />
@@ -315,7 +393,8 @@ const StaffSettingsContent: React.FC = () => {
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2"
+                        onClick={updatePassword}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2 cursor-pointer"
                       >
                         <FaKey className="text-sm" />
                         {t('settings.updatePassword')}
@@ -377,7 +456,11 @@ const StaffSettingsContent: React.FC = () => {
                         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
                           {t('settings.defaultView')}
                         </label>
-                        <select className="input-field max-w-xs">
+                        <select 
+                          className="input-field max-w-xs"
+                          value={preferences.defaultView}
+                          onChange={(e) => setPreferences({...preferences, defaultView: e.target.value})}
+                        >
                           <option value="overview">{t('settings.overview')}</option>
                           <option value="requests">{t('settings.requests')}</option>
                           <option value="residents">{t('settings.residents')}</option>

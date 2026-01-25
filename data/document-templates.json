@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Barangay Clearance Template",
+    "type": "clearance",
+    "status": "active",
+    "lastModified": "2024-01-15",
+    "content": "TO WHOM IT MAY CONCERN: This is to certify that [NAME] of legal age, [CIVIL STATUS], whose specimen signature appears hereon, is a bonafide resident of [ADDRESS]..."
+  },
+  {
+    "id": 2,
+    "name": "Cedula Template",
+    "type": "tax",
+    "status": "active",
+    "lastModified": "2024-01-10",
+    "content": "COMMUNITY TAX CERTIFICATE: This is to certify that [NAME], [AGE] years of age, [CIVIL STATUS], [PROFESSION/BUSINESS]..."
+  },
+  {
+    "id": 3,
+    "name": "Certificate of Residency",
+    "type": "certificate",
+    "status": "draft",
+    "lastModified": "2024-01-20",
+    "content": "CERTIFICATE OF RESIDENCY: This is to certify that [NAME] is a permanent resident of [BARANGAY NAME]..."
+  }
+]

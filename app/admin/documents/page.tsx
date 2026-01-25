@@ -1,37 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaFileAlt, FaPlus, FaEdit, FaTrash, FaSave, FaTimes } from "react-icons/fa";
+import { FaFileAlt, FaPlus, FaEdit, FaTrash, FaSave, FaTimes, FaSpinner } from "react-icons/fa";
 
 const DocumentTemplates: React.FC = () => {
-  const [templates, setTemplates] = useState([
-    {
-      id: 1,
-      name: "Barangay Clearance Template",
-      type: "clearance",
-      status: "active",
-      lastModified: "2024-01-15",
-      content: "TO WHOM IT MAY CONCERN: This is to certify that [NAME] of legal age, [CIVIL STATUS], whose specimen signature appears hereon, is a bonafide resident of [ADDRESS]..."
-    },
-    {
-      id: 2,
-      name: "Cedula Template",
-      type: "tax",
-      status: "active",
-      lastModified: "2024-01-10",
-      content: "COMMUNITY TAX CERTIFICATE: This is to certify that [NAME], [AGE] years of age, [CIVIL STATUS], [PROFESSION/BUSINESS]..."
-    },
-    {
-      id: 3,
-      name: "Certificate of Residency",
-      type: "certificate",
-      status: "draft",
-      lastModified: "2024-01-20",
-      content: "CERTIFICATE OF RESIDENCY: This is to certify that [NAME] is a permanent resident of [BARANGAY NAME]..."
-    }
-  ]);
-
+  const [templates, setTemplates] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [editingTemplate, setEditingTemplate] = useState<number | null>(null);
   const [newTemplate, setNewTemplate] = useState({
     name: "",
@@ -39,35 +14,120 @@ const DocumentTemplates: React.FC = () => {
     content: ""
   });
   const [showAddForm, setShowAddForm] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<number | null>(null);
+
+  // Fetch templates from API
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const response = await fetch('/api/document-templates');
+        if (response.ok) {
+          const data = await response.json();
+          setTemplates(data);
+        } else {
+          console.error('Failed to fetch templates:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching templates:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemplates();
+  }, []);
 
   const handleEdit = (id: number) => {
     setEditingTemplate(id);
   };
 
-  const handleSave = (id: number) => {
-    setEditingTemplate(null);
-    // Save logic would go here
-  };
-
-  const handleDelete = (id: number) => {
-    if (confirm("Are you sure you want to delete this template?")) {
-      setTemplates(templates.filter(t => t.id !== id));
+  const handleSave = async (id: number) => {
+    const templateElement = document.querySelector(`textarea[data-template-id="${id}"]`) as HTMLTextAreaElement;
+    if (!templateElement) return;
+    
+    const updatedContent = templateElement.value;
+    
+    setSaving(true);
+    try {
+      const response = await fetch('/api/document-templates', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id,
+          content: updatedContent
+        }),
+      });
+      
+      if (response.ok) {
+        const updatedTemplate = await response.json();
+        setTemplates(templates.map(t => t.id === id ? updatedTemplate : t));
+        setEditingTemplate(null);
+      } else {
+        alert('Failed to save template');
+      }
+    } catch (error) {
+      console.error('Error saving template:', error);
+      alert('An error occurred while saving the template');
+    } finally {
+      setSaving(false);
     }
   };
 
-  const handleAddTemplate = () => {
+  const handleDelete = async (id: number) => {
+    if (confirm("Are you sure you want to delete this template? This action cannot be undone.")) {
+      setDeleting(id);
+      try {
+        const response = await fetch('/api/document-templates', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id }),
+        });
+        
+        if (response.ok) {
+          setTemplates(templates.filter(t => t.id !== id));
+        } else {
+          alert('Failed to delete template');
+        }
+      } catch (error) {
+        console.error('Error deleting template:', error);
+        alert('An error occurred while deleting the template');
+      } finally {
+        setDeleting(null);
+      }
+    }
+  };
+
+  const handleAddTemplate = async () => {
     if (newTemplate.name && newTemplate.content) {
-      const template = {
-        id: templates.length + 1,
-        name: newTemplate.name,
-        type: newTemplate.type as "clearance" | "tax" | "certificate",
-        status: "draft" as const,
-        lastModified: new Date().toISOString().split('T')[0],
-        content: newTemplate.content
-      };
-      setTemplates([...templates, template]);
-      setNewTemplate({ name: "", type: "clearance", content: "" });
-      setShowAddForm(false);
+      setSaving(true);
+      try {
+        const response = await fetch('/api/document-templates', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newTemplate),
+        });
+        
+        if (response.ok) {
+          const addedTemplate = await response.json();
+          setTemplates([...templates, addedTemplate]);
+          setNewTemplate({ name: "", type: "clearance", content: "" });
+          setShowAddForm(false);
+        } else {
+          alert('Failed to add template');
+        }
+      } catch (error) {
+        console.error('Error adding template:', error);
+        alert('An error occurred while adding the template');
+      } finally {
+        setSaving(false);
+      }
     }
   };
 
@@ -211,14 +271,16 @@ const DocumentTemplates: React.FC = () => {
                 <button
                   onClick={() => handleEdit(template.id)}
                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  disabled={saving}
                 >
                   <FaEdit className="text-sm" />
                 </button>
                 <button
                   onClick={() => handleDelete(template.id)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={deleting === template.id}
                 >
-                  <FaTrash className="text-sm" />
+                  {deleting === template.id ? <FaSpinner className="text-sm animate-spin" /> : <FaTrash className="text-sm" />}
                 </button>
               </div>
             </div>
@@ -228,6 +290,7 @@ const DocumentTemplates: React.FC = () => {
                 <textarea
                   rows={4}
                   defaultValue={template.content}
+                  data-template-id={template.id}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
                 <div className="flex gap-2">

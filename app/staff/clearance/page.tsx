@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaCertificate, FaUser, FaBuilding, FaFileAlt, FaCheck, FaTimes } from "react-icons/fa";
 
@@ -19,6 +19,34 @@ const BarangayClearance: React.FC = () => {
   });
   const [step, setStep] = useState(1);
   const [processing, setProcessing] = useState(false);
+  const [fees, setFees] = useState({
+    residency: 50,
+    business: 100,
+    employment: 75
+  });
+  const [loading, setLoading] = useState(true);
+
+  // Fetch current fees
+  useEffect(() => {
+    const fetchFees = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/clearance-fees');
+        const data = await response.json();
+        
+        if (data.success) {
+          setFees(data.data.fees);
+        }
+      } catch (err) {
+        console.error('Error fetching fees:', err);
+        // Keep default fees if fetch fails
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFees();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -51,12 +79,7 @@ const BarangayClearance: React.FC = () => {
   };
 
   const getFee = () => {
-    switch(clearanceType) {
-      case "residency": return 50;
-      case "business": return 100;
-      case "employment": return 75;
-      default: return 50;
-    }
+    return fees[clearanceType] || 50;
   };
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaCertificate, FaUser, FaBuilding, FaFileAlt, FaCheck, FaTimes, FaPrint, FaSearch } from "react-icons/fa";
 
@@ -22,7 +22,35 @@ const BarangayClearance: React.FC = () => {
     position: ""
   });
   const [step, setStep] = useState(1);
+  const [fees, setFees] = useState({
+    residency: 50,
+    business: 100,
+    employment: 75
+  });
+  const [loading, setLoading] = useState(true);
   const printRef = useRef<HTMLDivElement>(null);
+
+  // Fetch current fees
+  useEffect(() => {
+    const fetchFees = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/clearance-fees');
+        const data = await response.json();
+        
+        if (data.success) {
+          setFees(data.data.fees);
+        }
+      } catch (err) {
+        console.error('Error fetching fees:', err);
+        // Keep default fees if fetch fails
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFees();
+  }, []);
 
   const handleResidentSearch = (search: string) => {
     setResidentSearch(search);
@@ -84,12 +112,7 @@ const BarangayClearance: React.FC = () => {
   };
 
   const getFee = () => {
-    switch(clearanceType) {
-      case "residency": return 50;
-      case "business": return 100;
-      case "employment": return 75;
-      default: return 50;
-    }
+    return fees[clearanceType] || 50;
   };
 
   const calculateAge = (birthDate: string) => {
@@ -127,9 +150,9 @@ const BarangayClearance: React.FC = () => {
           <h2 className="text-lg font-semibold text-gray-800 mb-6 text-center">Select Clearance Type</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { type: "residency", title: "Residency", desc: "Proof of residence", icon: <FaUser />, fee: 50 },
-              { type: "business", title: "Business", desc: "Business operations", icon: <FaBuilding />, fee: 100 },
-              { type: "employment", title: "Employment", desc: "Job applications", icon: <FaFileAlt />, fee: 75 }
+              { type: "residency", title: "Residency", desc: "Proof of residence", icon: <FaUser />, fee: fees.residency },
+              { type: "business", title: "Business", desc: "Business operations", icon: <FaBuilding />, fee: fees.business },
+              { type: "employment", title: "Employment", desc: "Job applications", icon: <FaFileAlt />, fee: fees.employment }
             ].map((item) => (
               <button
                 key={item.type}

@@ -1,12 +1,44 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaCertificate, FaIdCard, FaBuilding, FaUser, FaSearch, FaFilter } from "react-icons/fa";
 
 const DocumentServices: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
+  const [fees, setFees] = useState({
+    residency: 50,
+    business: 100,
+    employment: 75,
+    indigency: 25,
+    certification: 30,
+    seniorCitizen: 10,
+    pwd: 10
+  });
+  const [loading, setLoading] = useState(true);
+
+  // Fetch current fees
+  useEffect(() => {
+    const fetchFees = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/clearance-fees');
+        const data = await response.json();
+        
+        if (data.success) {
+          setFees(data.data.fees);
+        }
+      } catch (err) {
+        console.error('Error fetching fees:', err);
+        // Keep default fees if fetch fails
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFees();
+  }, []);
 
   const documentTypes = [
     {
@@ -16,7 +48,8 @@ const DocumentServices: React.FC = () => {
       icon: <FaCertificate className="text-blue-500" />,
       category: "clearance",
       processingTime: "1-2 hours",
-      fee: "₱50.00"
+      fee: `₱${fees.residency}`,
+      href: "/staff/clearance-simple"
     },
     {
       id: 2,
@@ -25,7 +58,8 @@ const DocumentServices: React.FC = () => {
       icon: <FaIdCard className="text-green-500" />,
       category: "tax",
       processingTime: "30 minutes",
-      fee: "₱15.00"
+      fee: "₱15.00",
+      href: "/staff/cedula"
     },
     {
       id: 3,
@@ -34,7 +68,8 @@ const DocumentServices: React.FC = () => {
       icon: <FaUser className="text-purple-500" />,
       category: "certificate",
       processingTime: "1 hour",
-      fee: "₱25.00"
+      fee: `₱${fees.indigency}`,
+      href: "/staff/clearance-simple"
     },
     {
       id: 4,
@@ -43,7 +78,8 @@ const DocumentServices: React.FC = () => {
       icon: <FaBuilding className="text-orange-500" />,
       category: "business",
       processingTime: "2-3 hours",
-      fee: "₱100.00"
+      fee: `₱${fees.business}`,
+      href: "/staff/clearance"
     }
   ];
 
@@ -112,13 +148,14 @@ const DocumentServices: React.FC = () => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         {filteredDocuments.map((doc, index) => (
-          <motion.div
+          <motion.a
             key={doc.id}
+            href={doc.href}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 * index }}
             whileHover={{ y: -5, scale: 1.02 }}
-            className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
+            className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 block"
           >
             <div className="flex items-start gap-4">
               <div className="p-3 bg-gray-100 rounded-lg">
@@ -139,18 +176,12 @@ const DocumentServices: React.FC = () => {
                   </div>
                 </div>
 
-                <a href={
-                  doc.category === 'clearance' ? '/staff/clearance-simple' : 
-                  doc.category === 'tax' ? '/staff/cedula' : 
-                  '/staff/clearance-simple'
-                }>
-                  <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                    Process Document
-                  </button>
-                </a>
+                <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                  Process Document
+                </button>
               </div>
             </div>
-          </motion.div>
+          </motion.a>
         ))}
       </motion.div>
 

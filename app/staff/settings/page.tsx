@@ -88,7 +88,7 @@ const StaffSettingsContent: React.FC = () => {
   ];
 
   return (
-    <div className="p-4 md:p-6 bg-white">
+    <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -101,47 +101,47 @@ const StaffSettingsContent: React.FC = () => {
                 <FaCog className="text-blue-600 text-xl" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">
-                  {t('settings.title')}
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Staff Settings
                 </h1>
                 <p className="text-gray-600 text-sm mt-1">
-                  {t('settings.subtitle')}
+                  Manage your account and preferences
                 </p>
               </div>
             </div>
           </div>
         </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+    
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar Navigation */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="lg:col-span-1"
           >
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm sticky top-6">
-              <div className="p-4">
-                <h3 className="text-base font-semibold text-gray-900 mb-3">Settings</h3>
+            <div className="bg-white border border-gray-200 rounded-xl shadow-sm sticky top-6">
+              <div className="p-5">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
                 <nav className="space-y-2">
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-left ${
                         activeTab === tab.id
-                          ? "bg-blue-50 text-blue-700"
-                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                          ? "bg-blue-50 text-blue-700 border border-blue-200"
+                          : "text-gray-700 hover:bg-gray-50 hover:text-gray-900 border border-transparent hover:border-gray-200"
                       }`}
                     >
                       {tab.icon}
-                      <span className="text-sm font-medium">{tab.label}</span>
+                      <span className="font-medium">{tab.label}</span>
                     </button>
                   ))}
                 </nav>
               </div>
             </div>
           </motion.div>
-
+    
           {/* Content Area */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -149,88 +149,88 @@ const StaffSettingsContent: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="lg:col-span-3"
           >
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-              <div className="p-4">
+            <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
+              <div className="p-6">
                 {/* Profile Settings */}
                 {activeTab === "profile" && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="space-y-4"
+                    className="space-y-6"
                   >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shadow-sm">
-                        <FaUser className="text-blue-600 text-lg" />
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center shadow-sm">
+                        <FaUser className="text-blue-600 text-xl" />
                       </div>
                       <div>
-                        <h2 className="text-lg font-semibold text-gray-900">{t('settings.profileTitle')}</h2>
-                        <p className="text-gray-600 text-sm">{t('settings.profileSubtitle')}</p>
+                        <h2 className="text-xl font-bold text-gray-900">Profile Settings</h2>
+                        <p className="text-gray-600">Manage your personal information</p>
                       </div>
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          {t('settings.firstName')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          First Name
                         </label>
                         <input
                           type="text"
                           value={profileData.firstName}
                           onChange={(e) => setProfileData({...profileData, firstName: e.target.value})}
-                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                           placeholder="Enter your first name"
                         />
                       </div>
-
+                
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          {t('settings.lastName')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Last Name
                         </label>
                         <input
                           type="text"
                           value={profileData.lastName}
                           onChange={(e) => setProfileData({...profileData, lastName: e.target.value})}
-                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                           placeholder="Enter your last name"
                         />
                       </div>
-
+                
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          {t('settings.email')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Email Address
                         </label>
                         <input
                           type="email"
                           value={profileData.email}
                           onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                           placeholder="Enter your email"
                         />
                       </div>
-
+                
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                          {t('settings.phone')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Phone Number
                         </label>
                         <input
                           type="tel"
                           value={profileData.phone}
                           onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
-                          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                           placeholder="Enter your phone number"
                         />
                       </div>
                     </div>
-
-                    <div className="pt-4 border-t border-gray-200">
+                
+                    <div className="pt-6 border-t border-gray-200">
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={saveProfileChanges}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1.5 text-sm cursor-pointer"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 shadow-sm hover:shadow-md transition-all"
                       >
-                        <FaSave className="text-xs" />
-                        {t('settings.saveChanges')}
+                        <FaSave className="text-sm" />
+                        Save Changes
                       </motion.button>
                     </div>
                   </motion.div>
@@ -243,53 +243,53 @@ const StaffSettingsContent: React.FC = () => {
                     animate={{ opacity: 1 }}
                     className="space-y-6"
                   >
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-2xl flex items-center justify-center">
-                        <FaBell className="text-green-600 dark:text-green-400 text-2xl" />
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center shadow-sm">
+                        <FaBell className="text-green-600 text-xl" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">{t('settings.notificationTitle')}</h2>
-                        <p className="text-neutral-600 dark:text-neutral-400">{t('settings.notificationSubtitle')}</p>
+                        <h2 className="text-xl font-bold text-gray-900">Notification Settings</h2>
+                        <p className="text-gray-600">Configure how you receive notifications</p>
                       </div>
                     </div>
-
+                
                     <div className="space-y-4">
                       {[
                         {
                           id: 'newRequests',
-                          title: t('settings.newRequests'),
-                          description: t('settings.newRequestsDesc'),
+                          title: 'New Requests',
+                          description: 'Get notified when new requests are submitted',
                           enabled: true
                         },
                         {
                           id: 'urgentTasks',
-                          title: t('settings.urgentTasks'),
-                          description: t('settings.urgentTasksDesc'),
+                          title: 'Urgent Tasks',
+                          description: 'Receive alerts for urgent tasks requiring immediate attention',
                           enabled: true
                         },
                         {
                           id: 'systemUpdates',
-                          title: t('settings.systemUpdates'),
-                          description: t('settings.systemUpdatesDesc'),
+                          title: 'System Updates',
+                          description: 'Stay informed about system maintenance and updates',
                           enabled: false
                         },
                         {
                           id: 'weeklyReports',
-                          title: t('settings.weeklyReports'),
-                          description: t('settings.weeklyReportsDesc'),
+                          title: 'Weekly Reports',
+                          description: 'Get summary reports of weekly activities',
                           enabled: true
                         }
-                      ].map((setting: { id: string; title: string; description: string; enabled: boolean }, index) => (
+                      ].map((setting, index) => (
                         <motion.div
                           key={setting.title}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          className="flex items-center justify-between p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50"
+                          className="flex items-center justify-between p-5 rounded-xl border border-gray-200 bg-white hover:shadow-sm transition-all"
                         >
                           <div className="flex-1">
-                            <h3 className="font-medium text-neutral-900 dark:text-white">{setting.title}</h3>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400">{setting.description}</p>
+                            <h3 className="font-semibold text-gray-900 text-lg mb-1">{setting.title}</h3>
+                            <p className="text-gray-600">{setting.description}</p>
                           </div>
                           <label className="relative inline-flex items-center cursor-pointer">
                             <input
@@ -301,7 +301,7 @@ const StaffSettingsContent: React.FC = () => {
                               })}
                               className="sr-only peer"
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            <div className="w-12 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                           </label>
                         </motion.div>
                       ))}
@@ -316,88 +316,100 @@ const StaffSettingsContent: React.FC = () => {
                     animate={{ opacity: 1 }}
                     className="space-y-6"
                   >
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-2xl flex items-center justify-center">
-                        <FaShieldAlt className="text-red-600 dark:text-red-400 text-2xl" />
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center shadow-sm">
+                        <FaShieldAlt className="text-red-600 text-xl" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">{t('settings.securityTitle')}</h2>
-                        <p className="text-neutral-600 dark:text-neutral-400">{t('settings.securitySubtitle')}</p>
+                        <h2 className="text-xl font-bold text-gray-900">Security Settings</h2>
+                        <p className="text-gray-600">Manage your account security</p>
                       </div>
                     </div>
-
+                
                     <div className="space-y-6">
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                          {t('settings.currentPassword')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Current Password
                         </label>
                         <div className="relative">
                           <input
                             type={showPassword ? "text" : "password"}
                             value={securityData.currentPassword}
                             onChange={(e) => setSecurityData({...securityData, currentPassword: e.target.value})}
-                            className="input-field w-full pr-12"
+                            className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all pr-12"
                             placeholder="Enter current password"
                           />
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
                           >
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                           </button>
                         </div>
                       </div>
-
+                
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                          {t('settings.newPassword')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          New Password
                         </label>
                         <input
                           type="password"
                           value={securityData.newPassword}
                           onChange={(e) => setSecurityData({...securityData, newPassword: e.target.value})}
-                          className="input-field w-full"
+                          className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                           placeholder="Enter new password"
                         />
                       </div>
-
+                
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                          {t('settings.confirmPassword')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Confirm New Password
                         </label>
                         <input
                           type="password"
                           value={securityData.confirmPassword}
                           onChange={(e) => setSecurityData({...securityData, confirmPassword: e.target.value})}
-                          className="input-field w-full"
+                          className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                           placeholder="Confirm new password"
                         />
                       </div>
-
-                      <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                
+                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
                         <div className="flex items-start gap-3">
-                          <FaShieldAlt className="text-yellow-600 dark:text-yellow-400 mt-1" />
+                          <FaShieldAlt className="text-amber-600 mt-1 text-lg" />
                           <div>
-                            <h4 className="font-medium text-yellow-800 dark:text-yellow-200">{t('settings.passwordRequirements')}</h4>
-                            <ul className="text-sm text-yellow-700 dark:text-yellow-300 mt-1 space-y-1">
-                              <li>• {t('settings.passwordReq1')}</li>
-                              <li>• {t('settings.passwordReq2')}</li>
-                              <li>• {t('settings.passwordReq3')}</li>
-                              <li>• {t('settings.passwordReq4')}</li>
+                            <h4 className="font-semibold text-amber-800 mb-2">Password Requirements</h4>
+                            <ul className="text-amber-700 space-y-1">
+                              <li className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                At least 8 characters long
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                Include uppercase and lowercase letters
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                Contain at least one number
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                Include special characters (!@#$%^&*)
+                              </li>
                             </ul>
                           </div>
                         </div>
                       </div>
-
+                
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={updatePassword}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2 cursor-pointer"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 shadow-sm hover:shadow-md transition-all"
                       >
                         <FaKey className="text-sm" />
-                        {t('settings.updatePassword')}
+                        Update Password
                       </motion.button>
                     </div>
                   </motion.div>
@@ -410,39 +422,39 @@ const StaffSettingsContent: React.FC = () => {
                     animate={{ opacity: 1 }}
                     className="space-y-6"
                   >
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-2xl flex items-center justify-center">
-                        <FaCog className="text-purple-600 dark:text-purple-400 text-2xl" />
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center shadow-sm">
+                        <FaCog className="text-purple-600 text-xl" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">{t('settings.preferencesTitle')}</h2>
-                        <p className="text-neutral-600 dark:text-neutral-400">{t('settings.preferencesSubtitle')}</p>
+                        <h2 className="text-xl font-bold text-gray-900">Preferences</h2>
+                        <p className="text-gray-600">Customize your experience</p>
                       </div>
                     </div>
-
+                
                     <div className="space-y-6">
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
-                          {t('settings.theme')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Theme
                         </label>
                         <div className="flex items-center gap-4">
                           <ThemeToggle />
-                          <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                            {t('settings.toggleTheme')}
+                          <span className="text-gray-600">
+                            Toggle between light and dark mode
                           </span>
                         </div>
                       </div>
-
+                
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
-                          {t('settings.language')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Language
                         </label>
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                            <FaLanguage className="text-blue-600 dark:text-blue-400 text-sm" />
+                          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <FaLanguage className="text-blue-600 text-lg" />
                           </div>
                           <select 
-                            className="input-field flex-1 max-w-xs"
+                            className="w-full max-w-xs px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                             value={language}
                             onChange={(e) => setLanguage(e.target.value as 'en' | 'tl')}
                           >
@@ -451,31 +463,31 @@ const StaffSettingsContent: React.FC = () => {
                           </select>
                         </div>
                       </div>
-
+                
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
-                          {t('settings.defaultView')}
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                          Default Dashboard View
                         </label>
                         <select 
-                          className="input-field max-w-xs"
+                          className="w-full max-w-xs px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                           value={preferences.defaultView}
                           onChange={(e) => setPreferences({...preferences, defaultView: e.target.value})}
                         >
-                          <option value="overview">{t('settings.overview')}</option>
-                          <option value="requests">{t('settings.requests')}</option>
-                          <option value="residents">{t('settings.residents')}</option>
+                          <option value="overview">Overview</option>
+                          <option value="requests">Requests</option>
+                          <option value="residents">Residents</option>
                         </select>
                       </div>
                     </div>
-
+                
                     {/* Staff Notice */}
-                    <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                    <div className="mt-8 p-5 bg-blue-50 border border-blue-200 rounded-xl">
                       <div className="flex items-start gap-3">
-                        <FaCog className="text-blue-600 dark:text-blue-400 mt-1" />
+                        <FaCog className="text-blue-600 mt-1 text-lg" />
                         <div>
-                          <h4 className="font-medium text-blue-800 dark:text-blue-200">{t('settings.staffNotice')}</h4>
-                          <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                            {t('settings.staffNoticeDesc')}
+                          <h4 className="font-semibold text-blue-800 mb-1">Staff Account Limitations</h4>
+                          <p className="text-blue-700">
+                            Some settings may be restricted for staff accounts. Contact your administrator for advanced configuration options.
                           </p>
                         </div>
                       </div>

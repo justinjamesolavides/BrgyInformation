@@ -20,7 +20,7 @@ import {
   FaUserFriends,
   FaTrash
 } from "react-icons/fa";
-import AddResidentModal from "./components/AddResidentModal";
+import Link from "next/link";
 import ViewResidentModal from "./components/ViewResidentModal";
 import EditResidentModal from "./components/EditResidentModal";
 import DeleteResidentModal from "./components/DeleteResidentModal";
@@ -54,7 +54,6 @@ const AdminResidentsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterGender, setFilterGender] = useState("all");
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // Modal states
   const [selectedResident, setSelectedResident] = useState<Resident | null>(null);
@@ -101,10 +100,6 @@ const AdminResidentsPage: React.FC = () => {
 
     return () => clearTimeout(debounceTimer);
   }, [searchTerm, filterStatus, filterGender]);
-
-  const handleResidentAdded = (newResident: Resident) => {
-    setResidents(prev => [newResident, ...prev]);
-  };
 
   // Modal handlers
   const handleViewResident = (resident: Resident) => {
@@ -187,15 +182,16 @@ const AdminResidentsPage: React.FC = () => {
         </div>
 
         {/* Add Resident Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setIsAddModalOpen(true)}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-2 text-sm font-medium"
-        >
-          <FaUserPlus className="text-xs" />
-          Add
-        </motion.button>
+        <Link href="/admin/residents/add">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-2 text-sm font-medium"
+          >
+            <FaUserPlus className="text-xs" />
+            Add
+          </motion.button>
+        </Link>
       </motion.div>
 
       {/* Filters and Search */}
@@ -419,13 +415,6 @@ const AdminResidentsPage: React.FC = () => {
           )}
         </div>
       </motion.div>
-
-      {/* Add Resident Modal */}
-      <AddResidentModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onResidentAdded={handleResidentAdded}
-      />
 
       {/* View Resident Modal */}
       <ViewResidentModal
